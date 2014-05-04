@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
-        <link rel='stylesheet' href='/css/style.css' />
+        <title>Space</title>
+        <link rel='stylesheet' href='/css/main.css' />
         <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/phaser.js"></script>
+        <script src="/js/asteroid.js"></script>
+        <script src="/js/ship.js"></script>
         <script src="/js/main.js"></script>
     </head>
     <body>
-        <h1><%= title %></h1>
-        <p>Welcome to <%= title %></p>
+        <div class="gamewrap" id="gamewrap"></div>
+        <div class="gamehelp">
+            <ul>Keys:
+                <li>Up, W - thrust</li>
+                <li>Down, S - reverse</li>
+                <li>Left, A - left</li>
+                <li>Right, D - right</li>
+                <li>Q - strafe left</li>
+                <li>E - strafe right</li>
+                <li>Ctrl - disable auto breaking</li>
+            </ul>
+        </div>
     </body>
 </html>

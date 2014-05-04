@@ -4,7 +4,8 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var socketio = require('socket.io');
+
+var game = require('./game');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -16,11 +17,7 @@ var server = app.listen(app.get('port'), function () {
     console.log('server listen on ' + app.get('port') + ' port');
 });
 
-// sockets
-var io = socketio.listen(server);
-io.sockets.on('connection', function (socket) {
-    socket.emit('news', {hello: 'World'});
-});
+game.init(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
