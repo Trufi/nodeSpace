@@ -32,3 +32,24 @@ function createAsteroid2 (position) {
 
     return asteroid;
 }
+
+function createAsteroidFromDate (body) {
+    var asteroid = game.add.sprite(0, 0, 'asteroid2');
+
+    asteroid.anchor.setTo(0.5, 0.5);
+    game.physics.p2.enable(asteroid);
+
+    asteroid.body.clearShapes();
+    asteroid.body.loadPolygon('physicsData', 'asteroid');
+    asteroid.body.mass = body.mass;
+    asteroid.body.rotation = body.angle;
+    asteroid.body.data.position[0] = utils.sxp(body.position[0]);
+    asteroid.body.data.position[1] = utils.sxp(body.position[1]);
+
+
+    asteroid.body.angularVelocity = body.angularVelocity;
+    asteroid.body.data.velocity[0] = body.velocity[0];
+    asteroid.body.data.velocity[1] = body.velocity[1];
+
+    return asteroid;
+}

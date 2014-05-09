@@ -64669,7 +64669,7 @@ module.exports = {
     World :                         require('./world/World'),
     QuadTree :                      require('./collision/QuadTree').QuadTree,
     vec2 :                          require('./math/vec2'),
-    version :                       require('../package.json').version,
+    version :                       require('../../../package.json').version,
 };
 
 },{"../package.json":8,"./collision/AABB":9,"./collision/Broadphase":10,"./collision/GridBroadphase":11,"./collision/NaiveBroadphase":12,"./collision/Narrowphase":13,"./collision/QuadTree":14,"./collision/SAPBroadphase":15,"./constraints/Constraint":16,"./constraints/DistanceConstraint":17,"./constraints/GearConstraint":18,"./constraints/LockConstraint":19,"./constraints/PrismaticConstraint":20,"./constraints/RevoluteConstraint":21,"./equations/AngleLockEquation":22,"./equations/ContactEquation":23,"./equations/Equation":24,"./equations/FrictionEquation":25,"./equations/RotationalVelocityEquation":27,"./events/EventEmitter":28,"./material/ContactMaterial":29,"./material/Material":30,"./math/vec2":33,"./objects/Body":34,"./objects/Spring":35,"./shapes/Capsule":37,"./shapes/Circle":38,"./shapes/Convex":39,"./shapes/Heightfield":40,"./shapes/Line":41,"./shapes/Particle":42,"./shapes/Plane":43,"./shapes/Rectangle":44,"./shapes/Shape":45,"./solver/GSSolver":46,"./solver/IslandSolver":48,"./solver/Solver":49,"./utils/Utils":50,"./world/World":51}],37:[function(require,module,exports){
@@ -66193,7 +66193,7 @@ var  GSSolver = require('../solver/GSSolver')
 ,    LockConstraint = require('../constraints/LockConstraint')
 ,    RevoluteConstraint = require('../constraints/RevoluteConstraint')
 ,    PrismaticConstraint = require('../constraints/PrismaticConstraint')
-,    pkg = require('../../package.json')
+,    pkg = require('../../../package.json')
 ,    Broadphase = require('../collision/Broadphase')
 ,    Narrowphase = require('../collision/Narrowphase')
 ,    Utils = require('../utils/Utils')

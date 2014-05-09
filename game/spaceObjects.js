@@ -9,10 +9,10 @@ var getUniqueId = (function() {
 
 var spaceObjects = {};
 
-spaceObjects.add = function(body) {
+spaceObjects.add = function(self) {
     var newObj = {};
     newObj.id = getUniqueId();
-    newObj.body = body;
+    newObj.self = self;
     objectList[newObj.id] = newObj;
 
     return newObj;
@@ -24,26 +24,26 @@ spaceObjects.remove = function(spObj) {
     return this;
 };
 
-spaceObjects.getAllInfo = function() {
+spaceObjects.getStepInfo = function() {
     var res = {},
-        el, i, newEl;
+        i;
 
     for (i in objectList) {
-        el = objectList[i];
-
-        newEl = {};
-        newEl.id = el.id;
-        newEl.position = el.body.getPosition();
-/*        newEl.velocity = el.body.getVelocity();
-        newEl.angularVelocity = el.body.getAngularVelocity();*/
-        res[newEl.id] = newEl;
+        res[i] = objectList[i].self.getStepInfo();
     }
 
     return res;
 };
 
-/*spaceObjects.updateAll = function() {
+spaceObjects.getFirstInfo = function() {
+    var res = {},
+        i;
 
-};*/
+    for (i in objectList) {
+        res[i] = objectList[i].self.getFirstInfo();
+    }
+
+    return res;
+};
 
 module.exports = spaceObjects;
