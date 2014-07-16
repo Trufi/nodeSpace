@@ -1,16 +1,16 @@
+html {
+    width: 100%;
+    height: 100%;
+}
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
     background: #d5d5d5;
 }
 
 .gamewrap {
-    width: 800px;
-    margin: 0 auto;
-}
-
-.gamehelp {
-    position: absolute;
-    top: 10px;
-    left: 15px;
+    width: 100%;
+    height: 100%;
 }

@@ -6,14 +6,9 @@ require.config({
         socketio: '/socket.io/socket.io.js',
         game: '../game',
         config: '../config.json'
-    },
-    shim: {
-        /*phaser: {
-            exports: 'Phaser'
-        }*/
     }
 });
 
-require(['game/main'], function(io) {
+require(['game/main'], function() {
 
 });

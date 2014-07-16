@@ -1,9 +1,7 @@
 define(
     'game/main',
-    ['socketio', 'json!config', 'game/asteroids', 'phaser'],
-    function(io, config, modAsteroids) {
-        var socket = io.connect(config.sockethost);
-
+    ['game/request', 'game/game', 'game/asteroids'],
+    function(request, gameGame, modAsteroids) {
         var game,
             firstData,
             asteroids,
@@ -13,10 +11,18 @@ define(
             keyboard,
             worldSize = [5000, 5000];
 
-        socket.on('playerIsConnect', function (data) {
+        request.gameInit(function(data) {
             firstData = data;
-            game = new Phaser.Game(800, 600, Phaser.AUTO, 'gamewrap', {preload: preload, create: create, update: update, render: render});
+
+            game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'gamewrap', {
+                preload: preload,
+                create: create,
+                update: update,
+                render: render
+            });
         });
+
+
 
         function preload() {
             game.load.image('background', 'img/bg2.png');
