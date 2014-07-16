@@ -1,3 +1,4 @@
 {
-    "sockethost": "http://localhost"
+    "socketHost": "http://localhost",
+    "gameHtmlWrapId": "gamewrap"
 }
