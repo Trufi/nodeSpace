@@ -1,9 +1,10 @@
 var p2 = require('p2');
-var world = (require('./../hlam/world')).world;
-var shapes = require('./../hlam/shapes');
+var shapes = require('./shapes');
+var utils = require('./utils');
 
 // Класс простейшего тела
 function Body() {
+    this.id = utils.getId('body');
     this.type = 0; // тип тела 0 - астероид
 
     this.mass = 1000;
@@ -19,11 +20,9 @@ function Body() {
         angularVelocity: this.angularVelocity,
         angularDamping: 0
     });
-
-    this.enable();
 }
 
-Body.prototype.enable = function() {
+Body.prototype.addToWorld = function(world) {
     world.addBody(this.body);
 };
 
@@ -71,7 +70,7 @@ Body.prototype.getFirstInfo = function() {
     };
 };
 
-Body.prototype.getStepInfo = function() {
+Body.prototype.getInfo = function() {
     return {
         position: [
             this.body.position[0],

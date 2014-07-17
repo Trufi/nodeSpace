@@ -18,7 +18,7 @@ Game.prototype.start = function() {
     var _this = this;
     this.interval = setInterval(function() {
         _this.world.step(_this.timeStep);
-        Game.sendStateToUsers();
+        _this.sendStateToUsers();
     }, 1000 * this.timeStep);
 };
 
@@ -29,10 +29,11 @@ Game.prototype.stop = function() {
 Game.prototype.sendStateToUsers = function() {
     var i;
     for (i in this.users) {
-        socket.emit('updateGameState', this.getGameState());
+        this.users[i].send('updateGameState', this.getGameState());
     }
 };
 
+// данные, которые отправляются через каждый шаг
 Game.prototype.getGameState = function(user) {
     var state = {};
     var i;
@@ -50,14 +51,41 @@ Game.prototype.getGameState = function(user) {
     return state;
 };
 
+// данные отправляемые при подключении пользователя
+Game.prototype.getGameFirstState = function(user) {
+    var state = {};
+    var i;
+
+    state.worldSize = this.worldSize;
+
+    state.bodies = [];
+    for (i in this.bodies) {
+        state.bodies.push(this.bodies[i].getFirstInfo());
+    }
+
+    state.users = [];
+    for (i in this.users) {
+        state.users.push(this.users[i].getFirstInfo());
+    }
+
+    return state;
+};
+
 Game.prototype.addUser = function(user) {
     this.users[user.id] = user;
+
+    user.send('firstGameState', this.getGameFirstState());
 };
 
 Game.prototype.removeUser = function(user) {
     if (typeof this.users !== 'undefined') {
         delete this.users[user.id];
     }
+};
+
+Game.prototype.addBody = function(body) {
+    this.bodies[body.id] = body;
+    body.addToWorld(this.world);
 };
 
 module.exports = Game;

@@ -1,14 +1,24 @@
-var p2game = require('./p2game');
+var Game = require('./game');
+var User = require('./user');
+var Body = require('./body');
 
 var socketio = require('socket.io');
-//var game = require('../game/game');
+
+// инициализация единственной пока что игры
+var game = new Game();
+game.start();
+
+// добавим астероид в игру
+var asteroid = new Body();
+game.addBody(asteroid);
 
 var init = function (server) {
     var io = socketio.listen(server, {log: false});
 
     io.sockets.on('connection', function (socket) {
-        game.init(socket);
+        var user = new User(socket);
+        game.addUser(user);
     });
 };
 
-exports.init = init;
+module.exports.init = init;

@@ -7,7 +7,7 @@ define(
         var socket = io.connect(config.socketHost);
 
         request.gameInit = function(callback) {
-            socket.on('playerIsConnect', function (data) {
+            socket.on('firstGameState', function (data) {
                 callback(data);
             });
         };

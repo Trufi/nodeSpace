@@ -17,7 +17,8 @@ var server = app.listen(app.get('port'), function () {
 });
 
 // Init game
-require('./game/main')(server);
+var gameMain = require('./game/main');
+gameMain.init(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
