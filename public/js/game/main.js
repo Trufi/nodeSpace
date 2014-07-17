@@ -1,7 +1,7 @@
 define(
     'game/main',
-    ['game/request', 'game/game', 'game/bodies'],
-    function(request, game, bodies) {
+    ['game/request', 'game/game', 'game/body'],
+    function(request, game, Body) {
         var worldSize = [5000, 5000];
         var bodiesData = {};
 
@@ -10,7 +10,7 @@ define(
             game.phaserGame.load.image('ship', 'img/ship2.png');
             game.phaserGame.load.image('asteroid', 'img/asteroid.png');
             game.phaserGame.load.image('asteroid2', 'img/asteroid2.png');
-            game.phaserGame.load.physics('physicsData', 'js/game/asteroid_polygon.json');
+            game.phaserGame.load.physics('physicsData', 'js/game/shapes.json');
         };
 
         var create = function() {
@@ -26,12 +26,12 @@ define(
             game.phaserGame.time.advancedTiming = true;
 
             for (i in bodiesData) {
-                bodies.createTestObj(bodiesData[i].position);
+                game.addBody(new Body(bodiesData[i]));
             }
         };
 
         var update = function() {
-            //
+            game.updateBodiesSprite();
         };
 
         var render = function() {
@@ -39,8 +39,8 @@ define(
         };
 
         request.gameInit(function(data) {
-            bodiesData = data;
-            game.init(preload, create, update, render);
+            bodiesData = data.bodies;
+            game.start(data, preload, create, update, render);
         });
     }
 );

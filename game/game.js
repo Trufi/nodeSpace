@@ -4,14 +4,17 @@ var utils = require('./utils');
 var Game = function Game() {
     this.id = utils.getId('game');
     this.worldSize = [5000, 5000];
-    this.timeStep = 1;
-    this.world = new p2.World({
-        gravity: [0, 0],
-        applyDamping: false
-    });
+    this.timeStep = 1 / 30;
+    this.gravity = [0, 0];
+    this.applyDamping = false;
     this.interval = undefined;
     this.users = {};
     this.bodies = {};
+
+    this.world = new p2.World({
+        gravity: this.gravity,
+        applyDamping: this.applyDamping
+    });
 };
 
 Game.prototype.start = function() {
@@ -56,7 +59,12 @@ Game.prototype.getGameFirstState = function(user) {
     var state = {};
     var i;
 
-    state.worldSize = this.worldSize;
+    state.world = {};
+    state.world.worldSize = this.worldSize;
+    state.world.timeStep = this.timeStep;
+    state.world.id = this.id;
+    state.world.gravity = this.gravity;
+    state.world.applyDamping = this.applyDamping;
 
     state.bodies = [];
     for (i in this.bodies) {
