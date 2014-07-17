@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var socketio = require('./lib/socketInit');
 
 var app = express();
 app.set('port', 8888);
@@ -17,7 +16,8 @@ var server = app.listen(app.get('port'), function () {
     console.log('server listen on ' + app.get('port') + ' port');
 });
 
-socketio.init(server);
+// Init game
+require('./game/main')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -1,6 +1,6 @@
 var p2 = require('p2');
-var world = (require('./world')).world;
-var shapes = require('./shapes');
+var world = (require('./../hlam/world')).world;
+var shapes = require('./../hlam/shapes');
 
 // Класс простейшего тела
 function Body() {
