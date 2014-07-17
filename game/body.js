@@ -12,6 +12,7 @@ function Body() {
         mass: 1000,
         position: [10, 10],
         velocity: [10, 0],
+        damping: 0,
         angularVelocity: 50,
         angularDamping: 0
     });

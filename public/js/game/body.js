@@ -12,6 +12,7 @@ define(
                 mass: param.mass,
                 position: param.position,
                 velocity: param.velocity,
+                damping: 0,
                 angularVelocity: param.angularVelocity,
                 angularDamping: 0,
                 angle: param.angle

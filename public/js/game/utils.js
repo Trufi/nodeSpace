@@ -14,12 +14,12 @@ define(
             return -val;
         };*/
 
-        // Server p2.js to phaser
+        // p2.js to phaser
         utils.sxp = function(val) {
             return val * 20;
         };
 
-        // Phaser to server
+        // Phaser to p2.js
         utils.pxs = function(val) {
             return val / 20;
         };
