@@ -24,7 +24,7 @@ define(
         Body.prototype.createSprite = function() {
             this.sprite = game.phaserGame.add.sprite(utils.sxp(this.body.position[0]), utils.sxp(this.body.position[1]), 'asteroid2');
             this.sprite.anchor.setTo(0.5, 0.5);
-            this.sprite.angle = this.body.angle; // TODO: dfh
+            this.sprite.angle = this.body.angle;
         };
 
         Body.prototype.addToWorld = function() {
