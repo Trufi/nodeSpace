@@ -1,4 +1,5 @@
 {
     "socketHost": "http://localhost",
-    "gameHtmlWrapId": "gamewrap"
+    "gameHtmlWrapId": "gamewrap",
+    "pathToAssets": "/img/"
 }

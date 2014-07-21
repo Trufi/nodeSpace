@@ -11,6 +11,11 @@ var Game = function Game() {
     this.users = {};
     this.bodies = {};
 
+    this.assets = {
+        background: 'bg2.png',
+        asteroid: 'asteroid.png'
+    };
+
     this.world = new p2.World({
         gravity: this.gravity,
         applyDamping: this.applyDamping
@@ -58,6 +63,8 @@ Game.prototype.getGameState = function(user) {
 Game.prototype.getGameFirstState = function(user) {
     var state = {};
     var i;
+
+    state.assets = this.assets;
 
     state.world = {};
     state.world.worldSize = this.worldSize;
