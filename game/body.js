@@ -13,7 +13,7 @@ function Body() {
         position: [10, 10],
         velocity: [10, 0],
         damping: 0,
-        angularVelocity: 50,
+        angularVelocity: 0.2,
         angularDamping: 0
     });
 }

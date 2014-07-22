@@ -4,7 +4,7 @@ var utils = require('./utils');
 var Game = function Game() {
     this.id = utils.getId('game');
     this.worldSize = [5000, 5000];
-    this.timeStep = 1 / 30;
+    this.timeStep = 1 / 100;
     this.gravity = [0, 0];
     this.applyDamping = false;
     this.interval = undefined;
@@ -12,8 +12,11 @@ var Game = function Game() {
     this.bodies = {};
 
     this.assets = {
-        background: 'bg2.png',
-        asteroid: 'asteroid.png'
+        texture: {
+            background: 'bg2.png',
+            backroundTest: 'bg.jpeg',
+            asteroid: 'asteroid.png'
+        }
     };
 
     this.world = new p2.World({
