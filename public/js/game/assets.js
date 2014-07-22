@@ -8,25 +8,23 @@ define(
 
         assets.load = function (loadObj, callback) {
             var loadArray = [],
-                loader, i, src;
+                loader;
 
             // загрузка текстур
-            for (i in loadObj.texture) {
-                src = config.pathToAssets + loadObj.texture[i];
-                loadArray.push(src);
-            }
+            _(loadObj.texture).forEach(function(el) {
+                loadArray.push(config.pathToAssets + el);
+            });
 
             loader = new PIXI.AssetLoader(loadArray);
 
             loader.onComplete = function() {
-                var i;
-
-                for (i in loadObj.texture) {
-                    assets.texture[i] = new PIXI.Texture.fromImage(config.pathToAssets + loadObj.texture[i]);
-                }
+                _(loadObj.texture).forEach(function(el, i) {
+                    assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
+                });
 
                 callback();
             };
+
             loader.load();
         };
 

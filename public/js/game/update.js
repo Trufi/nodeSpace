@@ -3,11 +3,9 @@ define(
     ['game/game', 'game/body'],
     function(game, Body) {
         return function() {
-            var i;
-
-            for (i in game.bodies) {
-                game.bodies[i].updateSprite();
-            }
+            _(game.bodies).forEach(function(el) {
+                el.updateSprite();
+            });
         };
     }
 );
