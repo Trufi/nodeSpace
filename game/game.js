@@ -1,5 +1,6 @@
 var p2 = require('p2');
 var utils = require('./utils');
+var _ = require('lodash');
 
 var Game = function Game() {
     this.id = utils.getId('game');
@@ -38,26 +39,24 @@ Game.prototype.stop = function() {
 };
 
 Game.prototype.sendStateToUsers = function() {
-    var i;
-    for (i in this.users) {
-        this.users[i].send('updateGameState', this.getGameState());
-    }
+    var _this = this;
+
+    _(this.users).forEach(function(el) {
+        el.send('updateGameState', _this.getGameState());
+    });
 };
 
 // данные, которые отправляются через каждый шаг
 Game.prototype.getGameState = function(user) {
     var state = {};
-    var i;
 
-    state.bodies = [];
-    for (i in this.bodies) {
-        state.bodies.push(this.bodies[i].getInfo());
-    }
+    state.bodies = _.map(this.bodies, function(el) {
+        return el.getInfo();
+    });
 
-    state.users = [];
-    for (i in this.users) {
-        state.users.push(this.users[i].getInfo());
-    }
+    state.users = _.map(this.users, function(el) {
+        return el.getInfo();
+    });
 
     return state;
 };
@@ -65,7 +64,6 @@ Game.prototype.getGameState = function(user) {
 // данные отправляемые при подключении пользователя
 Game.prototype.getGameFirstState = function(user) {
     var state = {};
-    var i;
 
     state.assets = this.assets;
 
@@ -76,15 +74,13 @@ Game.prototype.getGameFirstState = function(user) {
     state.world.gravity = this.gravity;
     state.world.applyDamping = this.applyDamping;
 
-    state.bodies = [];
-    for (i in this.bodies) {
-        state.bodies.push(this.bodies[i].getFirstInfo());
-    }
+    state.bodies = _.map(this.bodies, function(el) {
+        return el.getFirstInfo();
+    });
 
-    state.users = [];
-    for (i in this.users) {
-        state.users.push(this.users[i].getFirstInfo());
-    }
+    state.users = _.map(this.users, function(el) {
+        return el.getFirstInfo();
+    });
 
     return state;
 };

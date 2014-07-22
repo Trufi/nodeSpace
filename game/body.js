@@ -3,30 +3,36 @@ var shapes = require('./shapes');
 var utils = require('./utils');
 
 // Класс простейшего тела
-function Body() {
+function Body(param) {
     this.id = utils.getId('body');
     this.type = 0; // тип тела 0 - астероид
 //    this.shape = shapes.asteroid;
 
     this.body = new p2.Body({
         mass: 1000,
-        position: [10, 10],
-        velocity: [10, 0],
+        position: [0, 0],
+        velocity: [0, 0],
         damping: 0,
-        angularVelocity: 0.2,
+        angularVelocity: 0,
         angularDamping: 0
     });
+
+    if (typeof param !== 'undefined') {
+        if (typeof param.position !== 'undefined') {
+            this.body.position = param.position;
+        }
+        if (typeof param.velocity !== 'undefined') {
+            this.body.velocity = param.velocity;
+        }
+        if (typeof param.angularVelocity !== 'undefined') {
+            this.body.angularVelocity = param.angularVelocity;
+        }
+    }
 }
 
 Body.prototype.addToWorld = function(world) {
     world.addBody(this.body);
 };
-
-/*Body.prototype.update = function() {
-    this.position = this.body.position;
-    this.velocity = this.body.velocity;
-    this.angularVelocity = this.body.angularVelocity;
-};*/
 
 Body.prototype.getPosition = function() {
     return [this.body.position[0], this.body.position[1]];
@@ -61,7 +67,8 @@ Body.prototype.getFirstInfo = function() {
             this.body.velocity[1]
         ],
         angularVelocity: this.body.angularVelocity,
-        angle: this.body.angle
+        angle: this.body.angle,
+        id: this.id
     };
 
 };
@@ -77,7 +84,8 @@ Body.prototype.getInfo = function() {
             this.body.velocity[1]
         ],
         angularVelocity: this.body.angularVelocity,
-        angle: this.body.angle
+        angle: this.body.angle,
+        id: this.id
     };
 };
 
