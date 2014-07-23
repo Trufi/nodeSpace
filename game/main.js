@@ -10,15 +10,15 @@ game.start();
 
 // добавим астероид в игру
 var asteroid = new Body({
-    position: [10, 10],
-    velocity: [10, 2],
+    position: [10, 0],
+    velocity: [50, -10],
     angularVelocity: 0.53
 });
 game.addBody(asteroid);
 
 game.addBody(new Body({
-    position: [45, 5],
-    velocity: [-0.15, 0.2],
+    position: [500, 10],
+    velocity: [-5, 5],
     angularVelocity: -0.1
 }));
 

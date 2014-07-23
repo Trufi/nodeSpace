@@ -17,6 +17,7 @@ define(
                 angularDamping: 0,
                 angle: param.angle
             });
+            this.body.addShape(new p2.Circle(87.5));
 
             this.sprite = new PIXI.Sprite(assets.texture.asteroid);
             this.sprite.anchor.x = 0.5;
@@ -25,6 +26,7 @@ define(
             this.sprite.position.x = camera.x(this.body.position[0]);
             this.sprite.position.y = camera.y(this.body.position[1]);
             this.sprite.rotation = this.body.angle;
+            this.sprite.scale = new PIXI.Point(1, 1);
         };
 
         Body.prototype.addToWorld = function() {
@@ -33,9 +35,10 @@ define(
         };
 
         Body.prototype.updateSprite = function() {
-            this.sprite.rotation = this.body.angle;
             this.sprite.position.x = camera.x(this.body.position[0]);
             this.sprite.position.y = camera.y(this.body.position[1]);
+            this.sprite.rotation = this.body.angle;
+            this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 
         return Body;

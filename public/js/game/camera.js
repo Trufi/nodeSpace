@@ -7,7 +7,7 @@ define(
         var Camera = function Camera(width, height, scale) {
             this.width = width || 500;
             this.height = height || 500;
-            this.scale = scale || 20;
+            this.scale = scale || 0.7;
 
             this.position = [0, 0];
             //this.angle = 0; пока без поворотов
@@ -62,6 +62,10 @@ define(
 
         camera.update = function() {
             enableCamera.update();
+        };
+
+        camera.scale = function() {
+            return enableCamera.scale;
         };
 
         return camera;

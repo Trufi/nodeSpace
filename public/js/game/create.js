@@ -6,7 +6,7 @@ define(
             var first = false;
 
             game.setBackground(assets.texture.background);
-            camera.set(camera.create(game.resolution[0], game.resolution[1], 20));
+            camera.set(camera.create(game.resolution[0], game.resolution[1]));
 
             _(data.bodies).forEach(function(el) {
                 var body = new Body(el);

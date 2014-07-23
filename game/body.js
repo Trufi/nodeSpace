@@ -16,6 +16,7 @@ function Body(param) {
         angularVelocity: 0,
         angularDamping: 0
     });
+    this.body.addShape(new p2.Circle(87.5));
 
     if (typeof param !== 'undefined') {
         if (typeof param.position !== 'undefined') {

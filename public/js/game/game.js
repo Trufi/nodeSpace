@@ -86,12 +86,13 @@ define(
 
         game.setBackground = function(texture) {
             if (typeof this.background === 'undefined') {
-                this.background = new PIXI.TilingSprite(texture, game.resolution[0], game.resolution[1]);
+                this.background = new PIXI.TilingSprite(texture, game.resolution[0] / camera.scale(), game.resolution[1] /camera.scale());
                 this.background.position.x = 0;
                 this.background.position.y = 0;
                 this.background.tilePosition.x = 0;
                 this.background.tilePosition.y = 0;
                 this.stage.addChild(this.background);
+                // this.background.scale = new PIXI.Point(camera.scale(), camera.scale());
             } else {
                 this.background.setTexture(texture);
             }
