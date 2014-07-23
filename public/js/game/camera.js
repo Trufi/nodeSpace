@@ -5,8 +5,8 @@ define(
         var camera = {};
 
         var Camera = function Camera(width, height, scale) {
-            //this.width = width || 1024;
-            //this.height = height || 768;
+            this.width = width || 500;
+            this.height = height || 500;
             this.scale = scale || 20;
 
             this.position = [0, 0];
@@ -30,11 +30,11 @@ define(
         };
 
         Camera.prototype.x = function(val) {
-            return (val - this.position[0]) * this.scale;
+            return (val - this.position[0]) * this.scale + this.width / 2;
         };
 
         Camera.prototype.y = function(val) {
-            return (val - this.position[1]) * this.scale;
+            return (val - this.position[1]) * this.scale + this.height / 2;
         };
 
         var enableCamera = new Camera();

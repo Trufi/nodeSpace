@@ -1,7 +1,7 @@
 define(
     'game/game',
-    ['json!config', 'p2', 'pixi', 'game/assets'],
-    function(config, p2, PIXI, assets) {
+    ['json!config', 'p2', 'pixi', 'game/assets', 'game/camera'],
+    function(config, p2, PIXI, assets, camera) {
         var game = {};
 
         game.world = undefined;
@@ -17,12 +17,14 @@ define(
         game.bodies = {};
         game.background = undefined;
 
+        game.resolution = [1024, 768];
+
         var gameUpdate, gameRender;
 
-        var gameStep = function() {
+        var gameStep = function(time) {
             gameUpdate();
-            requestAnimFrame(gameStep);
             game.render.render(game.stage);
+            requestAnimFrame(gameStep);
             gameRender();
         };
 
@@ -39,16 +41,17 @@ define(
 
             this.interval = setInterval(function() {
                 game.world.step(game.timeStep);
+                camera.update();
             }, 1000 * game.timeStep);
 
             // подзагрузка файлов и инициализация Pixi.js
             assets.load(data.assets, function() {
                 game.stage = new PIXI.Stage(0x000000);
-                game.render = PIXI.autoDetectRenderer(1024, 640);
+                game.render = PIXI.autoDetectRenderer(game.resolution[0], game.resolution[1]);
 
                 game.render.view.style.display = 'block';
-                game.render.view.style.width = 1024;
-                game.render.view.style.height = 640;
+                //game.render.view.style.width = 1024;
+                //game.render.view.style.height = 768;
 
                 document.getElementById(config.gameHtmlWrapId).appendChild(game.render.view);
 
@@ -77,15 +80,17 @@ define(
         game.removeBody = function(body) {
             if (typeof this.bodies[body.id] !== 'undefined') {
                 delete this.bodies[body.id];
-                // TODO: sprite remove
+                // TODO: sprite and p2 remove
             }
         };
 
         game.setBackground = function(texture) {
             if (typeof this.background === 'undefined') {
-                this.background = new PIXI.TilingSprite(texture, 5000, 5000);
+                this.background = new PIXI.TilingSprite(texture, game.resolution[0], game.resolution[1]);
                 this.background.position.x = 0;
                 this.background.position.y = 0;
+                this.background.tilePosition.x = 0;
+                this.background.tilePosition.y = 0;
                 this.stage.addChild(this.background);
             } else {
                 this.background.setTexture(texture);
