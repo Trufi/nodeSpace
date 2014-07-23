@@ -1,7 +1,7 @@
 define(
     'game/body',
-    ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/utils', 'game/assets'],
-    function(p2, PIXI, shapes, game, utils, assets) {
+    ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/camera', 'game/assets'],
+    function(p2, PIXI, shapes, game, camera, assets) {
         // Класс простейшего тела
         var Body = function Body(param) {
             this.id = param.id;
@@ -21,8 +21,9 @@ define(
             this.sprite = new PIXI.Sprite(assets.texture.asteroid);
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
-            this.sprite.position.x = utils.sxp(this.body.position[0]);
-            this.sprite.position.y = utils.sxp(this.body.position[1]);
+
+            this.sprite.position.x = camera.x(this.body.position[0]);
+            this.sprite.position.y = camera.y(this.body.position[1]);
             this.sprite.rotation = this.body.angle;
         };
 
@@ -33,11 +34,10 @@ define(
 
         Body.prototype.updateSprite = function() {
             this.sprite.rotation = this.body.angle;
-            this.sprite.position.x = utils.sxp(this.body.position[0]);
-            this.sprite.position.y = utils.sxp(this.body.position[1]);
+            this.sprite.position.x = camera.x(this.body.position[0]);
+            this.sprite.position.y = camera.y(this.body.position[1]);
         };
 
         return Body;
     }
 );
-
