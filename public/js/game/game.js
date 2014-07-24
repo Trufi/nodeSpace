@@ -92,7 +92,7 @@ define(
                 this.background.tilePosition.x = 0;
                 this.background.tilePosition.y = 0;
                 this.stage.addChild(this.background);
-                // this.background.scale = new PIXI.Point(camera.scale(), camera.scale());
+                this.background.scale = new PIXI.Point(camera.scale(), camera.scale());
             } else {
                 this.background.setTexture(texture);
             }

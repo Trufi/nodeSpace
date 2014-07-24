@@ -1,7 +1,7 @@
 define(
     'game/update',
-    ['game/game', 'game/body', 'game/camera'],
-    function(game, Body, camera) {
+    ['game/game', 'game/camera'],
+    function(game, camera) {
         return function() {
             var first = true;
             _(game.bodies).forEach(function(el) {

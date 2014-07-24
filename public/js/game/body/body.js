@@ -1,7 +1,9 @@
 define(
-    'game/body',
+    'body/body',
     ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/camera', 'game/assets'],
     function(p2, PIXI, shapes, game, camera, assets) {
+        var body = {};
+
         // Класс простейшего тела
         var Body = function Body(param) {
             this.id = param.id;
@@ -41,6 +43,10 @@ define(
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 
-        return Body;
+        body.create = function(param) {
+            return new Body(param);
+        };
+
+        return body;
     }
 );

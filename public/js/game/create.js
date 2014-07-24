@@ -1,7 +1,7 @@
 define(
     'game/create',
-    ['lodash', 'game/game', 'game/body', 'game/assets', 'game/camera'],
-    function(_, game, Body, assets, camera) {
+    ['lodash', 'game/game', 'body/body', 'game/assets', 'game/camera'],
+    function(_, game, body, assets, camera) {
         return function(data) {
             var first = false;
 
@@ -9,12 +9,12 @@ define(
             camera.set(camera.create(game.resolution[0], game.resolution[1]));
 
             _(data.bodies).forEach(function(el) {
-                var body = new Body(el);
-                game.addBody(body);
+                var ast = body.create(el);
+                game.addBody(ast);
 
                 if (!first) {
                     first = true;
-                    camera.get().followToBody(body);
+                    camera.get().followToBody(ast);
                 }
             });
         };
