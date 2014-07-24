@@ -1,7 +1,7 @@
 define(
     'body/body',
-    ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/camera', 'game/assets'],
-    function(p2, PIXI, shapes, game, camera, assets) {
+    ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/camera', 'game/assets', 'game/utils'],
+    function(p2, PIXI, shapes, game, camera, assets, utils) {
         var body = {};
 
         // Класс простейшего тела
@@ -25,10 +25,8 @@ define(
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
 
-            this.sprite.position.x = camera.x(this.body.position[0]);
-            this.sprite.position.y = camera.y(this.body.position[1]);
-            this.sprite.rotation = this.body.angle;
-            this.sprite.scale = new PIXI.Point(1, 1);
+            this.updateSprite();
+            this.testPar = 'testPar';
         };
 
         Body.prototype.addToWorld = function() {
@@ -42,6 +40,13 @@ define(
             this.sprite.rotation = this.body.angle;
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
+
+        var Asteroid = function Asteroid() {
+            Asteroid.super_.apply(this, arguments);
+            this.test = 'ASDASDAS TEST';
+        };
+
+        utils.inherits(Asteroid, Body);
 
         body.create = function(param) {
             return new Body(param);

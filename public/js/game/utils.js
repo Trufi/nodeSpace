@@ -4,14 +4,17 @@ define(
     function() {
         var utils = {};
 
-        // p2.js to phaser
-        utils.sxp = function(val) {
-            return val * 20;
-        };
-
-        // Phaser to p2.js
-        utils.pxs = function(val) {
-            return val / 20;
+        // взято из node.jsZ
+        utils.inherits = function(ctor, superCtor) {
+            ctor.super_ = superCtor;
+            ctor.prototype = Object.create(superCtor.prototype, {
+                constructor: {
+                    value: ctor,
+                    enumerable: false,
+                    writable: true,
+                    configurable: true
+                }
+            });
         };
 
         return utils;
