@@ -1,7 +1,12 @@
 define(
-    'game/game',
-    ['json!config', 'p2', 'pixi', 'game/assets', 'game/camera'],
-    function(config, p2, PIXI, assets, camera) {
+    function(require) {
+        var config = require('json!config');
+        var p2 = require('p2');
+        var PIXI = require('pixi');
+        var assets = require('game/assets');
+        var camera = require('game/camera');
+        var request = require('game/request');
+
         var game = {};
 
         game.world = undefined;
@@ -21,7 +26,13 @@ define(
 
         var gameUpdate, gameRender;
 
+        var lastTimeStep;
         var gameStep = function(time) {
+            var currentTimeStep = (new Date()).getTime();
+            game.world.step((currentTimeStep - lastTimeStep) / 1000);
+            camera.update();
+            lastTimeStep = currentTimeStep;
+
             gameUpdate();
             game.render.render(game.stage);
             requestAnimFrame(gameStep);
@@ -39,10 +50,7 @@ define(
                 applyDamping: game.applyDamping
             });
 
-            this.interval = setInterval(function() {
-                game.world.step(game.timeStep);
-                camera.update();
-            }, 1000 * game.timeStep);
+            lastTimeStep = (new Date()).getTime();
 
             // подзагрузка файлов и инициализация Pixi.js
             assets.load(data.assets, function() {
@@ -59,6 +67,15 @@ define(
                 gameUpdate = update;
                 gameRender = render;
                 gameStep();
+
+                request.onUpdateGameState(function(data) {
+                    _(data.bodies).forEach(function(el) {
+                        game.bodies[el.id].update(el);
+                    });
+
+                    lastTimeStep = (new Date()).getTime();
+                    console.log('bodies was update');
+                });
             });
         };
 

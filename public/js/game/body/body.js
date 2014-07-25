@@ -43,6 +43,13 @@ define(
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 
+        Body.prototype.update = function(data) {
+            this.body.position = data.position;
+            this.body.velocity = data.velocity;
+            this.body.angle = data.angle;
+            this.body.angularVelocity = data.angularVelocity;
+        };
+
         return Body;
     }
 );

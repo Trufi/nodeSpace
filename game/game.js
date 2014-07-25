@@ -1,11 +1,10 @@
 var p2 = require('p2');
-var utils = require('./utils');
 var _ = require('lodash');
 
 var Game = function Game() {
     this.id = ++Game._idCounter;
     this.worldSize = [5000, 5000];
-    this.timeStep = 1 / 100;
+    this.timeStep = 1 / 60;
     this.gravity = [0, 0];
     this.applyDamping = false;
     this.interval = undefined;
@@ -31,9 +30,16 @@ Game._idCounter = 0;
 
 Game.prototype.start = function() {
     var _this = this;
+
+    this.lastTimeStep = (new Date()).getTime();
+
     this.interval = setInterval(function() {
-        _this.world.step(_this.timeStep);
+        var currentTimeStep = (new Date()).getTime();
+
+        _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
         _this.sendStateToUsers();
+
+        _this.lastTimeStep = currentTimeStep;
     }, 1000 * this.timeStep);
 };
 
