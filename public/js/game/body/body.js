@@ -1,35 +1,37 @@
 define(
-    'body/body',
-    ['p2', 'pixi', 'json!game/shapes.json', 'game/game', 'game/camera', 'game/assets', 'game/utils'],
-    function(p2, PIXI, shapes, game, camera, assets, utils) {
-        var body = {};
+    function(require) {
+        var p2 = require('p2');
+        var PIXI = require('pixi');
+        var shapes = require('json!./shapes.json');
+        var game = require('game/game');
+        var camera = require('game/camera');
+        var assets = require('game/assets');
 
         // Класс простейшего тела
-        var Body = function Body(param) {
-            this.id = param.id;
-            this.type = param.type; // тип тела 0 - астероид
-            this.shape = shapes.asteroid;
-
-            this.body = new p2.Body({
-                mass: param.mass,
-                position: param.position,
-                velocity: param.velocity,
-                damping: 0,
-                angularVelocity: param.angularVelocity,
-                angularDamping: 0,
-                angle: param.angle
-            });
-            this.body.addShape(new p2.Circle(87.5));
-
-            this.sprite = new PIXI.Sprite(assets.texture.asteroid);
-            this.sprite.anchor.x = 0.5;
-            this.sprite.anchor.y = 0.5;
-
-            this.updateSprite();
-            this.testPar = 'testPar';
+        var Body = function Body(options) {
+            this.id = options.id;
+            this.type = options.type;
+            this.body;
+            this.sprite;
         };
 
-        Body.prototype.addToWorld = function() {
+        Body.prototype.createBody = function(options) {
+            this.body = new p2.Body({
+                mass: options.mass,
+                position: options.position,
+                velocity: options.velocity,
+                damping: 0,
+                angularVelocity: options.angularVelocity,
+                angularDamping: 0,
+                angle: options.angle
+            });
+        };
+
+        Body.prototype.applyShape = function() {};
+
+        Body.prototype.createSprite = function() {};
+
+        Body.prototype.addToGame = function() {
             game.world.addBody(this.body);
             game.stage.addChild(this.sprite);
         };
@@ -41,17 +43,6 @@ define(
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 
-        var Asteroid = function Asteroid() {
-            Asteroid.super_.apply(this, arguments);
-            this.test = 'ASDASDAS TEST';
-        };
-
-        utils.inherits(Asteroid, Body);
-
-        body.create = function(param) {
-            return new Body(param);
-        };
-
-        return body;
+        return Body;
     }
 );

@@ -16,7 +16,8 @@ var Game = function Game() {
         texture: {
             background: 'bg2.png',
             backroundTest: 'bg.jpeg',
-            asteroid: 'asteroid.png'
+            asteroid: 'asteroid.png',
+            rectangle: 'rect.png'
         }
     };
 

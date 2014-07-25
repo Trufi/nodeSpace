@@ -74,7 +74,7 @@ define(
 
         game.addBody = function(body) {
             this.bodies[body.id] = body;
-            body.addToWorld();
+            body.addToGame();
         };
 
         game.removeBody = function(body) {

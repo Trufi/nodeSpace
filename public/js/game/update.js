@@ -1,7 +1,8 @@
 define(
-    'game/update',
-    ['game/game', 'game/camera'],
-    function(game, camera) {
+    function(require) {
+        var game = require('game/game');
+        var camera = require('game/camera');
+
         return function() {
             var first = true;
             _(game.bodies).forEach(function(el) {

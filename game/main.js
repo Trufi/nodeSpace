@@ -1,6 +1,6 @@
 var Game = require('./game');
 var User = require('./user');
-var Body = require('./body');
+var body = require('./body/index');
 
 var socketio = require('socket.io');
 
@@ -9,17 +9,27 @@ var game = new Game();
 game.start();
 
 // добавим астероид в игру
-var asteroid = new Body({
+var asteroid = body.create({
+    type: 1,
     position: [10, 0],
     velocity: [50, -10],
     angularVelocity: 0.53
 });
 game.addBody(asteroid);
 
-game.addBody(new Body({
+game.addBody(body.create({
+    type: 1,
     position: [500, 10],
     velocity: [-5, 5],
     angularVelocity: -0.1
+}));
+
+game.addBody(body.create({
+    type: 0,
+    position: [10, 1000],
+    velocity: [50, -150],
+    angularVelocity: 0.5,
+    mass: 5
 }));
 
 var init = function (server) {
