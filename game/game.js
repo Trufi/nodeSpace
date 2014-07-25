@@ -3,7 +3,7 @@ var utils = require('./utils');
 var _ = require('lodash');
 
 var Game = function Game() {
-    this.id = utils.getId('game');
+    this.id = ++Game._idCounter;
     this.worldSize = [5000, 5000];
     this.timeStep = 1 / 100;
     this.gravity = [0, 0];
@@ -26,6 +26,8 @@ var Game = function Game() {
         applyDamping: this.applyDamping
     });
 };
+
+Game._idCounter = 0;
 
 Game.prototype.start = function() {
     var _this = this;

@@ -10,10 +10,9 @@ define(
             var first = false;
 
             game.setBackground(assets.texture.background);
-            camera.set(camera.create(game.resolution[0], game.resolution[1], 0.5));
+            camera.set(camera.create(game.resolution[0], game.resolution[1]));
 
             _(data.bodies).forEach(function(el) {
-                console.log(el);
                 var ast = body.create(el);
                 game.addBody(ast);
 

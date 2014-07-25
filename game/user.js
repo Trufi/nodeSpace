@@ -1,9 +1,9 @@
-var utils = require('./utils');
-
 var User = function User(socket) {
-    this.id = utils.getId('user');
+    this.id = ++User._idCounter;
     this.socket = socket;
 };
+
+User._idCounter = 0;
 
 User.prototype.getInfo = function() {
     var info = {};

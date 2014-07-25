@@ -1,10 +1,8 @@
 define(
-    'game/utils',
-    [],
     function() {
         var utils = {};
 
-        // взято из node.jsZ
+        // взято из node.js
         utils.inherits = function(ctor, superCtor) {
             ctor.super_ = superCtor;
             ctor.prototype = Object.create(superCtor.prototype, {
