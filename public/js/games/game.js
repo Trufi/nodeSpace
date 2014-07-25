@@ -91,11 +91,11 @@ define(
             var _this = this;
 
             request.onUpdateGameState(function(data) {
+                _this.lastGameStepTime = (new Date()).getTime();
+
                 _(data.bodies).forEach(function(el) {
                     _this.bodies[el.id].update(el);
                 });
-
-                _this.lastGameStepTime = (new Date()).getTime();
             });
         };
 

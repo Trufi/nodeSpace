@@ -39,7 +39,7 @@ define(
             });*/
 
             this.updateFromServerEnable();
-
+            
             this.loop();
         };
 
