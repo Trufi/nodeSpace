@@ -32,7 +32,7 @@ define(
 
         game.loop = function() {
             var _this = this;
-            var currentTime = (new Date()).getTime();
+            var currentTime = Date.now();
 
             if (currentTime < this.lastGameStepTime) {
                 return;
@@ -82,7 +82,7 @@ define(
         };
 
         game.load = function(options, callback) {
-            this.lastGameStepTime = (new Date()).getTime();
+            this.lastGameStepTime = Date.now();
 
             assets.load(options.assets, callback);
         };
@@ -91,7 +91,7 @@ define(
             var _this = this;
 
             request.onUpdateGameState(function(data) {
-                _this.lastGameStepTime = (new Date()).getTime();
+                _this.lastGameStepTime = Date.now();
 
                 _(data.bodies).forEach(function(el) {
                     _this.bodies[el.id].update(el);

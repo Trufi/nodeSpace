@@ -16,7 +16,6 @@ define(
         request.onUpdateGameState = function(callback) {
             socket.on('updateGameState', function(data) {
                 callback(data);
-                console.log('update!');
             });
         };
 

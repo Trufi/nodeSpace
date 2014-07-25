@@ -31,10 +31,10 @@ Game._idCounter = 0;
 Game.prototype.start = function() {
     var _this = this;
 
-    this.lastTimeStep = (new Date()).getTime();
+    this.lastTimeStep = Date.now();
 
     this.interval = setInterval(function() {
-        var currentTimeStep = (new Date()).getTime();
+        var currentTimeStep = Date.now();
 
         _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
         _this.sendStateToUsers();
