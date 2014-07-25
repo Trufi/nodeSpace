@@ -4,7 +4,7 @@ var _ = require('lodash');
 var Game = function Game() {
     this.id = ++Game._idCounter;
     this.worldSize = [5000, 5000];
-    this.timeStep = 1 / 60;
+    this.timeStep = 1;
     this.gravity = [0, 0];
     this.applyDamping = false;
     this.interval = undefined;
@@ -101,7 +101,7 @@ Game.prototype.addUser = function(user) {
 };
 
 Game.prototype.removeUser = function(user) {
-    if (typeof this.users !== 'undefined') {
+    if (this.users[user.id] !== undefined) {
         delete this.users[user.id];
     }
 };

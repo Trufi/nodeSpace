@@ -4,7 +4,7 @@ define(
         var PIXI = require('pixi');
         var utils = require('utils');
         var Body = require('./body');
-        var assets = require('game/assets');
+        var assets = require('modules/assets');
 
         var Rectangle = function Rectangle(options) {
             Rectangle.super_.apply(this, arguments);

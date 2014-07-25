@@ -5,7 +5,7 @@ define(
         var shapes = require('json!./shapes.json');
         var utils = require('utils');
         var Body = require('./body');
-        var assets = require('game/assets');
+        var assets = require('modules/assets');
 
         var Asteroid = function Asteroid(options) {
             Asteroid.super_.apply(this, arguments);

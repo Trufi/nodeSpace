@@ -1,6 +1,4 @@
 define(
-    'game/camera',
-    [],
     function() {
         var camera = {};
 

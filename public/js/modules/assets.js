@@ -1,7 +1,8 @@
 define(
-    'game/assets',
-    ['json!config', 'pixi'],
-    function(config, PIXI) {
+    function(require) {
+        var config = require('json!config');
+        var PIXI = require('pixi');
+
         var assets = {};
 
         assets.texture = {};

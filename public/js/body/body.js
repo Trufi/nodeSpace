@@ -3,9 +3,8 @@ define(
         var p2 = require('p2');
         var PIXI = require('pixi');
         var shapes = require('json!./shapes.json');
-        var game = require('game/game');
-        var camera = require('game/camera');
-        var assets = require('game/assets');
+        var camera = require('modules/camera');
+        var assets = require('modules/assets');
 
         // Класс простейшего тела
         var Body = function Body(options) {
@@ -31,7 +30,7 @@ define(
 
         Body.prototype.createSprite = function() {};
 
-        Body.prototype.addToGame = function() {
+        Body.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
             game.stage.addChild(this.sprite);
         };

@@ -1,7 +1,8 @@
 define(
-    'game/request',
-    ['json!config', 'socketio'],
-    function(config, io) {
+    function(require) {
+        var config = require('json!config');
+        var io = require('socketio');
+
         var request = {};
 
         var socket = io.connect(config.socketHost);
@@ -15,6 +16,7 @@ define(
         request.onUpdateGameState = function(callback) {
             socket.on('updateGameState', function(data) {
                 callback(data);
+                console.log('update!');
             });
         };
 

@@ -1,9 +1,15 @@
 define(
-    'game/main',
-    ['game/request', 'game/game', 'game/create', 'game/update', 'game/render'],
-    function(request, game, create, update, render) {
+    function(require) {
+        var request = require('modules/request');
+        var game = require('games/first');
+        var render = require('modules/render');
+
+        render.create();
+
         request.gameInit(function(data) {
-            game.start(data, create, update, render);
+            game.load(data, function() {
+                game.start(data);
+            });
         });
     }
 );

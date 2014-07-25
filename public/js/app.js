@@ -6,7 +6,9 @@ require.config({
         socketio: '/socket.io/socket.io.js',
         game: '../game',
         config: '../config.json',
-        body: '../game/body'
+        body: '../body',
+        modules: '../modules',
+        games: '../games'
     }
 });
 
