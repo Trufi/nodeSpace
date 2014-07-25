@@ -8,10 +8,11 @@ require.config({
         config: '../config.json',
         body: '../body',
         modules: '../modules',
-        games: '../games'
+        games: '../games',
+        main: '../main'
     }
 });
 
-require(['game/main'], function() {
+require(['main'], function() {
 
 });
