@@ -35,6 +35,17 @@ define(
             return (val - this.position[1]) * this.scale + this.height / 2;
         };
 
+        Camera.prototype.zoomOut = function() {
+            if (this.scale >= 0.3) {
+                this.scale -= 0.05;
+            }
+        };
+        Camera.prototype.zoomIn = function() {
+            if (this.scale <= 1.5) {
+                this.scale += 0.05;
+            }
+        };
+
         var enableCamera = new Camera();
 
         camera.create = function(width, height, scale) {

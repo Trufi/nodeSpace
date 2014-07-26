@@ -52,12 +52,17 @@ define(
                 el.updateSprite();
             });
 
-            this.background.tilePosition.x = this.camera.x(0);
-            this.background.tilePosition.y = this.camera.y(0);
+            this.updateBackground();
 
             if (key.press.SPACE) {
                 this.followBodyNumber = this.followBodyNumber % 3 + 1;
                 this.camera.followToBody(this.bodies[this.followBodyNumber]);
+            }
+
+            if (key.press.WHEELDOWN) {
+                this.camera.zoomOut();
+            } else if (key.press.WHEELUP) {
+                this.camera.zoomIn();
             }
 
             key.reset();

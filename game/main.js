@@ -11,7 +11,7 @@ game.start();
 // добавим астероид в игру
 var asteroid = body.create({
     type: 1,
-    position: [10, 0],
+    position: [0, 0],
     velocity: [0, 0],
     angularVelocity: 0.53
 });
@@ -20,7 +20,7 @@ game.addBody(asteroid);
 game.addBody(body.create({
     type: 1,
     position: [500, 10],
-    velocity: [-5, 0],
+    velocity: [0, 0],
     angularVelocity: -0.1
 }));
 

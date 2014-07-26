@@ -81,6 +81,14 @@ define(
             this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
         };
 
+        game.updateBackground = function() {
+            this.background.width = render.resolution[0] / this.camera.scale;
+            this.background.height = render.resolution[1] / this.camera.scale;
+            this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
+            this.background.tilePosition.x = render.resolution[0] * (1 / this.camera.scale - 1) / 2  - this.camera.position[0];
+            this.background.tilePosition.y = render.resolution[1] * (1 / this.camera.scale - 1) / 2  - this.camera.position[1];
+        };
+
         game.load = function(options, callback) {
             this.lastGameStepTime = Date.now();
 
@@ -107,6 +115,8 @@ define(
 
         game.update = function() {
             this.camera.update();
+
+            key.reset();
         };
 
         game.render = function() {};

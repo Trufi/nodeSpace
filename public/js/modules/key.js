@@ -35,24 +35,20 @@ define(
             32: 'SPACE'
         };
 
-        /*var resetKeyPressed = function(obj) {
-            for (var i = 0; i < 300; i++) {
-                obj[i] = false;
-            }
-        };*/
-
         var keyPressed = {};
-
-        //resetKeyPressed(keyPressed);
 
         document.onkeydown = function(ev) {
             keyPressed[codesToKey[ev.keyCode]] = true;
             //key.check = true;
         };
 
-/*        document.onkeyup = function(ev) {
-            keyPressed[codesToKey[ev.keyCode]] = false;
-        };*/
+        document.onwheel = function(ev) {
+            if (ev.deltaY < 0) {
+                keyPressed['WHEELUP'] = true;
+            } else {
+                keyPressed['WHEELDOWN'] = true;
+            }
+        };
 
         key.press = keyPressed;
 
@@ -61,8 +57,6 @@ define(
                 keyPressed[i] = false;
             }
         };
-
-        //key.check = false;
 
         return key;
     }
