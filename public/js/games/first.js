@@ -10,6 +10,7 @@ define(
         var request = require('modules/request');
         var body = require('body/index');
         var User = require('modules/user');
+        var key = require('modules/key');
 
         var game = _.clone(require('./game'));
 
@@ -32,7 +33,8 @@ define(
                 _this.addBody(body.create(el));
             });
 
-            this.camera.followToBody(this.bodies[3]);
+            this.followBodyNumber = 3;
+            this.camera.followToBody(this.bodies[this.followBodyNumber]);
 
 /*            _(options.users).forEach(function(el) {
                 _this.addUser(new User(el));
@@ -52,6 +54,13 @@ define(
 
             this.background.tilePosition.x = this.camera.x(0);
             this.background.tilePosition.y = this.camera.y(0);
+
+            if (key.press.SPACE) {
+                this.followBodyNumber = this.followBodyNumber % 3 + 1;
+                this.camera.followToBody(this.bodies[this.followBodyNumber]);
+            }
+
+            key.reset();
         };
 
         game.render = function() {
