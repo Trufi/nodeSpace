@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var Game = require('./game');
 var User = require('./user');
 var body = require('./body/index');
@@ -45,10 +46,9 @@ var init = function (server) {
         });
 
         socket.on('playerActions', function(data) {
-            // console.log(data);
-            if (data.thrust) {
-                user.ship.thrust();
-            }
+            _(data).forEach(function(el) {
+                user.action(el);
+            });
         });
     });
 };

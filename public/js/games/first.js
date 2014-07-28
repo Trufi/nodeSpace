@@ -47,7 +47,7 @@ define(
             // присваиваем User игроку
             player.setUser(this.users[options.player.id]);
 
-            this.followBodyNumber = player.ship.id;
+            this.followBodyNumber = player.user.ship.id;
             this.camera.followToBody(this.bodies[this.followBodyNumber]);
 
             this.updateFromServerEnable();
@@ -76,7 +76,7 @@ define(
             }
 
             if (key.down.W) {
-                player.actions.thrust.done = true; // TODO: херня какая то + нет проверки на время
+                player.action('thrust');
             }
 
             key.reset();

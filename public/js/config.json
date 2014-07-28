@@ -2,5 +2,5 @@
     "socketHost": "http://localhost",
     "gameHtmlWrapId": "gamewrap",
     "pathToAssets": "/img/",
-    "timeAbilityRepeat": 1000
+    "actionsCooldown": 50
 }

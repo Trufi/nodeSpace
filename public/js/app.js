@@ -9,7 +9,8 @@ require.config({
         body: '../body',
         modules: '../modules',
         games: '../games',
-        main: '../main'
+        main: '../main',
+        actions: '../actions'
     }
 });
 
