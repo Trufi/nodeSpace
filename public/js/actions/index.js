@@ -1,6 +1,6 @@
 define(
     function(require) {
-        var Thrust = require('./thrust');
+        var Move = require('./move');
 
         var module = {};
 
@@ -9,7 +9,16 @@ define(
 
             switch (options.name) {
                 case 'thrust':
-                    newAction = new Thrust(options);
+                    newAction = new Move(options);
+                    break;
+                case 'reverse':
+                    newAction = new Move(options);
+                    break;
+                case 'left':
+                    newAction = new Move(options);
+                    break;
+                case 'right':
+                    newAction = new Move(options);
                     break;
             }
 

@@ -23,11 +23,34 @@ define(
                     assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
                 });
 
+                generateGraphicsTextures();
+
                 callback();
             };
 
             loader.load();
         };
+
+        function generateThrustTextures() {
+            var graphics = new PIXI.Graphics();
+            graphics.beginFill(0xFFFFFF);
+            graphics.drawRect(0, 0, 5, 30);
+            graphics.endFill();
+            return graphics.generateTexture();
+        }
+
+        function generateSideTextures() {
+            var graphics = new PIXI.Graphics();
+            graphics.beginFill(0xFFFFFF);
+            graphics.drawRect(0, 0, 5, 5);
+            graphics.endFill();
+            return graphics.generateTexture();
+        }
+
+        function generateGraphicsTextures() {
+            assets.texture.thrust = generateThrustTextures();
+            assets.texture.side = generateSideTextures();
+        }
 
         return assets;
     }

@@ -18,7 +18,8 @@ Body.prototype.createBody = function(options) {
         velocity: options.velocity || [0, 0],
         damping: 0,
         angularVelocity: options.angularVelocity || 0,
-        angularDamping: 0
+        angularDamping: 0,
+        angle: options.angle || 0
     });
 };
 

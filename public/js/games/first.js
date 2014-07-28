@@ -77,6 +77,16 @@ define(
 
             if (key.down.W) {
                 player.action('thrust');
+            } else if (key.down.S) {
+                player.action('reverse');
+            }
+
+            if (key.down.A) {
+                player.action('left');
+            } else if (key.down.D) {
+                player.action('right');
+            } else if (!key.down.CTRL) {
+                // TODO: торможение
             }
 
             key.reset();
