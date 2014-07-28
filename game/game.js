@@ -16,7 +16,8 @@ var Game = function Game() {
             background: 'bg2.png',
             backroundTest: 'bg.jpeg',
             asteroid: 'asteroid.png',
-            rectangle: 'rect.png'
+            rectangle: 'rect.png',
+            ship: 'ship2.png'
         }
     };
 
@@ -91,13 +92,15 @@ Game.prototype.getGameFirstState = function(user) {
         return el.getFirstInfo();
     });
 
+    state.player = user.getFirstInfo();
+
     return state;
 };
 
 Game.prototype.addUser = function(user) {
     this.users[user.id] = user;
-
-    user.send('firstGameState', this.getGameFirstState());
+    this.addBody(user.ship);
+    user.send('firstGameState', this.getGameFirstState(user));
 };
 
 Game.prototype.removeUser = function(user) {

@@ -36,8 +36,20 @@ var init = function (server) {
     var io = socketio.listen(server, {log: false});
 
     io.sockets.on('connection', function (socket) {
-        var user = new User(socket);
-        game.addUser(user);
+        var user;
+
+        socket.once('userConnect', function() {
+            user = new User(socket);
+            user.createShip();
+            game.addUser(user);
+        });
+
+        socket.on('playerActions', function(data) {
+            // console.log(data);
+            if (data.thrust) {
+                user.ship.thrust();
+            }
+        });
     });
 };
 

@@ -1,9 +1,12 @@
 define(
-    'game/user',
-    [],
-    function() {
-        var User = function User(param) {
-            this.id = param.id;
+    function(require) {
+        var User = function User(options) {
+            this.id = options.id;
+            this.ship;
+        };
+
+        User.prototype.setShip = function(body) {
+            this.ship = body;
         };
 
         return User;

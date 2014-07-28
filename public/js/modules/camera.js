@@ -10,6 +10,9 @@ define(
             this.position = [0, 0];
             //this.angle = 0; пока без поворотов
 
+            // значение на которое меняется scale при зуме
+            this.zoomChangeValue = 0.1;
+
             this.followFunction = function() {
                 return [0, 0];
             };
@@ -37,12 +40,12 @@ define(
 
         Camera.prototype.zoomOut = function() {
             if (this.scale >= 0.3) {
-                this.scale -= 0.05;
+                this.scale -= this.zoomChangeValue;
             }
         };
         Camera.prototype.zoomIn = function() {
             if (this.scale <= 1.5) {
-                this.scale += 0.05;
+                this.scale += this.zoomChangeValue;
             }
         };
 

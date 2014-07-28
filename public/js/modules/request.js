@@ -8,6 +8,7 @@ define(
         var socket = io.connect(config.socketHost);
 
         request.gameInit = function(callback) {
+            socket.emit('userConnect');
             socket.once('firstGameState', function (data) {
                 callback(data);
             });
@@ -17,6 +18,10 @@ define(
             socket.on('updateGameState', function(data) {
                 callback(data);
             });
+        };
+
+        request.sendToServer = function(data) {
+            socket.emit('playerActions', data);
         };
 
         return request;

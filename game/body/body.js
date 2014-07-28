@@ -44,8 +44,7 @@ Body.prototype.getFirstInfo = function() {
         ],
         angularVelocity: this.body.angularVelocity,
         angle: this.body.angle,
-        id: this.id,
-        type: this.type
+        id: this.id
     };
 };
 

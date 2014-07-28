@@ -28,6 +28,9 @@ define(
         // фон игры
         game.background;
 
+        // игрок
+        game.player;
+
         game.lastGameStepTime;
 
         game.loop = function() {
@@ -87,6 +90,9 @@ define(
             this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
             this.background.tilePosition.x = render.resolution[0] * (1 / this.camera.scale - 1) / 2  - this.camera.position[0];
             this.background.tilePosition.y = render.resolution[1] * (1 / this.camera.scale - 1) / 2  - this.camera.position[1];
+
+            /*this.background.tilePosition.x = -this.camera.position[0];
+            this.background.tilePosition.y = -this.camera.position[1];*/
         };
 
         game.load = function(options, callback) {
@@ -102,7 +108,9 @@ define(
                 _this.lastGameStepTime = Date.now();
 
                 _(data.bodies).forEach(function(el) {
-                    _this.bodies[el.id].update(el);
+                    if (_this.bodies[el.id] !== undefined) {
+                        _this.bodies[el.id].update(el);
+                    }
                 });
             });
         };

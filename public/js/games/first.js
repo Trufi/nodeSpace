@@ -11,6 +11,7 @@ define(
         var body = require('body/index');
         var User = require('modules/user');
         var key = require('modules/key');
+        var player = require('modules/player');
 
         var game = _.clone(require('./game'));
 
@@ -24,21 +25,30 @@ define(
 
             this.stage = new PIXI.Stage(0x000000);
 
+            // создаем камеру
             this.camera = camera.create(render.resolution[0], render.resolution[1]);
             camera.set(this.camera);
 
+            // создаем фон
             this.createBackground(assets.texture.background);
 
+            // создаем объекты в космосе
             _(options.bodies).forEach(function(el) {
                 _this.addBody(body.create(el));
             });
 
-            this.followBodyNumber = 3;
-            this.camera.followToBody(this.bodies[this.followBodyNumber]);
+            // создаем и сохраняем юзеров
+            _(options.users).forEach(function(el) {
+                var user = new User(el);
+                _this.addUser(user);
+                user.setShip(_this.bodies[el.shipId]);
+            });
 
-/*            _(options.users).forEach(function(el) {
-                _this.addUser(new User(el));
-            });*/
+            // присваиваем User игроку
+            player.setUser(this.users[options.player.id]);
+
+            this.followBodyNumber = player.ship.id;
+            this.camera.followToBody(this.bodies[this.followBodyNumber]);
 
             this.updateFromServerEnable();
             
@@ -55,7 +65,7 @@ define(
             this.updateBackground();
 
             if (key.press.SPACE) {
-                this.followBodyNumber = this.followBodyNumber % 3 + 1;
+                this.followBodyNumber = this.followBodyNumber % _.size(this.bodies) + 1;
                 this.camera.followToBody(this.bodies[this.followBodyNumber]);
             }
 
@@ -65,7 +75,12 @@ define(
                 this.camera.zoomIn();
             }
 
+            if (key.press.W) {
+                player.actions.thrust.done = true; // TODO: херня какая то + нет проверки на время
+            }
+
             key.reset();
+            player.sendActionToServer();
         };
 
         game.render = function() {

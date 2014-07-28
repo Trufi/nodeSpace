@@ -1,5 +1,6 @@
 var Asteroid = require('./asteroid');
 var Rectangle = require('./rectangle');
+var Ship = require('./ships/ship');
 
 exports.create = function(options) {
     var newBody;
@@ -13,6 +14,9 @@ exports.create = function(options) {
             break;
         case 1:
             newBody = new Asteroid(options);
+            break;
+        case 10:
+            newBody = new Ship(options);
             break;
     }
 
