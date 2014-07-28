@@ -2,7 +2,7 @@ define(
     function(require) {
         var key = {};
 
-        var keyCodes = {
+        /*var keyCodes = {
             1: 49, 2: 50, 3: 51, 4: 52, 5: 53, 6: 54, 7: 55, 8: 56, 9: 57, 0: 48,
             Q: 81, W: 87, E: 69, R: 82, T: 84, Y: 89, U: 85, I: 73, O: 79, P: 80,
             A: 65, S: 83, D: 68, F: 70, G: 71, H: 72, J: 74, K: 75, L: 76,
@@ -16,7 +16,7 @@ define(
             RIGHT: 39,
             DOWN: 40,
             SPACE: 32
-        };
+        };*/
         //TODO: доделать остальные кнопки
 
         var codesToKey = {
@@ -36,10 +36,16 @@ define(
         };
 
         var keyPressed = {};
+        var keyDown = {};
 
         document.onkeydown = function(ev) {
             keyPressed[codesToKey[ev.keyCode]] = true;
+            keyDown[codesToKey[ev.keyCode]] = true;
             //key.check = true;
+        };
+
+        document.onkeyup = function(ev) {
+            keyDown[codesToKey[ev.keyCode]] = false;
         };
 
         document.onwheel = function(ev) {
@@ -50,13 +56,15 @@ define(
             }
         };
 
-        key.press = keyPressed;
+        key.pressed = keyPressed;
 
         key.reset = function() {
             for (var i in keyPressed) {
                 keyPressed[i] = false;
             }
         };
+
+        key.down = keyDown;
 
         return key;
     }

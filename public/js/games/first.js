@@ -64,18 +64,18 @@ define(
 
             this.updateBackground();
 
-            if (key.press.SPACE) {
+            if (key.pressed.SPACE) {
                 this.followBodyNumber = this.followBodyNumber % _.size(this.bodies) + 1;
                 this.camera.followToBody(this.bodies[this.followBodyNumber]);
             }
 
-            if (key.press.WHEELDOWN) {
+            if (key.pressed.WHEELDOWN) {
                 this.camera.zoomOut();
-            } else if (key.press.WHEELUP) {
+            } else if (key.pressed.WHEELUP) {
                 this.camera.zoomIn();
             }
 
-            if (key.press.W) {
+            if (key.down.W) {
                 player.actions.thrust.done = true; // TODO: херня какая то + нет проверки на время
             }
 

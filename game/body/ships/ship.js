@@ -38,7 +38,7 @@ Ship.prototype.thrust = function() {
 
     if (this.checkAbilities('thrust')) {
         this.body.toWorldFrame(worldPoint, [0, -20]);
-        force = [-this.forceThrust * Math.sin(this.body.angle), -this.forceThrust * Math.cos(this.body.angle)];
+        force = [this.forceThrust * Math.sin(this.body.angle), -this.forceThrust * Math.cos(this.body.angle)];
         this.body.applyForce(force, worldPoint);
     }
 };
