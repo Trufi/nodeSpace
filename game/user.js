@@ -40,13 +40,15 @@ User.prototype.createShip = function() {
         mass: 50
     });
 
-    _(this.ship.userActions).forEach(function(el) {
-        _this.actions[el] = action.create({name: el, user: _this});
+    _(this.ship.actions).forEach(function(el, i) {
+        _this.actions[i] = el;
     });
 };
 
 User.prototype.action = function(name) {
-    this.actions[name].use();
+    if (this.actions[name] !== undefined) {
+        this.actions[name].use();
+    }
 };
 
 module.exports = User;

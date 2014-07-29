@@ -20,6 +20,7 @@ exports.create = function(options) {
             break;
     }
 
+    newBody.applyActions();
     newBody.createBody(options);
     newBody.applyShape();
 

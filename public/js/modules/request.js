@@ -21,7 +21,6 @@ define(
         };
 
         request.sendToServer = function(data) {
-            console.log(data);
             socket.emit('playerActions', data);
         };
 

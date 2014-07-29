@@ -2,9 +2,11 @@ define(
     function(require) {
         var p2 = require('p2');
         var PIXI = require('pixi');
+        var _ = require('lodash');
         var shapes = require('json!./shapes.json');
         var camera = require('modules/camera');
         var assets = require('modules/assets');
+        var action = require('actions/index');
 
         // Класс простейшего тела
         var Body = function Body(options) {
@@ -12,6 +14,9 @@ define(
             this.type = options.type;
             this.body;
             this.sprite;
+
+            this.actionsArray = [];
+            this.actions = {};
         };
 
         Body.prototype.createBody = function(options) {
@@ -27,6 +32,14 @@ define(
         };
 
         Body.prototype.applyShape = function() {};
+
+        Body.prototype.applyActions = function() {
+            var _this = this;
+
+            _(this.actionsArray).forEach(function(el) {
+                _this.actions[el] = action.create({body: _this, name: el});
+            });
+        };
 
         Body.prototype.createSprite = function() {};
 

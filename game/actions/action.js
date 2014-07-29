@@ -1,7 +1,6 @@
 var config = require('../config');
 
 var Action = function Action(options) {
-    this.user = options.user;
     this.cooldown = options.cooldown || config.actionsCooldown;
     this.lastTimeUsed = 0;
 };

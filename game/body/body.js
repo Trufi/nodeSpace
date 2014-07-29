@@ -1,5 +1,7 @@
 var p2 = require('p2');
 var shapes = require('./shapes');
+var _ = require('lodash');
+var action = require('../actions/index');
 
 // Класс простейшего тела
 var Body = function Body(options) {
@@ -7,6 +9,9 @@ var Body = function Body(options) {
     this.type = options.type;
     this.body;
     this.texture;
+
+    this.actionsArray = [];
+    this.actions = {};
 }
 
 Body._idCounter = 0;
@@ -25,6 +30,14 @@ Body.prototype.createBody = function(options) {
 
 Body.prototype.applyShape = function() {
     this.body.addShape(new p2.Circle(87.5));
+};
+
+Body.prototype.applyActions = function() {
+    var _this = this;
+
+    _(this.actionsArray).forEach(function(el) {
+        _this.actions[el] = action.create({body: _this, name: el});
+    });
 };
 
 Body.prototype.addToWorld = function(world) {

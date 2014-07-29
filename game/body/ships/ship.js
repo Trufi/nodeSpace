@@ -1,14 +1,15 @@
 var utils = require('util');
 var p2 = require('p2');
+var _ = require('lodash');
 var Body = require('../body');
 var config = require('../../config.json');
 
 var Ship = function Ship(options) {
     Ship.super_.apply(this, arguments);
 
-    this.forceThrust = options.forceThrust || 20000;
-    this.forceSide = options.forceSide || 2000;
-    this.userActions = ['thrust', 'reverse', 'left', 'right'];
+    this.forceThrust = options.forceThrust || 10000;
+    this.forceSide = options.forceSide || 500;
+    this.actionsArray = ['thrust', 'reverse', 'left', 'right'];
 };
 
 utils.inherits(Ship, Body);

@@ -2,6 +2,7 @@ define(
     function(require) {
         var utils = require('utils');
         var p2 = require('p2');
+        var _ = require('lodash');
         var PIXI = require('pixi');
         var Body = require('../body');
         var config = require('json!config');
@@ -11,11 +12,9 @@ define(
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
 
-            this.forceThrust = options.forceThrust || 20000;
-            this.forceSide = options.forceSide || 2000;
-            this.userActions = ['thrust', 'reverse', 'left', 'right'];
-            // TODO: придмать что с действиямиы
-            //this.usedThrust = false;
+            this.forceThrust = options.forceThrust || 10000;
+            this.forceSide = options.forceSide || 500;
+            this.actionsArray = ['thrust', 'reverse', 'left', 'right'];
         };
 
         utils.inherits(Ship, Body);
@@ -25,13 +24,36 @@ define(
         };
 
         Ship.prototype.createSprite = function() {
+            var _this = this;
+
             this.sprite = new PIXI.Sprite(assets.texture.ship);
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
 
-            this.thrustSprite = new PIXI.Sprite(assets.texture.thrust);
-            this.thrustSprite.anchor.x = 0;
-            this.thrustSprite.anchor.y = 0.5;
+
+            // спрайт для thrust
+            this.spriteThrust = new PIXI.Sprite(assets.texture.thrust);
+            this.spriteThrust.anchor.x = 0;
+            this.spriteThrust.anchor.y = 0.5;
+            this.spriteThrust.position.x = -45;
+            this.spriteThrust.position.y = 0;
+            this.sprite.addChild(this.spriteThrust);
+
+            // боковые спрайты
+            this.spriteSide = [];
+
+            function createSideSprite(x, y) {
+                var sprite = new PIXI.Sprite(assets.texture.side);
+                sprite.position.x = x;
+                sprite.position.y = y;
+                _this.sprite.addChild(sprite);
+                return sprite;
+            }
+
+            this.spriteSide[0] = createSideSprite(-30, -35);
+            this.spriteSide[1] = createSideSprite(0, -35);
+            this.spriteSide[2] = createSideSprite(-30, 10);
+            this.spriteSide[3] = createSideSprite(0, 10);
         };
 
         Ship.prototype.updateSprite = function() {
@@ -40,13 +62,25 @@ define(
             this.sprite.rotation = this.body.angle;
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
 
-            this.thrustSprite.position.x = -45;
-            this.thrustSprite.position.y = 0;
+            // проверям actions
+            this.spriteThrust.visible = this.actions.thrust.isAnimate();
+
+            this.spriteSide[0].visible = false;
+            this.spriteSide[1].visible = false;
+            this.spriteSide[2].visible = false;
+            this.spriteSide[3].visible = false;
+
+            if (this.actions.left.isAnimate()) {
+                this.spriteSide[0].visible = true;
+                this.spriteSide[3].visible = true;
+            } else if (this.actions.right.isAnimate()) {
+                this.spriteSide[1].visible = true;
+                this.spriteSide[2].visible = true;
+            }
         };
 
         Ship.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
-            this.sprite.addChild(this.thrustSprite);
             game.stage.addChild(this.sprite);
         };
 

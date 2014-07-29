@@ -23,6 +23,8 @@ define(
                     assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
                 });
 
+                assets.texture.debug = PIXI.Texture.fromImage(config.pathToAssets + 'debug.png');
+
                 generateGraphicsTextures();
 
                 callback();
@@ -42,7 +44,7 @@ define(
         function generateSideTextures() {
             var graphics = new PIXI.Graphics();
             graphics.beginFill(0xFFFFFF);
-            graphics.drawRect(0, 0, 5, 5);
+            graphics.drawRect(0, 0, 10, 5);
             graphics.endFill();
             return graphics.generateTexture();
         }

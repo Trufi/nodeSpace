@@ -41,6 +41,10 @@ define(
                 return;
             }
 
+            requestAnimFrame(function() {
+                _this.loop();
+            });
+
             // шаг мира p2.js
             this.world.step((currentTime - this.lastGameStepTime) / 1000);
 
@@ -51,10 +55,6 @@ define(
             render.draw(this.stage);
 
             this.lastGameStepTime = currentTime;
-
-            requestAnimFrame(function() {
-                _this.loop();
-            });
 
             this.render();
         };
