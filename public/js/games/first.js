@@ -12,6 +12,7 @@ define(
         var User = require('modules/user');
         var key = require('modules/key');
         var player = require('modules/player');
+        var ScreenArrow = require('interface/screenArrow');
 
         var game = _.clone(require('./game'));
 
@@ -49,6 +50,12 @@ define(
 
             this.followBodyNumber = player.user.ship.id;
             this.camera.followToBody(this.bodies[this.followBodyNumber]);
+
+            this.scrArrow = new ScreenArrow({
+                camera: this.camera,
+                target: this.bodies[1],
+                stage: this.stage
+            });
 
             this.updateFromServerEnable();
             
@@ -88,6 +95,8 @@ define(
             } else if (!key.down.CTRL) {
                 // TODO: торможение
             }
+
+            this.scrArrow.update();
 
             key.reset();
             player.sendActionToServer();

@@ -11,6 +11,9 @@ define(
             var loadArray = [],
                 loader;
 
+            loadObj.texture.screenArrow = 'screenarrow.png';
+            loadObj.texture.debug = 'debug.png';
+
             // загрузка текстур
             _(loadObj.texture).forEach(function(el) {
                 loadArray.push(config.pathToAssets + el);
@@ -22,8 +25,6 @@ define(
                 _(loadObj.texture).forEach(function(el, i) {
                     assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
                 });
-
-                assets.texture.debug = PIXI.Texture.fromImage(config.pathToAssets + 'debug.png');
 
                 generateGraphicsTextures();
 

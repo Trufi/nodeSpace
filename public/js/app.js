@@ -10,7 +10,8 @@ require.config({
         modules: '../modules',
         games: '../games',
         main: '../main',
-        actions: '../actions'
+        actions: '../actions',
+        interface: '../interface'
     }
 });
 
