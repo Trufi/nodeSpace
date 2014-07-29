@@ -8,12 +8,15 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var gameConfig = require('./game/config')
+
 
 var app = express();
 app.set('port', 8888);
+app.set('host', gameConfig.host)
 
-var server = app.listen(app.get('port'), function () {
-    console.log('server listen on ' + app.get('port') + ' port');
+var server = app.listen(app.get('port'), app.set('host'), function () {
+    console.log('server listen on ' + app.get('port') + ' port and host ' + app.set('host'));
 });
 
 // Init game

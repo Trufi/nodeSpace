@@ -33,20 +33,21 @@ define(
 
         game.lastGameStepTime;
 
+        game.dataFromServer;
+
         game.loop = function() {
             var _this = this;
             var currentTime = Date.now();
+
+            //console.log(parseInt(1000 / (currentTime - this.lastGameStepTime), 10));
 
             if (currentTime < this.lastGameStepTime) {
                 return;
             }
 
-            requestAnimFrame(function() {
-                _this.loop();
-            });
-
             // шаг мира p2.js
-            this.world.step((currentTime - this.lastGameStepTime) / 1000);
+            //this.world.step((currentTime - this.lastGameStepTime) / 1000);
+            this.worldStep(currentTime);
 
             // производим различные действия для нового шага
             this.update();
@@ -55,6 +56,10 @@ define(
             render.draw(this.stage);
 
             this.lastGameStepTime = currentTime;
+
+            requestAnimFrame(function() {
+                _this.loop();
+            });
 
             this.render();
         };
@@ -105,14 +110,45 @@ define(
             var _this = this;
 
             request.onUpdateGameState(function(data) {
-                _this.lastGameStepTime = Date.now();
+                _this.dataFromServer = data;
+                _this.dataFromServer.time = Date.now();
+            });
+        };
 
-                _(data.bodies).forEach(function(el) {
-                    if (_this.bodies[el.id] !== undefined) {
-                        _this.bodies[el.id].update(el);
+        game.updateFromDataServer = function() {
+            var _this = this;
+            // TODO: возможно dataFromServer надо клонировать
+
+            this.lastGameStepTime = this.dataFromServer.time;
+
+            _(this.dataFromServer.bodies).forEach(function(el) {
+                if (_this.bodies[el.id] !== undefined) {
+                    _this.bodies[el.id].update(el);
+                }
+            });
+
+            if (this.dataFromServer.newData !== undefined) {
+                _(this.dataFromServer.newData.bodies).forEach(function(el) {
+                    if (_this.bodies[el.id] === undefined) {
+                        _this.addBody(body.create(el));
                     }
                 });
-            });
+
+                _(this.dataFromServer.newData.users).forEach(function(el) {
+                    if (_this.users[el.id] === undefined) {
+                        _this.addUser(new User(el));
+                    }
+                });
+            }
+        };
+
+        game.worldStep = function(currentTime) {
+            if (this.dataFromServer !== undefined) {
+                this.updateFromDataServer();
+                this.dataFromServer = undefined;
+            }
+
+            this.world.step((currentTime - this.lastGameStepTime) / 1000);
         };
 
         game.start = function() {

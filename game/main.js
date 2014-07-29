@@ -46,9 +46,11 @@ var init = function (server) {
         });
 
         socket.on('playerActions', function(data) {
-            _(data).forEach(function(el) {
-                user.action(el);
-            });
+            if (user !== undefined) {
+                _(data).forEach(function (el) {
+                    user.action(el);
+                });
+            }
         });
     });
 };

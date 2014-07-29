@@ -1,3 +1,5 @@
 {
-    "actionsCooldown": 50
+    "actionsCooldown": 50,
+    "host2": "92.125.250.27",
+    "host": "192.168.0.4"
 }

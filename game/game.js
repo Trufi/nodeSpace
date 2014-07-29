@@ -3,7 +3,6 @@ var _ = require('lodash');
 
 var Game = function Game() {
     this.id = ++Game._idCounter;
-    this.worldSize = [5000, 5000];
     this.timeStep = 1 / 60;
     this.gravity = [0, 0];
     this.applyDamping = false;
@@ -20,6 +19,9 @@ var Game = function Game() {
             ship: 'ship2.png'
         }
     };
+
+    this.newBodies = [];
+    this.newUsers = [];
 
     this.world = new p2.World({
         gravity: this.gravity,
@@ -49,11 +51,27 @@ Game.prototype.stop = function() {
 };
 
 Game.prototype.sendStateToUsers = function() {
-    var _this = this;
+    var _this = this,
+        hasNew = false;
+
+    if (this.newBodies.length > 0 || this.newUsers.length > 0) {
+        hasNew = true;
+    }
 
     _(this.users).forEach(function(el) {
-        el.send('updateGameState', _this.getGameState());
+        var gameState = _this.getGameState(el);
+
+        if (hasNew) {
+            gameState.newData = _this.getGameNewState(el);
+        }
+
+        el.send('updateGameState', gameState);
     });
+
+    if (hasNew) {
+        _this.newBodies = [];
+        _this.newUsers = [];
+    }
 };
 
 // данные, которые отправляются через каждый шаг
@@ -97,9 +115,27 @@ Game.prototype.getGameFirstState = function(user) {
     return state;
 };
 
+// данные о новых телах и пользователях
+Game.prototype.getGameNewState = function(user) {
+    var state = {};
+
+    state.bodies = _.map(this.newBodies, function(el) {
+        return el.getFirstInfo();
+    });
+
+    state.users = _.map(this.newUsers, function(el) {
+        return el.getFirstInfo();
+    });
+
+    return state;
+};
+
 Game.prototype.addUser = function(user) {
     this.users[user.id] = user;
     this.addBody(user.ship);
+
+    this.newUsers.push(user);
+
     user.send('firstGameState', this.getGameFirstState(user));
 };
 
@@ -112,6 +148,8 @@ Game.prototype.removeUser = function(user) {
 Game.prototype.addBody = function(body) {
     this.bodies[body.id] = body;
     body.addToWorld(this.world);
+
+    this.newBodies.push(body);
 };
 
 module.exports = Game;
