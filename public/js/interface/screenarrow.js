@@ -25,13 +25,7 @@ define(
         };
 
         Arrow.prototype.getTargetPosition = function() {
-            switch (this.typeTarget) {
-                case 0:
-                    // Body
-                    return [this.target.body.position[0], this.target.body.position[1]];
-                default:
-                    return [0, 0];
-            };
+            return [this.target.body.position[0], this.target.body.position[1]];
         };
 
         Arrow.prototype.createSprite = function() {
@@ -77,11 +71,16 @@ define(
         };
 
         Arrow.prototype.update = function() {
-            var spr = this.getSpritePosition();
-
-            this.sprite.position.x = spr.position[0];
-            this.sprite.position.y = spr.position[1];
-            this.sprite.rotation = spr.angle;
+            var spr;
+            if (this.camera.containsSprite(this.target.sprite)) {
+                this.sprite.visible = false;
+            } else {
+                spr = this.getSpritePosition();
+                this.sprite.position.x = spr.position[0];
+                this.sprite.position.y = spr.position[1];
+                this.sprite.rotation = spr.angle;
+                this.sprite.visible = true;
+            }
         };
 
         return Arrow;

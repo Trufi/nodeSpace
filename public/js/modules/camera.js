@@ -1,5 +1,7 @@
 define(
-    function() {
+    function(require) {
+        var PIXI = require('pixi');
+
         var camera = {};
 
         var Camera = function Camera(width, height, scale) {
@@ -16,6 +18,8 @@ define(
             this.followFunction = function() {
                 return [0, 0];
             };
+
+            this.rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
         };
 
         Camera.prototype.followToBody = function(body) {
@@ -46,6 +50,22 @@ define(
         Camera.prototype.zoomIn = function() {
             if (this.scale <= 1.5) {
                 this.scale += this.zoomChangeValue;
+            }
+        };
+
+        Camera.prototype.containsSprite = function(sprite) {
+            var bounds = sprite.getBounds();
+
+            if (this.rectangle.contains(bounds.x, bounds.y)) {
+                return true;
+            } else if (this.rectangle.contains(bounds.x + bounds.width, bounds.y)) {
+                return true;
+            } else if (this.rectangle.contains(bounds.x, bounds.y + bounds.height)) {
+                return true;
+            } else if (this.rectangle.contains(bounds.x + bounds.width, bounds.y + bounds.height)) {
+                return true;
+            } else {
+                return false;
             }
         };
 
