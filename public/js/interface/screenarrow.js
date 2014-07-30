@@ -1,5 +1,6 @@
 define(
     function(require) {
+        var p2 = require('p2');
         var PIXI = require('pixi');
         var assets = require('modules/assets');
         var Body = require('body/body');
@@ -9,12 +10,14 @@ define(
             this.target;
             this.typeTarget;
             this.sprite;
+            this.text;
             this.camera;
             this.stage = options.stage;
 
             this.setCamera(options.camera);
             this.followTo(options.target);
             this.createSprite();
+            //this.createText();
         };
 
         Arrow.prototype.followTo = function(target) {
@@ -33,6 +36,14 @@ define(
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
             this.stage.addChild(this.sprite);
+        };
+
+        Arrow.prototype.createText = function() {
+            this.text = new PIXI.Text('0', {
+                fill: '#AD0F0F'
+            });
+
+            this.stage.addChild(this.text);
         };
 
         Arrow.prototype.setCamera = function(camera) {

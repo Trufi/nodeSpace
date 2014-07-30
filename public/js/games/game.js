@@ -57,6 +57,7 @@ define(
 
             this.lastGameStepTime = currentTime;
 
+
             requestAnimFrame(function() {
                 _this.loop();
             });
@@ -117,24 +118,24 @@ define(
 
         game.updateFromDataServer = function() {
             var _this = this;
-            // TODO: возможно dataFromServer надо клонировать
+            var data = this.dataFromServer;
 
-            this.lastGameStepTime = this.dataFromServer.time;
+            this.lastGameStepTime = data.time;
 
-            _(this.dataFromServer.bodies).forEach(function(el) {
+            _(data.bodies).forEach(function(el) {
                 if (_this.bodies[el.id] !== undefined) {
                     _this.bodies[el.id].update(el);
                 }
             });
 
-            if (this.dataFromServer.newData !== undefined) {
-                _(this.dataFromServer.newData.bodies).forEach(function(el) {
+            if (data.newData !== undefined) {
+                _(data.newData.bodies).forEach(function(el) {
                     if (_this.bodies[el.id] === undefined) {
                         _this.addBody(body.create(el));
                     }
                 });
 
-                _(this.dataFromServer.newData.users).forEach(function(el) {
+                _(data.newData.users).forEach(function(el) {
                     if (_this.users[el.id] === undefined) {
                         _this.addUser(new User(el));
                     }
@@ -148,7 +149,9 @@ define(
                 this.dataFromServer = undefined;
             }
 
-            this.world.step((currentTime - this.lastGameStepTime) / 1000);
+            if (currentTime !== this.lastGameStepTime) {
+                this.world.step((currentTime - this.lastGameStepTime) / 1000);
+            }
         };
 
         game.start = function() {

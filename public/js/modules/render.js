@@ -2,11 +2,15 @@ define(
     function(require) {
         var PIXI = require('pixi');
         var config = require('json!config');
+        var _ = require('lodash');
 
         var render = {};
 
+        var resizeCallbacks = {};
+
         render.create = function(options) {
             var _this = this;
+            var gameWrap = document.getElementById(config.gameHtmlWrapId);
 
             options = options || {};
 
@@ -16,7 +20,10 @@ define(
             this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1]);
             this.render.view.style.display = 'block';
 
-            document.getElementById(config.gameHtmlWrapId).appendChild(this.render.view);
+
+            document.getElementById('gamepreloader').style.display = 'none';
+            gameWrap.style.display = 'block';
+            gameWrap.appendChild(this.render.view);
 
             /*window.addEventListener('resize', function(ev){
                 _this.resolution = [window.innerWidth, window.innerHeight];

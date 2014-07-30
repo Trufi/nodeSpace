@@ -5,6 +5,7 @@ define(
         var camera = {};
 
         var Camera = function Camera(width, height, scale) {
+            this.id = ++Camera._idCounter;
             this.width = width || 500;
             this.height = height || 500;
             this.scale = scale || 1;
@@ -21,6 +22,8 @@ define(
 
             this.rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
         };
+
+        Camera._idCounter = 0;
 
         Camera.prototype.followToBody = function(body) {
             this.followFunction = (function() {
