@@ -132,11 +132,8 @@ Game.prototype.getGameNewState = function(user) {
 
 Game.prototype.addUser = function(user) {
     this.users[user.id] = user;
-    this.addBody(user.ship);
 
     this.newUsers.push(user);
-
-    user.send('firstGameState', this.getGameFirstState(user));
 };
 
 Game.prototype.removeUser = function(user) {

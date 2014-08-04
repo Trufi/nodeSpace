@@ -9,6 +9,9 @@ var User = function User(socket) {
     this.ship;
 
     this.actions = {};
+
+    // info.type - 0 - spectator, 1 - player
+    this.type = 0;
 };
 
 User._idCounter = 0;
@@ -22,7 +25,12 @@ User.prototype.getInfo = function() {
 User.prototype.getFirstInfo = function() {
     var info = {};
     info.id = this.id;
-    info.shipId = this.ship.id;
+    info.type = this.type;
+
+    if (this.type !== 0) {
+        info.shipId = this.ship.id;
+    }
+
     return info;
 };
 
@@ -43,6 +51,10 @@ User.prototype.createShip = function() {
     _(this.ship.actions).forEach(function(el, i) {
         _this.actions[i] = el;
     });
+};
+
+User.prototype.isSpectator = function() {
+    return this.ship === undefined;
 };
 
 User.prototype.action = function(name) {

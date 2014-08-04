@@ -42,13 +42,17 @@ define(
             _(options.users).forEach(function(el) {
                 var user = new User(el);
                 _this.addUser(user);
-                user.setShip(_this.bodies[el.shipId]);
+
+                if (el.type !== 0) {
+                    user.setShip(_this.bodies[el.shipId]);
+                }
             });
 
             // присваиваем User игроку
             player.setUser(this.users[options.player.id]);
 
-            this.followBodyNumber = player.user.ship.id;
+            //this.followBodyNumber = player.user.ship.id;
+            this.followBodyNumber = 1;
             this.camera.followToBody(this.bodies[this.followBodyNumber]);
 
             this.scrArrow = new ScreenArrow({

@@ -16,6 +16,7 @@ var asteroid = body.create({
     velocity: [0, 0],
     angularVelocity: 0.53
 });
+
 game.addBody(asteroid);
 
 game.addBody(body.create({
@@ -41,8 +42,11 @@ var init = function (server) {
 
         socket.once('userConnect', function() {
             user = new User(socket);
-            user.createShip();
+            //user.createShip();
             game.addUser(user);
+
+            //game.addBody(user.ship);
+            user.send('firstGameState', game.getGameFirstState(user));
         });
 
         socket.on('playerActions', function(data) {
