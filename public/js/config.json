@@ -3,5 +3,7 @@
     "socketHost": "http://192.168.0.4",
     "gameHtmlWrapId": "gamewrap",
     "pathToAssets": "/img/",
-    "actionsCooldown": 50
+    "actionsCooldown": 50,
+    "buttonFontFamily": "Arial",
+    "buttonFontWeight": "normal"
 }

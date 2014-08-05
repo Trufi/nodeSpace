@@ -1,0 +1,23 @@
+define(
+    function(require) {
+        var render = require('modules/render');
+
+        var position = {};
+
+        position.update = function() {
+            this.CENTER = [render.resolution[0] / 2, render.resolution[1] / 2];
+
+            this.TOP = [render.resolution[0] / 2, 0];
+            this.BOTTOM = [render.resolution[0] / 2, render.resolution[1]];
+            this.LEFT = [0, render.resolution[1] / 2];
+            this.RIGHT = [render.resolution[0], render.resolution[1] / 2];
+
+            this.TOPLEFT = [0, 0];
+            this.TOPRIGHT = [render.resolution[0], 0];
+            this.BOTTOMLEFT = [0, render.resolution[1]];
+            this.BOTTOMRIGHT = [render.resolution[0], render.resolution[1]];
+        };
+
+        position.update();
+    }
+);

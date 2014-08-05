@@ -1,7 +1,6 @@
 define(
     function(require) {
         var _ = require('lodash');
-        var p2 = require('p2');
         var PIXI = require('pixi');
         var game = require('games/game');
         var key = require('modules/key');
@@ -22,11 +21,6 @@ define(
         };
 
         state.update = function() {
-            if (key.pressed.SPACE) {
-                this.followBodyNumber = this.followBodyNumber % _.size(game.bodies) + 1;
-                game.camera.followTo(game.bodies[this.followBodyNumber]);
-            }
-
             if (key.pressed.WHEELDOWN) {
                 game.camera.zoomOut();
             } else if (key.pressed.WHEELUP) {
@@ -51,6 +45,10 @@ define(
         };
 
         state.render = function() {
+
+        };
+
+        state.close = function() {
 
         };
 
