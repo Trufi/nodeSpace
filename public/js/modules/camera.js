@@ -1,5 +1,6 @@
 define(
     function(require) {
+        var _ = require('lodash');
         var PIXI = require('pixi');
 
         var camera = {};
@@ -16,21 +17,33 @@ define(
             // значение на которое меняется scale при зуме
             this.zoomChangeValue = 0.1;
 
-            this.followFunction = function() {
-                return [0, 0];
-            };
+            this.target = [0, 0];
+            this.followFunction = this.followToPoint;
 
             this.rectangle = new PIXI.Rectangle(0, 0, this.width, this.height);
         };
 
         Camera._idCounter = 0;
 
-        Camera.prototype.followToBody = function(body) {
-            this.followFunction = (function() {
-                return function() {
-                    return [body.body.position[0], body.body.position[1]];
-                };
-            })();
+        Camera.prototype.followTo = function(arg) {
+            if (_.isArray(arg)) {
+                this.target = arg;
+                this.followFunction = this.followToPoint;
+            } else if (arg.body !== undefined) {
+                this.target = arg;
+                this.followFunction = this.followToBody;
+            } else if (typeof arg === 'function') {
+                this.target = undefined;
+                this.followFunction = arg;
+            }
+        };
+
+        Camera.prototype.followToPoint = function() {
+            return [this.target[0], this.target[1]];
+        };
+
+        Camera.prototype.followToBody = function() {
+            return [this.target.body.position[0], this.target.body.position[1]];
         };
 
         Camera.prototype.update = function() {

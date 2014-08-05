@@ -4,7 +4,6 @@ define(
         var game = require('games/first');
         var render = require('modules/render');
 
-
         request.gameInit(function(data) {
             game.load(data, function() {
                 render.create();

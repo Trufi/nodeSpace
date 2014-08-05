@@ -8,11 +8,11 @@ define(
         var render = require('modules/render');
         var assets = require('modules/assets');
         var request = require('modules/request');
-        var body = require('body/index');
         var User = require('modules/user');
         var key = require('modules/key');
         var player = require('modules/player');
         var ScreenArrow = require('interface/screenArrow');
+        var body = require('body/index');
 
         var game = _.clone(require('./game'));
 
@@ -53,7 +53,7 @@ define(
 
             //this.followBodyNumber = player.user.ship.id;
             this.followBodyNumber = 1;
-            this.camera.followToBody(this.bodies[this.followBodyNumber]);
+            this.camera.followTo(this.bodies[this.followBodyNumber]);
 
             this.scrArrow = new ScreenArrow({
                 camera: this.camera,
@@ -77,7 +77,7 @@ define(
 
             if (key.pressed.SPACE) {
                 this.followBodyNumber = this.followBodyNumber % _.size(this.bodies) + 1;
-                this.camera.followToBody(this.bodies[this.followBodyNumber]);
+                this.camera.followTo(this.bodies[this.followBodyNumber]);
             }
 
             if (key.pressed.WHEELDOWN) {

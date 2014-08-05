@@ -1,33 +1,45 @@
 define(
     function(require) {
+        var _ = require('lodash');
         var p2 = require('p2');
         var PIXI = require('pixi');
         var assets = require('modules/assets');
-        var Body = require('body/body');
 
         var Arrow = function Arrow(options) {
             this.padding = 30;
-            this.target;
-            this.typeTarget;
             this.sprite;
             this.text;
             this.camera;
             this.stage = options.stage;
 
             this.setCamera(options.camera);
+
+            this.target = [0, 0];
             this.followTo(options.target);
+            this.getTargetPosition = this.getPointPosition;
+
             this.createSprite();
             //this.createText();
         };
 
-        Arrow.prototype.followTo = function(target) {
-            if (target instanceof Body) {
-                this.typeTarget = 0;
-                this.target = target;
+        Arrow.prototype.followTo = function(arg) {
+            if (_.isArray(arg)) {
+                this.target = arg;
+                this.getTargetPosition = this.getPointPosition;
+            } else if (arg.body !== undefined) {
+                this.target = arg;
+                this.getTargetPosition = this.getBodyPosition;
+            } else if (typeof arg === 'function') {
+                this.target = undefined;
+                this.getTargetPosition = arg;
             }
         };
 
-        Arrow.prototype.getTargetPosition = function() {
+        Arrow.prototype.getPointPosition = function() {
+            return [this.target[0], this.target[1]];
+        };
+
+        Arrow.prototype.getBodyPosition = function() {
             return [this.target.body.position[0], this.target.body.position[1]];
         };
 
