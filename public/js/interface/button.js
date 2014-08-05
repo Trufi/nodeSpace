@@ -4,6 +4,7 @@ define(
         var PIXI = require('pixi');
         var game = require('games/game');
         var config = require('json!config');
+        var position = require('./position');
 
         var button = {};
 
@@ -25,6 +26,12 @@ define(
 
             this.width = options.width || 100;
             this.height = options.height || 30;
+
+            if (options.anchor !== undefined) {
+                this.anchor = position[options.anchor];
+            } else {
+                this.anchor = position.TOPLEFT;
+            }
             this.position = options.position || [0, 0];
 
             this.displayObject = new PIXI.DisplayObjectContainer();
@@ -32,8 +39,8 @@ define(
             this.displayObject.interactive = true;
             this.displayObject.width = this.width;
             this.displayObject.height = this.height;
-            this.displayObject.position.x = this.position[0];
-            this.displayObject.position.y = this.position[1];
+            this.displayObject.position.x = this.anchor[0] + this.position[0];
+            this.displayObject.position.y = this.anchor[1] + this.position[1];
             this.displayObject.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
 
             game.stage.addChild(this.displayObject);
@@ -53,6 +60,8 @@ define(
         };
 
         Button.prototype.createBackground = function() {
+            var _this = this;
+
             this.sprite = new PIXI.Graphics();
             this.sprite.lineStyle(1, parseInt('0x' + this.strokeColor, 16), 1);
             this.sprite.beginFill(parseInt('0x' + this.strokeColor, 16), 0.5);
@@ -66,7 +75,12 @@ define(
             this.spriteHover.beginFill(parseInt('0x' + this.strokeColor, 16), 0.7);
             this.spriteHover.drawRect(0, 0, this.width, this.height);
             this.spriteHover.endFill();
-            this.spriteHover.visible = false;
+            this.spriteHover.visible = true;
+
+            // fix blinked bug
+            setTimeout(function() {
+                _this.spriteHover.visible = false;
+            }, 0);
 
             this.displayObject.addChild(this.spriteHover);
         };

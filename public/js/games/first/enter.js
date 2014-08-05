@@ -22,7 +22,9 @@ define(
                 color: 'red',
                 click: function() {
                     console.log('lol');
-                }
+                },
+                anchor: 'CENTER',
+                position: [-150, -25]
             });
         };
 
