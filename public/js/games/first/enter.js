@@ -15,7 +15,7 @@ define(
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 
             interface.button.create({
-                text: 'Ahahah, it\'s work!',
+                text: 'Quick start',
                 width: 300,
                 height: 50,
                 fontSize: 22,
