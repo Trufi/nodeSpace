@@ -5,12 +5,15 @@ define(
         var p2 = require('p2');
         var PIXI = require('pixi');
         var _ = require('lodash');
-        var assets = require('modules/assets');
-        var render = require('modules/render');
-        var body = require('body/index');
-        var User = require('modules/user');
         var camera = require('modules/camera');
+        var render = require('modules/render');
+        var assets = require('modules/assets');
         var request = require('modules/request');
+        var User = require('modules/user');
+        var key = require('modules/key');
+        var player = require('modules/player');
+        var ScreenArrow = require('interface/screenArrow');
+        var body = require('body/index');
 
         var game = {};
 
@@ -34,6 +37,9 @@ define(
         game.lastGameStepTime;
 
         game.dataFromServer;
+
+        // игровое состояние
+        game.state;
 
         game.loop = function() {
             var _this = this;
@@ -154,19 +160,69 @@ define(
             }
         };
 
-        game.start = function() {
-            this.updateFromServerEnable();
+        game.start = function(options) {
+            var _this = this;
 
+            this.world = new p2.World({
+                gravity: options.world.gravity,
+                applyDamping: options.world.applyDamping
+            });
+
+            this.stage = new PIXI.Stage(0x000000);
+
+            // create camera
+            this.camera = camera.create(render.resolution[0], render.resolution[1]);
+            camera.set(this.camera);
+
+            // create background
+            this.createBackground(assets.texture.background);
+
+            // создаем объекты в космосе
+            _(options.bodies).forEach(function(el) {
+                _this.addBody(body.create(el));
+            });
+
+            // создаем и сохраняем юзеров
+            _(options.users).forEach(function(el) {
+                var user = new User(el);
+                _this.addUser(user);
+
+                // if user is not spectator, add body
+                if (el.type !== 0) {
+                    user.setShip(_this.bodies[el.shipId]);
+                }
+            });
+
+            // присваиваем User игроку
+            player.setUser(this.users[options.player.id]);
+
+            this.state.start();
+
+            this.updateFromServerEnable();
             this.loop();
         };
 
         game.update = function() {
             this.camera.update();
 
+            _(game.bodies).forEach(function(el) {
+                el.updateSprite();
+            });
+
+            this.updateBackground();
+
+            this.state.update();
+
             key.reset();
         };
 
-        game.render = function() {};
+        game.render = function() {
+            this.state.render();
+        };
+
+        game.changeState = function(state) {
+            this.state = state;
+        };
 
         return game;
     }

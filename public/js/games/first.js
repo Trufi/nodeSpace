@@ -17,40 +17,6 @@ define(
         var game = _.clone(require('./game'));
 
         game.start = function(options) {
-            var _this = this;
-
-            this.world = new p2.World({
-                gravity: options.world.gravity,
-                applyDamping: options.world.applyDamping
-            });
-
-            this.stage = new PIXI.Stage(0x000000);
-
-            // создаем камеру
-            this.camera = camera.create(render.resolution[0], render.resolution[1]);
-            camera.set(this.camera);
-
-            // создаем фон
-            this.createBackground(assets.texture.background);
-
-            // создаем объекты в космосе
-            _(options.bodies).forEach(function(el) {
-                _this.addBody(body.create(el));
-            });
-
-            // создаем и сохраняем юзеров
-            _(options.users).forEach(function(el) {
-                var user = new User(el);
-                _this.addUser(user);
-
-                if (el.type !== 0) {
-                    user.setShip(_this.bodies[el.shipId]);
-                }
-            });
-
-            // присваиваем User игроку
-            player.setUser(this.users[options.player.id]);
-
             //this.followBodyNumber = player.user.ship.id;
             this.followBodyNumber = 1;
             this.camera.followTo(this.bodies[this.followBodyNumber]);

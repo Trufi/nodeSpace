@@ -15,8 +15,8 @@ define(
             this.setCamera(options.camera);
 
             this.target = [0, 0];
-            this.followTo(options.target);
             this.getTargetPosition = this.getPointPosition;
+            this.followTo(options.target);
 
             this.createSprite();
             //this.createText();
