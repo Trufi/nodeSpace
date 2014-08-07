@@ -38,23 +38,23 @@ define(
         var keyPressed = {};
         var keyDown = {};
 
-        document.onkeydown = function(ev) {
+        window.addEventListener('keydown', function(ev) {
             keyPressed[codesToKey[ev.keyCode]] = true;
             keyDown[codesToKey[ev.keyCode]] = true;
             //key.check = true;
-        };
+        });
 
-        document.onkeyup = function(ev) {
+        window.addEventListener('keyup', function(ev) {
             keyDown[codesToKey[ev.keyCode]] = false;
-        };
+        });
 
-        document.onwheel = function(ev) {
+        window.addEventListener('wheel', function(ev) {
             if (ev.deltaY < 0) {
                 keyPressed['WHEELUP'] = true;
             } else {
                 keyPressed['WHEELDOWN'] = true;
             }
-        };
+        });
 
         key.pressed = keyPressed;
 

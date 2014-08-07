@@ -14,7 +14,7 @@ define(
             this.followBodyNumber = 1;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 
-            interface.button.create({
+            var button = interface.button.create({
                 text: 'Quick start',
                 width: 300,
                 height: 50,
@@ -24,7 +24,21 @@ define(
                     console.log('lol');
                 },
                 anchor: 'CENTER',
-                position: [-150, -25]
+                position: [-150, -60]
+            });
+
+            interface.editbox.create({
+                text: 'Quick start',
+                width: 300,
+                height: 50,
+                fontSize: 22,
+                color: 'blue',
+                click: function() {
+                    console.log('lol2');
+                },
+                anchor: 'CENTER',
+                position: [-150, 15],
+                placeholder: 'smth'
             });
         };
 

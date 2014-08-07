@@ -5,10 +5,11 @@ define(
         var game = require('games/game');
         var config = require('json!config');
         var position = require('./position');
+        var key = require('modules/key');
 
-        var button = {};
+        var editbox = {};
 
-        var Button = function(options) {
+        var Editbox = function(options) {
             options = options || {};
             this.color = options.color || 'blue';
 
@@ -42,6 +43,7 @@ define(
             this.displayObject.position.x = this.anchor[0] + this.position[0];
             this.displayObject.position.y = this.anchor[1] + this.position[1];
             this.displayObject.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
+            this.displayObject.defaultCursor = 'text';
 
             game.stage.addChild(this.displayObject);
 
@@ -49,18 +51,22 @@ define(
             this.text = options.text || '';
             this.spriteText;
             this.fontSize = options.fontSize || 16;
+            this.paddingLeft = options.paddingLeft || 15;
 
             this._createBackground();
             this._createText();
 
+            this.cursor;
+            this.cursorInterval;
+            this.cursorIntervalDelay = 500;
+            this._createCursor();
+
+            this.displayObject.click = _.bind(this._click, this);
             this.displayObject.mouseover = _.bind(this._mouseover, this);
             this.displayObject.mouseout = _.bind(this._mouseout, this);
-            if (options.click !== undefined) {
-                this.click(options.click);
-            }
         };
 
-        Button.prototype._createBackground = function() {
+        Editbox.prototype._createBackground = function() {
             var _this = this;
 
             this.sprite = new PIXI.Graphics();
@@ -78,7 +84,7 @@ define(
             this.spriteHover.endFill();
             this.spriteHover.visible = true;
 
-            // fix blinked bug
+            // fix blinked bug with first mouseover
             setTimeout(function() {
                 _this.spriteHover.visible = false;
             }, 0);
@@ -86,39 +92,69 @@ define(
             this.displayObject.addChild(this.spriteHover);
         };
 
-        Button.prototype._createText = function() {
+        Editbox.prototype._createText = function(text) {
             this.spriteText = new PIXI.Text(this.text, {
                 font: config.buttonFontWeight + ' ' + this.fontSize + 'px ' + config.buttonFontFamily,
-                align: 'center',
+                align: 'left',
                 fill: '#fff',
                 strokeThickness: 1,
                 stroke: '#' + this.strokeColor,
                 wordWrap: true,
                 wordWrapWidth: this.width
             });
-            this.spriteText.position.x = (this.width - this.spriteText.width) / 2;
+            this.spriteText.position.x = this.paddingLeft;
             this.spriteText.position.y = (this.height - this.spriteText.height) / 2;
             this.displayObject.addChild(this.spriteText);
         };
 
-        Button.prototype.click = function(callback) {
-            this.displayObject.click = callback;
+        Editbox.prototype._createCursor = function() {
+            this.cursor = new PIXI.Graphics();
+            this.cursor.lineStyle(2, 0xffffff, 1);
+            this.cursor.moveTo(0, 0);
+            this.cursor.lineTo(0, this.fontSize * 1.2);
+            this.cursor.visible = false;
+
+            this.displayObject.addChild(this.cursor);
         };
 
-        Button.prototype._mouseover = function() {
+        Editbox.prototype.active = function() {
+            var _this = this;
+            this.cursor.visible = true;
+
+            editbox._active.deactive();
+            editbox._active = this;
+
+            this.cursorInterval = setInterval(function() {
+                _this.cursor.visible = !_this.cursor.visible;
+            }, this.cursorIntervalDelay);
+        };
+
+        Editbox.prototype.deactive = function() {
+            clearInterval(this.cursorInterval);
+            this.cursor.visible = false;
+            editbox._active = undefined;
+        };
+
+        Editbox.prototype._click = function() {
+            this.active();
+        };
+
+        Editbox.prototype._mouseover = function() {
             this.sprite.visible = false;
             this.spriteHover.visible = true;
         };
 
-        Button.prototype._mouseout = function() {
+        Editbox.prototype._mouseout = function() {
             this.sprite.visible = true;
             this.spriteHover.visible = false;
         };
 
-        button.create = function(options) {
-            return new Button(options);
+        editbox._active = undefined;
+
+        editbox.create = function(options) {
+            return new Editbox(options);
         };
 
-        return button;
+        return editbox;
     }
 );
