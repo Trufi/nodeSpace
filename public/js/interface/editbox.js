@@ -47,6 +47,8 @@ define(
 
             game.stage.addChild(this.displayObject);
 
+            this.isActive = false;
+
             this.sprite;
             this.text = options.text || '';
             this.spriteText;
@@ -60,6 +62,8 @@ define(
             this.cursorInterval;
             this.cursorIntervalDelay = 500;
             this._createCursor();
+            this.cursorPosition = this.text.length;
+            this.updateCursor();
 
             this.displayObject.click = _.bind(this._click, this);
             this.displayObject.mouseover = _.bind(this._mouseover, this);
@@ -93,7 +97,7 @@ define(
         };
 
         Editbox.prototype._createText = function(text) {
-            this.spriteText = new PIXI.Text(this.text, {
+            var textOptions = {
                 font: config.buttonFontWeight + ' ' + this.fontSize + 'px ' + config.buttonFontFamily,
                 align: 'left',
                 fill: '#fff',
@@ -101,10 +105,16 @@ define(
                 stroke: '#' + this.strokeColor,
                 wordWrap: true,
                 wordWrapWidth: this.width
-            });
+            };
+
+            this.spriteText = new PIXI.Text(this.text, textOptions);
             this.spriteText.position.x = this.paddingLeft;
             this.spriteText.position.y = (this.height - this.spriteText.height) / 2;
             this.displayObject.addChild(this.spriteText);
+
+            this.spriteTextHelp = new PIXI.Text(this.text, textOptions);
+            this.spriteTextHelp.visible = false;
+            this.displayObject.addChild(this.spriteTextHelp);
         };
 
         Editbox.prototype._createCursor = function() {
@@ -112,13 +122,72 @@ define(
             this.cursor.lineStyle(2, 0xffffff, 1);
             this.cursor.moveTo(0, 0);
             this.cursor.lineTo(0, this.fontSize * 1.2);
+            this.cursor.position.y = (this.height - this.fontSize * 1.2) / 2;
             this.cursor.visible = false;
 
             this.displayObject.addChild(this.cursor);
         };
 
+        Editbox.prototype.updateCursor = function() {
+            var _this = this;
+
+            this.spriteText.setText(this.text);
+            this.spriteTextHelp.setText(this.text.substr(0, this.cursorPosition));
+
+            setTimeout(function() {
+                _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+            }, 50);
+
+            if (this.isActive) {
+                clearInterval(this.cursorInterval);
+                this.cursor.visible = true;
+                this.cursorInterval = setInterval(function () {
+                    _this.cursor.visible = !_this.cursor.visible;
+                }, this.cursorIntervalDelay);
+            }
+        };
+
+        Editbox.prototype._cursorLeft = function() {
+            if (this.cursorPosition > 0) {
+                this.cursorPosition--;
+            }
+        };
+
+        Editbox.prototype._cursorRight = function() {
+            if (this.cursorPosition < this.text.length) {
+                this.cursorPosition++;
+            }
+        };
+
+        Editbox.prototype._cursorHome = function() {
+            this.cursorPosition = 0;
+        };
+
+        Editbox.prototype._cursorEnd = function() {
+            this.cursorPosition = this.text.length;
+        };
+
+        Editbox.prototype._backspace = function() {
+            if (this.cursorPosition > 0) {
+                this.text = this.text.substr(0, this.cursorPosition - 1) + this.text.substr(this.cursorPosition);
+                this.cursorPosition--;
+            }
+        };
+
+        Editbox.prototype._delete = function() {
+            if (this.cursorPosition < this.text.length) {
+                this.text = this.text.substr(0, this.cursorPosition) + this.text.substr(this.cursorPosition + 1);
+            }
+        };
+
+        Editbox.prototype._addCharToText = function(ch) {
+            this.text = this.text.substr(0, this.cursorPosition) + ch + this.text.substr(this.cursorPosition);
+            this.cursorPosition++;
+        };
+
         Editbox.prototype.active = function() {
             var _this = this;
+            this.isActive = true;
             this.cursor.visible = true;
 
             if (editbox._active !== undefined) {
@@ -133,26 +202,35 @@ define(
             key.enableWriteText(function(ch) {
                 switch (ch) {
                     case 'LEFT':
+                        _this._cursorLeft();
                         break;
                     case 'RIGHT':
+                        _this._cursorRight();
                         break;
                     case 'BACKSPACE':
+                        _this._backspace();
                         break;
                     case 'DELETE':
+                        _this._delete();
                         break;
                     case 'HOME':
+                        _this._cursorHome();
                         break;
                     case 'END':
+                        _this._cursorEnd();
                         break;
                     case 'ENTER':
                         break;
                     default:
-                        console.log(ch);
+                        _this._addCharToText(ch);
                 }
+
+                _this.updateCursor();
             });
         };
 
         Editbox.prototype.deactive = function() {
+            this.isActive = false;
             clearInterval(this.cursorInterval);
             this.cursor.visible = false;
             editbox._active = undefined;

@@ -28,7 +28,7 @@ define(
             });
 
             interface.editbox.create({
-                text: 'Quick start',
+                text: '123456789',
                 width: 300,
                 height: 50,
                 fontSize: 22,

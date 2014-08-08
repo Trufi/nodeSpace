@@ -48,12 +48,16 @@ define(
         var isWriteText = false;
         var writeTextCallback;
         // кнопки которые будут передаваться в writeTextCallback при событии keydown
-        var keyForTextEdit = [13, 37, 40, 8, 46, 35, 36];
+        var keyForTextEdit = [13, 37, 39, 8, 46, 35, 36];
 
 
         window.addEventListener('keydown', function(ev) {
             var keyCode = ev.keyCode || ev.which,
                 keyStr;
+
+            if (defaultKeyBlock.indexOf(keyCode) !== -1) {
+                ev.preventDefault();
+            }
 
             if (!isWriteText) {
                 keyStr = codesToKey[keyCode];
@@ -63,11 +67,6 @@ define(
                 if (keyForTextEdit.indexOf(keyCode) !== -1) {
                     writeTextCallback(codesToKey[keyCode]);
                 }
-            }
-
-            if (defaultKeyBlock.indexOf(keyCode) !== -1) {
-                ev.preventDefault();
-                return false;
             }
         });
 
