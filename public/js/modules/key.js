@@ -118,7 +118,7 @@ define(
         };
 
         key.disableWriteText = function() {
-            isWriteText = true;
+            isWriteText = false;
             writeTextCallback = undefined;
         };
 

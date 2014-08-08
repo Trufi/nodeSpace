@@ -136,7 +136,7 @@ define(
 
             setTimeout(function() {
                 _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
-            }, 50);
+            }, 15);
 
             if (this.isActive) {
                 clearInterval(this.cursorInterval);
@@ -185,19 +185,22 @@ define(
             this.cursorPosition++;
         };
 
+        Editbox.prototype._enter = function(ch) {
+            this.deactive();
+        };
+
         Editbox.prototype.active = function() {
             var _this = this;
             this.isActive = true;
-            this.cursor.visible = true;
+            this.cursorPosition = this.text.length;
 
             if (editbox._active !== undefined) {
                 editbox._active.deactive();
             }
             editbox._active = this;
 
-            this.cursorInterval = setInterval(function() {
-                _this.cursor.visible = !_this.cursor.visible;
-            }, this.cursorIntervalDelay);
+
+            this.updateCursor();
 
             key.enableWriteText(function(ch) {
                 switch (ch) {
@@ -220,6 +223,7 @@ define(
                         _this._cursorEnd();
                         break;
                     case 'ENTER':
+                        _this._enter();
                         break;
                     default:
                         _this._addCharToText(ch);
@@ -234,10 +238,16 @@ define(
             clearInterval(this.cursorInterval);
             this.cursor.visible = false;
             editbox._active = undefined;
+            key.disableWriteText();
         };
 
         Editbox.prototype._click = function() {
-            this.active();
+            var _this = this;
+
+            // bad
+            setTimeout(function() {
+                _this.active();
+            }, 0);
         };
 
         Editbox.prototype._mouseover = function() {
@@ -251,6 +261,12 @@ define(
         };
 
         editbox._active = undefined;
+
+        window.addEventListener('click', function() {
+            if (editbox._active !== undefined) {
+                editbox._active.deactive();
+            }
+        });
 
         editbox.create = function(options) {
             return new Editbox(options);
