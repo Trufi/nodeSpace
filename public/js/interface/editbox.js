@@ -121,12 +121,35 @@ define(
             var _this = this;
             this.cursor.visible = true;
 
-            editbox._active.deactive();
+            if (editbox._active !== undefined) {
+                editbox._active.deactive();
+            }
             editbox._active = this;
 
             this.cursorInterval = setInterval(function() {
                 _this.cursor.visible = !_this.cursor.visible;
             }, this.cursorIntervalDelay);
+
+            key.enableWriteText(function(ch) {
+                switch (ch) {
+                    case 'LEFT':
+                        break;
+                    case 'RIGHT':
+                        break;
+                    case 'BACKSPACE':
+                        break;
+                    case 'DELETE':
+                        break;
+                    case 'HOME':
+                        break;
+                    case 'END':
+                        break;
+                    case 'ENTER':
+                        break;
+                    default:
+                        console.log(ch);
+                }
+            });
         };
 
         Editbox.prototype.deactive = function() {

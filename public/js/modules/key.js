@@ -32,16 +32,62 @@ define(
             38: 'UP',
             39: 'RIGHT',
             40: 'DOWN',
-            32: 'SPACE'
+            32: 'SPACE',
+            8: 'BACKSPACE',
+            46: 'DELETE',
+            35: 'END',
+            36: 'HOME'
         };
 
+
+        var defaultKeyBlock = [8];
         var keyPressed = {};
         var keyDown = {};
 
+        // включен ли набор текста
+        var isWriteText = false;
+        var writeTextCallback;
+        // кнопки которые будут передаваться в writeTextCallback при событии keydown
+        var keyForTextEdit = [13, 37, 40, 8, 46, 35, 36];
+
+
         window.addEventListener('keydown', function(ev) {
-            keyPressed[codesToKey[ev.keyCode]] = true;
-            keyDown[codesToKey[ev.keyCode]] = true;
-            //key.check = true;
+            var keyCode = ev.keyCode || ev.which,
+                keyStr;
+
+            if (!isWriteText) {
+                keyStr = codesToKey[keyCode];
+                keyPressed[keyStr] = true;
+                keyDown[keyStr] = true;
+            } else {
+                if (keyForTextEdit.indexOf(keyCode) !== -1) {
+                    writeTextCallback(codesToKey[keyCode]);
+                }
+            }
+
+            if (defaultKeyBlock.indexOf(keyCode) !== -1) {
+                ev.preventDefault();
+                return false;
+            }
+        });
+
+        window.addEventListener('keypress', function(ev) {
+            var code,
+                ch;
+
+            if (isWriteText) {
+                code = ev.keyCode || ev.charCode;
+
+                if (code !== 13) {
+                    ch = String.fromCharCode(code);
+
+                    if (ev.shiftKey) {
+                        ch.toUpperCase();
+                    }
+
+                    writeTextCallback(ch);
+                }
+            }
         });
 
         window.addEventListener('keyup', function(ev) {
@@ -65,6 +111,17 @@ define(
         };
 
         key.down = keyDown;
+
+        key.enableWriteText = function(callback) {
+            isWriteText = true;
+            key.reset();
+            writeTextCallback = callback;
+        };
+
+        key.disableWriteText = function() {
+            isWriteText = true;
+            writeTextCallback = undefined;
+        };
 
         return key;
     }
