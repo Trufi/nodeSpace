@@ -221,6 +221,10 @@ define(
         };
 
         game.changeState = function(state) {
+            if (this.state !== undefined) {
+                this.state.close();
+                state.start();
+            }
             this.state = state;
         };
 

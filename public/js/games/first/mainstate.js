@@ -10,7 +10,7 @@ define(
         var state = {};
 
         state.start = function() {
-            this.followBodyNumber = 1;
+            this.followBodyNumber = 3;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 
             this.scrArrow = new ScreenArrow({

@@ -5,45 +5,78 @@ define(
         var game = require('games/game');
         var key = require('modules/key');
         var interface = require('interface/index')
+        var nextStage = require('./mainstate');
 
         var state = {};
-
+        state.firstMenu;
+        state.loginMenu;
         state.followBodyNumber;
+
+
+        function createFirstMenu() {
+            var buttonQuickStart,
+                buttonLogIn,
+                buttonSignUp;
+
+            state.firstMenu = interface.frame.create({
+                anchor: 'CENTER'
+            });
+
+            buttonQuickStart = interface.button.create({
+                text: 'Quick Start',
+                click: function() {
+                    state.next();
+                },
+                position: [-150, -85]
+            });
+            state.firstMenu.addChild(buttonQuickStart);
+
+            buttonLogIn = interface.button.create({
+                text: 'Log In',
+                color: 'red',
+                click: function() {
+                    state.firstMenu.hide();
+                    state.loginMenu.show();
+                },
+                position: [-150, -25]
+            });
+            state.firstMenu.addChild(buttonLogIn);
+
+            buttonSignUp = interface.button.create({
+                text: 'Sign Up',
+                click: function() {
+                    console.log('lol');
+                },
+                position: [-150, 35]
+            });
+            state.firstMenu.addChild(buttonSignUp);
+        };
+
+        function createLoginMenu() {
+            var login, pass;
+            state.loginMenu = interface.frame.create({
+                anchor: 'CENTER',
+                visible: false
+            });
+
+            login = interface.editbox.create({
+                color: 'red',
+                position: [-150, -55]
+            });
+            state.loginMenu.addChild(login);
+
+            pass = interface.editbox.create({
+                position: [-150, 5]
+            });
+            state.loginMenu.addChild(pass);
+        }
 
         state.start = function() {
             this.followBodyNumber = 1;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 
-            var enterFrame = interface.frame.create({
-                anchor: 'CENTER'
-            });
-
-            var button = interface.button.create({
-                text: 'Quick start',
-                width: 300,
-                height: 50,
-                fontSize: 22,
-                color: 'red',
-                click: function() {
-                    console.log('lol');
-                },
-                position: [-150, -60]
-            });
-            enterFrame.addChild(button);
-
-            var editbox = interface.editbox.create({
-                text: '123456789',
-                width: 300,
-                height: 50,
-                fontSize: 22,
-                color: 'blue',
-                click: function() {
-                    console.log('lol2');
-                },
-                position: [-150, 15],
-                placeholder: 'smth'
-            });
-            enterFrame.addChild(editbox);
+            createFirstMenu();
+            createLoginMenu();
         };
 
         state.update = function() {
@@ -58,7 +91,12 @@ define(
         };
 
         state.close = function() {
+            this.firstMenu.hide();
+            this.loginMenu.hide();
+        };
 
+        state.next = function() {
+            game.changeState(nextStage);
         };
 
         return state;

@@ -2,7 +2,6 @@ define(
     function(require) {
         var _ = require('lodash');
         var PIXI = require('pixi');
-        var game = require('games/game');
         var config = require('json!config');
         var position = require('./position');
 
@@ -25,8 +24,8 @@ define(
             }
 
             this.id;
-            this.width = options.width || 100;
-            this.height = options.height || 30;
+            this.width = options.width || 300;
+            this.height = options.height || 50;
             this.position = options.position || [0, 0];
 
             this.displayObject = new PIXI.DisplayObjectContainer();
@@ -41,7 +40,7 @@ define(
             this.sprite;
             this.text = options.text || '';
             this.spriteText;
-            this.fontSize = options.fontSize || 16;
+            this.fontSize = options.fontSize || 22;
 
             this._createBackground();
             this._createText();

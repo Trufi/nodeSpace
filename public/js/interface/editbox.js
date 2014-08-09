@@ -2,7 +2,6 @@ define(
     function(require) {
         var _ = require('lodash');
         var PIXI = require('pixi');
-        var game = require('games/game');
         var config = require('json!config');
         var position = require('./position');
         var key = require('modules/key');
@@ -26,8 +25,8 @@ define(
             }
 
             this.id;
-            this.width = options.width || 100;
-            this.height = options.height || 30;
+            this.width = options.width || 300;
+            this.height = options.height || 50;
             this.position = options.position || [0, 0];
 
             this.displayObject = new PIXI.DisplayObjectContainer();
@@ -45,7 +44,7 @@ define(
             this.sprite;
             this.text = options.text || '';
             this.spriteText;
-            this.fontSize = options.fontSize || 16;
+            this.fontSize = options.fontSize || 22;
             this.paddingLeft = options.paddingLeft || 15;
 
             this._createBackground();
@@ -256,6 +255,10 @@ define(
         Editbox.prototype._mouseout = function() {
             this.sprite.visible = true;
             this.spriteHover.visible = false;
+        };
+
+        Editbox.prototype.value = function() {
+            return this.text;
         };
 
         editbox._active = undefined;
