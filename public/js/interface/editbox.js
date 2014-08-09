@@ -154,13 +154,11 @@ define(
             if (this.cursorPosition === 0) {
                 this.cursor.position.x = this.paddingLeft;
             } else {
-                setTimeout(function () {
-                    if (_this.isTextOverWidth) {
-                        _this.cursor.position.x = _this.width - _this.paddingLeft;
-                    } else {
-                        _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
-                    }
-                }, 15);
+                if (_this.isTextOverWidth) {
+                    _this.cursor.position.x = _this.width - _this.paddingLeft;
+                } else {
+                    _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+                }
             }
 
             // запускаем интервал мигания курсора
@@ -264,8 +262,10 @@ define(
                 }
                 _this.spriteText.setText(str);
                 _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
-                _this.checkForAlign();
-                _this.updateCursor();
+                setTimeout(function() {
+                    _this.checkForAlign();
+                    _this.updateCursor();
+                }, 30);
             });
         };
 

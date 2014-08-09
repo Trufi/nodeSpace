@@ -126,7 +126,7 @@ define(
 
             state.regMenu.addChild(interface.text.create({
                 text: 'Sign up',
-                position: [0, -120],
+                position: [0, -150],
                 anchor: [0.5, 1]
             }));
 
