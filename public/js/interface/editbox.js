@@ -14,14 +14,14 @@ define(
 
             switch (this.color) {
                 case 'blue':
-                    this.fillColor = '6f84b5';
                     this.strokeColor = '1a59e8';
                     break;
                 case 'red':
-                    this.fillColor = 'ba3737';
                     this.strokeColor = '980707';
                     break;
-
+                case 'orange':
+                    this.strokeColor = 'f66a1d';
+                    break;
             }
 
             this.id;
@@ -39,6 +39,10 @@ define(
             this.displayObject.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
             this.displayObject.defaultCursor = 'text';
 
+            if (options.visible !== undefined) {
+                this.displayObject.visible = options.visible;
+            }
+
             this.isActive = false;
 
             this.sprite;
@@ -46,6 +50,7 @@ define(
             this.spriteText;
             this.fontSize = options.fontSize || 22;
             this.paddingLeft = options.paddingLeft || 15;
+            this.type = options.type;
 
             this._createBackground();
             this._createText();
@@ -78,12 +83,7 @@ define(
             this.spriteHover.beginFill(parseInt('0x' + this.strokeColor, 16), 0.7);
             this.spriteHover.drawRect(0, 0, this.width, this.height);
             this.spriteHover.endFill();
-            this.spriteHover.visible = true;
-
-            // fix blinked bug with first mouseover
-            setTimeout(function() {
-                _this.spriteHover.visible = false;
-            }, 0);
+            this.spriteHover.visible = false;
 
             this.displayObject.addChild(this.spriteHover);
         };
@@ -122,9 +122,6 @@ define(
 
         Editbox.prototype.updateCursor = function() {
             var _this = this;
-
-            this.spriteText.setText(this.text);
-            this.spriteTextHelp.setText(this.text.substr(0, this.cursorPosition));
 
             if (this.cursorPosition === 0) {
                 this.cursor.position.x = this.paddingLeft;
@@ -200,6 +197,8 @@ define(
             this.updateCursor();
 
             key.enableWriteText(function(ch) {
+                var str;
+
                 switch (ch) {
                     case 'LEFT':
                         _this._cursorLeft();
@@ -226,6 +225,13 @@ define(
                         _this._addCharToText(ch);
                 }
 
+                if (_this.type === 'pass') {
+                    str = (new Array(_this.text.length + 1)).join('*');
+                } else {
+                    str = _this.text;
+                }
+                _this.spriteText.setText(str);
+                _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
                 _this.updateCursor();
             });
         };
@@ -248,8 +254,13 @@ define(
         };
 
         Editbox.prototype._mouseover = function() {
-            this.sprite.visible = false;
-            this.spriteHover.visible = true;
+            var _this = this;
+
+            // fix blinked bug with first mouseover
+            setTimeout(function() {
+                _this.sprite.visible = false;
+                _this.spriteHover.visible = true;
+            }, 0);
         };
 
         Editbox.prototype._mouseout = function() {
@@ -259,6 +270,10 @@ define(
 
         Editbox.prototype.value = function() {
             return this.text;
+        };
+
+        Editbox.prototype.addChild = function(child) {
+            this.displayObject.addChild(child.displayObject);
         };
 
         editbox._active = undefined;
