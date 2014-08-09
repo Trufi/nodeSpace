@@ -40,13 +40,17 @@ var init = function (server) {
     io.sockets.on('connection', function (socket) {
         var user;
 
-        socket.once('userConnect', function() {
-            user = new User(socket);
+
+        // клиент загрузился
+        socket.once('clientOnLoad', function() {
+            //user = new User(socket);
             //user.createShip();
-            game.addUser(user);
+            //game.addUser(user);
 
             //game.addBody(user.ship);
-            user.send('firstGameState', game.getGameFirstState(user));
+            //user.send('firstGameState', game.getGameFirstState(user));
+
+            socket.emit('firstGameState', game.getGameFirstState());
         });
 
         socket.on('playerActions', function(data) {

@@ -8,7 +8,7 @@ define(
         var socket = io.connect(config.socketHost);
 
         request.gameInit = function(callback) {
-            socket.emit('userConnect');
+            socket.emit('clientOnLoad');
             socket.once('firstGameState', function (data) {
                 callback(data);
             });

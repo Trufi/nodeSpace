@@ -194,7 +194,7 @@ define(
             });
 
             // присваиваем User игроку
-            player.setUser(this.users[options.player.id]);
+            //player.setUser(this.users[options.player.id]);
 
             this.state.start();
 
