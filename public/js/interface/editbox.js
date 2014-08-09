@@ -51,6 +51,10 @@ define(
             this.fontSize = options.fontSize || 22;
             this.paddingLeft = options.paddingLeft || 15;
             this.type = options.type;
+            this.spriteTextHelp;
+            this.mask;
+            this.isTextOverWidth = false;
+
 
             this._createBackground();
             this._createText();
@@ -106,7 +110,19 @@ define(
 
             this.spriteTextHelp = new PIXI.Text(this.text, textOptions);
             this.spriteTextHelp.visible = false;
+            this.spriteTextHelp.anchor.x = 1;
+            this.spriteTextHelp.position.x = this.width - this.paddingLeft;
+            this.spriteTextHelp.position.y = (this.height - this.spriteText.height) / 2;
             this.displayObject.addChild(this.spriteTextHelp);
+
+            // маска для текста
+            this.maskText = new PIXI.Graphics();
+            this.maskText.beginFill();
+            this.maskText.drawRect(this.paddingLeft, 0, this.width - this.paddingLeft * 2, this.height);
+            this.maskText.endFill();
+            this.displayObject.addChild(this.maskText);
+            this.spriteText.mask = this.maskText;
+            this.spriteTextHelp.mask = this.maskText;
         };
 
         Editbox.prototype._createCursor = function() {
@@ -120,6 +136,18 @@ define(
             this.displayObject.addChild(this.cursor);
         };
 
+        Editbox.prototype.checkForAlign = function() {
+            if (this.spriteTextHelp.width >= this.width - this.paddingLeft * 2) {
+                this.spriteText.visible = false;
+                this.spriteTextHelp.visible = true;
+                this.isTextOverWidth = true;
+            } else {
+                this.spriteText.visible = true;
+                this.spriteTextHelp.visible = false;
+                this.isTextOverWidth = false;
+            }
+        };
+
         Editbox.prototype.updateCursor = function() {
             var _this = this;
 
@@ -127,7 +155,11 @@ define(
                 this.cursor.position.x = this.paddingLeft;
             } else {
                 setTimeout(function () {
-                    _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+                    if (_this.isTextOverWidth) {
+                        _this.cursor.position.x = _this.width - _this.paddingLeft;
+                    } else {
+                        _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+                    }
                 }, 15);
             }
 
@@ -232,6 +264,7 @@ define(
                 }
                 _this.spriteText.setText(str);
                 _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
+                _this.checkForAlign();
                 _this.updateCursor();
             });
         };
