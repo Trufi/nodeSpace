@@ -25,14 +25,9 @@ define(
 
             }
 
+            this.id;
             this.width = options.width || 100;
             this.height = options.height || 30;
-
-            if (options.anchor !== undefined) {
-                this.anchor = position[options.anchor];
-            } else {
-                this.anchor = position.TOPLEFT;
-            }
             this.position = options.position || [0, 0];
 
             this.displayObject = new PIXI.DisplayObjectContainer();
@@ -40,12 +35,10 @@ define(
             this.displayObject.interactive = true;
             this.displayObject.width = this.width;
             this.displayObject.height = this.height;
-            this.displayObject.position.x = this.anchor[0] + this.position[0];
-            this.displayObject.position.y = this.anchor[1] + this.position[1];
+            this.displayObject.position.x = this.position[0];
+            this.displayObject.position.y = this.position[1];
             this.displayObject.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
             this.displayObject.defaultCursor = 'text';
-
-            game.stage.addChild(this.displayObject);
 
             this.isActive = false;
 
@@ -134,10 +127,15 @@ define(
             this.spriteText.setText(this.text);
             this.spriteTextHelp.setText(this.text.substr(0, this.cursorPosition));
 
-            setTimeout(function() {
-                _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
-            }, 15);
+            if (this.cursorPosition === 0) {
+                this.cursor.position.x = this.paddingLeft;
+            } else {
+                setTimeout(function () {
+                    _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+                }, 15);
+            }
 
+            // запускаем интервал мигания курсора
             if (this.isActive) {
                 clearInterval(this.cursorInterval);
                 this.cursor.visible = true;
