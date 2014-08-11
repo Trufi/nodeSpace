@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Game = require('./game');
 var User = require('./user');
 var body = require('./body/index');
+var config = require('./config');
 
 var socketio = require('socket.io');
 
@@ -36,6 +37,7 @@ game.addBody(body.create({
 
 var init = function (server) {
     var io = socketio.listen(server, {log: false});
+    io.set('origins', config.host + ':' + config.port);
 
     io.sockets.on('connection', function (socket) {
         var user;

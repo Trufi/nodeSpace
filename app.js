@@ -6,14 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+// var users = require('./routes/users');
 
-var gameConfig = require('./game/config')
+var gameConfig = require('./game/config');
 
 
 var app = express();
-app.set('port', 8888);
-app.set('host', gameConfig.host)
+app.set('port', gameConfig.port);
+app.set('host', gameConfig.host);
 
 var server = app.listen(app.get('port'), app.set('host'), function () {
     console.log('server listen on ' + app.get('port') + ' port and host ' + app.set('host'));
@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
