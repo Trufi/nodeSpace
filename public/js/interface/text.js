@@ -35,6 +35,11 @@ define(
             }
         };
 
+        Text.prototype.setText = function(str) {
+            this.text = str;
+            this.displayObject.setText(str);
+        };
+
         text.create = function(options) {
             return new Text(options);
         };

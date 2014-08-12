@@ -4,8 +4,11 @@ define(
         var PIXI = require('pixi');
         var game = require('games/game');
         var key = require('modules/key');
-        var interface = require('interface/index')
+        var interface = require('interface/index');
         var nextStage = require('./mainstate');
+        var valid = require('modules/valid');
+        var config = require('json!config');
+        var request = require('modules/request');
 
         var state = {};
         state.firstMenu;
@@ -53,7 +56,7 @@ define(
                 position: [-150, 35]
             });
             state.firstMenu.addChild(buttonSignUp);
-        };
+        }
 
         function createLoginMenu() {
             var login, pass;
@@ -117,7 +120,7 @@ define(
         }
 
         function createRegMenu() {
-            var login, pass, confirmPass;
+            var login, pass, confirmPass, error;
 
             state.regMenu = interface.frame.create({
                 anchor: 'CENTER',
@@ -178,6 +181,30 @@ define(
                 text: 'Ok',
                 position: [-150, 35],
                 click: function() {
+                    var email = login.value(),
+                        passVal = pass.value(),
+                        confirmPassVal = confirmPass.value(),
+                        validNoErrors = false;
+
+                    if (valid.email(email)) {
+                        if (valid.passwordLength(passVal)) {
+                            if (valid.passwordsConfirm(passVal, confirmPassVal)) {
+                                validNoErrors = true;
+                            } else {
+                                error.setText(config.errors.passwordsDontMatch);
+                            }
+                        } else {
+                            error.setText(config.errors.minPasswordLength);
+                        }
+                    } else {
+                        error.setText(config.errors.emailNotValid);
+                    }
+
+                    if (validNoErrors) {
+                        request.signUp(email, passVal, function() {
+                            console.log('done');
+                        });
+                    }
                 }
             }));
 
@@ -190,6 +217,15 @@ define(
                     state.firstMenu.show();
                 }
             }));
+
+            error = interface.text.create({
+                text: '',
+                color: 'ff0000',
+                position: [160, 60],
+                fontSize: 18,
+                anchor: [0, 0.5]
+            });
+            state.regMenu.addChild(error);
         }
 
         state.start = function() {

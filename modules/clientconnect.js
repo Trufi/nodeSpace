@@ -24,8 +24,8 @@ function loadSession(sid, callback) {
 function loadUserFromDB(session, callback) {
     if (db.users === undefined) {
         callback(new Error('db not initialized'));
-    } else if (session.username) {
-        db.users.find({name: session.username}, function(err, doc) {
+    } else if (session.login) {
+        db.users.find({login: session.login}, function(err, doc) {
             if (err) {
                 callback(err);
             }
@@ -33,7 +33,7 @@ function loadUserFromDB(session, callback) {
             callback(null, doc);
         });
     } else {
-        callback(new Error('session not have username'));
+        callback(new Error('session not have login'));
     }
 }
 

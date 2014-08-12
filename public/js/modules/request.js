@@ -1,5 +1,6 @@
 define(
     function(require) {
+        var $ = require('jquery');
         var config = require('json!config');
         var io = require('socketio');
 
@@ -36,6 +37,17 @@ define(
 
         request.sendToServer = function(data) {
             socket.emit('playerActions', data);
+        };
+
+        request.signUp = function(email, pass) {
+            $.ajax({
+                url: '/signup',
+                method: 'POST',
+                data: 'login=' + email + '&pass=' + pass,
+                success: function(data) {
+                    console.log(data);
+                }
+            });
         };
 
         return request;
