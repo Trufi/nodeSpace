@@ -3,8 +3,8 @@ var Game = require('./game');
 var User = require('./user');
 var body = require('./body/index');
 var config = require('./config');
+var io = require('../modules/socket').io;
 
-var socketio = require('socket.io');
 
 // инициализация единственной пока что игры
 var game = new Game();
@@ -35,13 +35,9 @@ game.addBody(body.create({
     mass: 5
 }));
 
-var init = function (server) {
-    var io = socketio.listen(server, {log: false});
-    io.set('origins', config.host + ':' + config.port);
-
+var start = function (server) {
     io.sockets.on('connection', function (socket) {
         var user;
-
 
         // клиент загрузился
         socket.once('clientOnLoad', function() {
@@ -65,4 +61,4 @@ var init = function (server) {
     });
 };
 
-module.exports.init = init;
+exports.start = start;
