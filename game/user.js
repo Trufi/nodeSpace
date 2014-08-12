@@ -2,10 +2,16 @@ var _ = require('lodash');
 var body = require('./body/index');
 var config = require('./config.json');
 var action = require('./actions/index');
+var game = require('game/games');
 
-var User = function User(socket) {
+var User = function User(options) {
     this.id = ++User._idCounter;
-    this.socket = socket;
+    this.socket = options.socket;
+
+    options.doc = options.doc || {};
+    this.name = options.doc.name || 'Anon' + this.id;
+    this.game = game.firstGame;
+
     this.ship;
 
     this.actions = {};
@@ -32,6 +38,10 @@ User.prototype.getFirstInfo = function() {
     }
 
     return info;
+};
+
+User.prototype.sendGameFirstState = function() {
+    this.socket.emit('firstGameState', this.game.getGameFirstState(this));
 };
 
 User.prototype.send = function(name, data) {

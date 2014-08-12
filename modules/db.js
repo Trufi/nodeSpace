@@ -1,10 +1,7 @@
 var mongodb = require('mongodb');
 var mongoClient = mongodb.MongoClient;
-var format = require('util').format;
+//var format = require('util').format;
 var config = require('config');
-
-var db;
-var users;
 
 mongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.db, function(err, _db) {
     if (err) throw err;

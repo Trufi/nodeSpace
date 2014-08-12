@@ -37,10 +37,7 @@ function loadUserFromDB(session, callback) {
     }
 }
 
-io.sockets.on('connection', function (socket) {
-    log.info('User connection');
-    var user;
-
+function getUser(socket, callback) {
     async.waterfall([
         function(callback) {
             var sid;
@@ -65,18 +62,46 @@ io.sockets.on('connection', function (socket) {
             }
         },
         function(userDoc) {
-            user = new User(userDoc);
+            var user = new User({socket: socket, doc: userDoc});
+            log.silly('user taked from db, username: ' + user.name);
+            callback(null, user);
         }
     ], function(err) {
+        var user;
         if (!err) {
             log.silly('No error!');
         } else {
             log.silly(err.message);
+            user = new User({socket: socket});
+            log.silly('new user create, username: ' + user.name);
+            callback(null, user);
         }
+    });
+}
+
+io.sockets.on('connection', function (socket) {
+    log.info('User connection');
+    var user;
+
+    async.parallel([
+        function(callback) {
+            getUser(socket, callback)
+        },
+        function(callback) {
+            socket.once('clientOnLoad', function() {
+                callback(null, null);
+            });
+        }
+    ],  function(err, results) {
+        var user = results[0];
+
+        user.sendGameFirstState();
+
+        log.silly('send game first state to user');
     });
 
     // клиент загрузился
-    socket.once('clientOnLoad', function() {
+    /*socket.once('clientOnLoad', function() {
         //user = new User(socket);
         //user.createShip();
         //game.addUser(user);
@@ -85,7 +110,7 @@ io.sockets.on('connection', function (socket) {
         //user.send('firstGameState', game.getGameFirstState(user));
 
         //socket.emit('firstGameState', game.getGameFirstState());
-    });
+    });*/
 
     socket.on('playerActions', function(data) {
         if (user !== undefined) {
