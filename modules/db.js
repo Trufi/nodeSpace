@@ -1,11 +1,22 @@
 var mongodb = require('mongodb');
 var mongoClient = mongodb.MongoClient;
 var format = require('util').format;
+var config = require('config');
 
-mongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
-    if(err) throw err;
+var db;
+var users;
 
-    var collection = db.collection('test_insert');
+mongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.db, function(err, _db) {
+    if (err) throw err;
+
+    exports.db = _db;
+
+    /*var sessions = db.collection('sessions');
+    sessions.find().toArray(function(err, res) {
+        console.log(res);
+    });*/
+
+/*    var collection = db.collection('test_insert');
     collection.insert({a:2}, function(err, docs) {
 
         collection.count(function(err, count) {
@@ -18,5 +29,11 @@ mongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
             // Let's close the db
             db.close();
         });
-    });
+    });*/
+
+    exports.users = _db.collection('users');
 });
+
+/*
+exports.db = db;
+exports.users = users;*/

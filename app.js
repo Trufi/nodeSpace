@@ -12,7 +12,8 @@ var routes = require('routes/index');
 
 var config = require('config');
 var sockets = require('modules/socket');
-var MongoStore = require('connect-mongo')(session);
+
+var sessionStore = require('modules/sessionStore');
 
 
 var app = express();
@@ -46,9 +47,7 @@ app.use(session({
     cookie: config.session.cookie,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({
-        db: 'test'
-    })
+    store: sessionStore
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
