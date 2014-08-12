@@ -51,12 +51,6 @@ app.use(session({
     })
 }));
 
-app.use(function(req, res, next) {
-    req.session.numderOfVisits = req.session.numderOfVisits + 1 || 1;
-
-    next();
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
