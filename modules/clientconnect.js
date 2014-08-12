@@ -14,13 +14,16 @@ io.sockets.on('connection', function (socket) {
     var user;
 
     var sid;
+
+    // код синхронный
     cookieParser(socket.handshake, null, function(err) {
         sid = socket.handshake.signedCookies[config.session.key];
     });
 
+    log.silly('User\'s sid = ' + sid);
+
     // клиент загрузился
     socket.once('clientOnLoad', function() {
-        console.log('sdsad');
         //user = new User(socket);
         //user.createShip();
         //game.addUser(user);

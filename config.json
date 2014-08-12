@@ -8,8 +8,9 @@
         "key": "sid",
         "cookie": {
             "path": "/",
-            "maxAge": null,
-            "httpOnly": true
+            "maxAge": 3600000,
+            "httpOnly": true,
+            "secure": false
         }
     }
 }

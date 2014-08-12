@@ -12,6 +12,7 @@ var routes = require('routes/index');
 
 var config = require('config');
 var sockets = require('modules/socket');
+var MongoStore = require('connect-mongo')(session);
 
 
 var app = express();
@@ -44,8 +45,17 @@ app.use(session({
     key: config.session.key,
     cookie: config.session.cookie,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new MongoStore({
+        db: 'test'
+    })
 }));
+
+app.use(function(req, res, next) {
+    req.session.numderOfVisits = req.session.numderOfVisits + 1 || 1;
+
+    next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -6,7 +6,7 @@ function createLogger(path) {
         new winston.transports.Console({
             //timestamp: true,
             colorize: true,
-            level: 'debug',
+            level: 'silly',
             label: path.replace(config['pathToProject'], '')
         })
     ];
