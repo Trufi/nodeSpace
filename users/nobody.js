@@ -6,8 +6,15 @@ function Nobody(options) {
     this.game = game.getGameForNobody();
 }
 
-Nobody.prototype.sendGameFirstState = function() {
-    this.socket.emit('firstGameState', this.game.getGameFirstState());
+Nobody.prototype.sendFirstState = function() {
+    var state = {};
+
+    state.game = this.game.getGameFirstState();
+    state.user = {
+        type: 0
+    };
+
+    this.socket.emit('userFirstState', state);
 };
 
 Nobody.prototype.send = function(name, data) {

@@ -10,12 +10,22 @@ var Player = function User(options) {
     options.doc = options.doc || {};
     this.name = options.doc.name || 'Anon' + (++Player._idCounter);
     this.game = game.getGameForPlayer(this);
+    this.game.addUser(this);
 
     this.actions = {};
     this.ship;
 };
 
 Player._idCounter = 0;
+
+Player.prototype.sendFirstState = function() {
+    var state = {};
+
+    state.game = this.game.getGameFirstState();
+    state.user = this.getFirstInfo();
+
+    this.socket.emit('userFirstState', state);
+};
 
 Player.prototype.getInfo = function() {
     var info = {};
@@ -35,10 +45,6 @@ Player.prototype.getFirstInfo = function() {
     }
 
     return info;
-};
-
-Player.prototype.sendGameFirstState = function() {
-    this.socket.emit('firstGameState', this.game.getGameFirstState(this));
 };
 
 Player.prototype.send = function(name, data) {

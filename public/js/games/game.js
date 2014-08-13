@@ -12,7 +12,6 @@ define(
         var User = require('modules/user');
         var key = require('modules/key');
         var player = require('modules/player');
-        var ScreenArrow = require('interface/screenArrow');
         var body = require('body/index');
 
         var game = {};
@@ -30,9 +29,6 @@ define(
 
         // фон игры
         game.background;
-
-        // игрок
-        game.player;
 
         game.lastGameStepTime;
 
@@ -110,7 +106,7 @@ define(
         game.load = function(options, callback) {
             this.lastGameStepTime = Date.now();
 
-            assets.load(options.assets, callback);
+            assets.load(options.game.assets, callback);
         };
 
         game.updateFromServerEnable = function() {
@@ -164,8 +160,8 @@ define(
             var _this = this;
 
             this.world = new p2.World({
-                gravity: options.world.gravity,
-                applyDamping: options.world.applyDamping
+                gravity: options.game.world.gravity,
+                applyDamping: options.game.world.applyDamping
             });
 
             this.stage = new PIXI.Stage(0x000000);
@@ -178,25 +174,22 @@ define(
             this.createBackground(assets.texture.background);
 
             // создаем объекты в космосе
-            _(options.bodies).forEach(function(el) {
+            _(options.game.bodies).forEach(function(el) {
                 _this.addBody(body.create(el));
             });
 
             // создаем и сохраняем юзеров
-            _(options.users).forEach(function(el) {
+            _(options.game.users).forEach(function(el) {
                 var user = new User(el);
                 _this.addUser(user);
 
-                // if user is not spectator, add body
-                if (el.type !== 0) {
+                // if user have ship
+                if (el.shipId !== undefined) {
                     user.setShip(_this.bodies[el.shipId]);
                 }
             });
 
-            // присваиваем User игроку
-            //player.setUser(this.users[options.player.id]);
-
-            this.state.start();
+            this.state.start(options);
 
             this.updateFromServerEnable();
             this.loop();

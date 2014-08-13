@@ -2,14 +2,10 @@ define(
     function(require) {
         var PIXI = require('pixi');
         var config = require('json!config');
-        var _ = require('lodash');
 
         var render = {};
 
-        var resizeCallbacks = {};
-
         render.create = function(options) {
-            var _this = this;
             var gameWrap = document.getElementById(config.gameHtmlWrapId);
 
             options = options || {};

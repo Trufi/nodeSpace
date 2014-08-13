@@ -9,7 +9,10 @@ define(
 
         var state = {};
 
-        state.start = function() {
+        state.start = function(options) {
+            // присваиваем User игроку
+            player.setUser(game.users[options.user.id]);
+
             this.followBodyNumber = 3;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 

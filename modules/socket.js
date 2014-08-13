@@ -20,7 +20,7 @@ exports.io = function() {
 
 exports.find = function(sid) {
     var socket = _(io.sockets.clients()).find(function(el) {
-        return el.session.id === sid;
+        return el.handshake.session.id === sid;
     });
 
     return socket;

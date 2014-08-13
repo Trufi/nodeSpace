@@ -24,7 +24,7 @@ define(
 
         request.gameInit = function(callback) {
             socket.emit('clientOnLoad');
-            socket.once('firstGameState', function (data) {
+            socket.once('userFirstState', function (data) {
                 callback(data);
             });
         };

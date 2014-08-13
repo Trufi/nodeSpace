@@ -110,10 +110,6 @@ Game.prototype.getGameFirstState = function(user) {
         return el.getFirstInfo();
     });
 
-    if (user !== undefined) {
-        state.player = user.getFirstInfo();
-    }
-
     return state;
 };
 

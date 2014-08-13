@@ -96,7 +96,7 @@ io.sockets.on('connection', function (socket) {
     ],  function(err, results) {
         var user = results[0];
 
-        user.sendGameFirstState();
+        user.sendFirstState();
 
         log.silly('send game first state to user');
     });

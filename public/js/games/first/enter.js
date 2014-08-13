@@ -248,9 +248,7 @@ define(
                 game.camera.followTo(game.bodies[state.followBodyNumber]);
             }
 
-            if (key.pressed.SPACE) {
-                changeCamera();
-            } else if (now - this.lastTimeChangeCamera > 7000) {
+            if (key.pressed.SPACE || (now - this.lastTimeChangeCamera) > 7000) {
                 changeCamera();
             }
         };
