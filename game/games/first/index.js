@@ -1,7 +1,6 @@
 var _ = require('lodash');
-var Game = require('game/game');
-var User = require('game/user');
-var body = require('game/body/index');
+var Game = require('../game');
+var body = require('game/body');
 
 // инициализация единственной пока что игры
 var game = new Game();

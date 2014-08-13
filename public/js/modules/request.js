@@ -39,13 +39,13 @@ define(
             socket.emit('playerActions', data);
         };
 
-        request.signUp = function(email, pass) {
+        request.signUp = function(email, pass, callback) {
             $.ajax({
                 url: '/signup',
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    console.log(data);
+                    callback()
                 }
             });
         };

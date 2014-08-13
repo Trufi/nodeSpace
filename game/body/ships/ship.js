@@ -2,7 +2,7 @@ var utils = require('util');
 var p2 = require('p2');
 var _ = require('lodash');
 var Body = require('../body');
-var config = require('../../config.json');
+var config = require('config');
 
 var Ship = function Ship(options) {
     Ship.super_.apply(this, arguments);

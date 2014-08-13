@@ -3,8 +3,7 @@ var io = require('./socket').io();
 var log = require('modules/log')(module);
 var async = require('async');
 var config = require('config');
-var User = require('game/user');
-var body = require('game/body/index');
+var users = require('users');
 var cookieParser = require('cookie-parser')(config.session.secret);
 var sessionStore = require('modules/sessionStore');
 var db = require('modules/db');
@@ -58,22 +57,24 @@ function getUser(socket, callback) {
             if (!session) {
                 callback(new Error('session is empty'));
             } else {
+                socket.handshake.session = session;
                 loadUserFromDB(session, callback);
             }
         },
         function(userDoc) {
-            var user = new User({socket: socket, doc: userDoc});
-            log.silly('user taked from db, username: ' + user.name);
+            var user = users.player.create({socket: socket, doc: userDoc});
+            log.silly('user taked from db as Player, username: ' + user.name);
             callback(null, user);
         }
     ], function(err) {
         var user;
         if (!err) {
+            // не заходит
             log.silly('No error!');
         } else {
             log.silly(err.message);
-            user = new User({socket: socket});
-            log.silly('new user create, username: ' + user.name);
+            user = users.nobody.create({socket: socket});
+            log.silly('new client create as Nobody');
             callback(null, user);
         }
     });

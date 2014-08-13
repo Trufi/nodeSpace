@@ -27,7 +27,7 @@ var server = app.listen(app.get('port'), app.set('host'), function () {
 sockets.init(server);
 
 // Init game
-require('game/games');
+require('game');
 
 //var gameMain = require('./game/main');
 var clientConnect = require('modules/clientconnect');

@@ -32,6 +32,16 @@ signup.post = function(req, res, next) {
     var login = req.body.login,
         pass = req.body.pass;
 
+    if (!/.+@.+\..+/i.test(login)) {
+        log.warn('login not valid, login: %s, pass: %s', login, pass);
+        return next(new Error('login not valid'));
+    }
+
+    if (pass.length <= 3) {
+        log.warn('password length <= 3, login: %s, pass: %s', login, pass);
+        return next(new Error('password length <= 3'));
+    }
+
     if (login === undefined || pass === undefined) {
         log.warn('login or password are undefined, login: %s, pass: %s', login, pass);
         return next(new Error('login or password are undefined'));

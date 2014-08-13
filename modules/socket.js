@@ -17,3 +17,11 @@ exports.init = function (server) {
 exports.io = function() {
     return io;
 };
+
+exports.find = function(sid) {
+    var socket = _(io.sockets.clients()).find(function(el) {
+        return el.session.id === sid;
+    });
+
+    return socket;
+};
