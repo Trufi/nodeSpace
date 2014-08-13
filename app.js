@@ -17,11 +17,9 @@ var sessionStore = require('modules/sessionStore');
 
 
 var app = express();
-app.set('port', config.port);
-app.set('host', config.host);
 
-var server = app.listen(app.get('port'), app.set('host'), function () {
-    log.info('server listen on ' + app.get('port') + ' port and host ' + app.set('host'));
+var server = app.listen(config.port, config.host, function () {
+    log.info('server listen on %s port and %s host ', config.port, config.host);
 });
 
 sockets.init(server);
@@ -30,7 +28,6 @@ sockets.init(server);
 require('game');
 
 //var gameMain = require('./game/main');
-var clientConnect = require('modules/clientconnect');
 //gameMain.start();
 
 // view engine setup
@@ -51,6 +48,8 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore
 }));
+
+var clientConnect = require('modules/clientconnect');
 
 app.use(express.static(path.join(__dirname, 'public')));
 

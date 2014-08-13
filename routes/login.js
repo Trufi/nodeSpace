@@ -3,7 +3,7 @@ var db = require('modules/db');
 var crypto = require('crypto');
 var users = require('users');
 
-var signup = {};
+var login = {};
 
 function userAuth(login, pass, callback) {
     if (db.users === undefined) {
@@ -11,26 +11,26 @@ function userAuth(login, pass, callback) {
     }
 
     db.users.findOne({login: login}, function(err, doc) {
-        var password, salt;
+        var password;
 
         if (err) return callback(err);
 
-        if (doc) {
-            callback(null, 1);
-            log.silly('login %s already busy', login);
-        } else {
-            salt = Math.random() + '';
-            password = crypto.createHmac('sha1', salt).update(pass).digest('hex');
-            db.users.insert({login: login, salt: salt, password: password}, function(err, arrDoc) {
-                if (err) return callback(err);
-                log.info('Create new user in database, login: %s', arrDoc[0].login);
+        if (doc && doc.salt && doc.password) {
+            password = crypto.createHmac('sha1', doc.salt).update(pass).digest('hex');
+            if (password === doc.password) {
                 callback(null, null);
-            });
+            } else {
+                callback(null, 1);
+                log.silly('passwords not match, login: %s, password: %s', login, pass);
+            }
+        } else {
+            callback(null, 1);
+            log.silly('login not found in db, login: %s', login);
         }
     });
 }
 
-signup.post = function(req, res, next) {
+login.post = function(req, res, next) {
     var login = req.body.login,
         pass = req.body.pass;
 
@@ -60,7 +60,7 @@ signup.post = function(req, res, next) {
         if (err) return next(err);
 
         if (arg2 === 1) {
-            res.send({error: 1, message: 'this login already busy'});
+            res.send({error: 1, message: 'unknown login or password'});
         } else {
             req.session.login = login;
             res.send({error: null});
@@ -68,9 +68,10 @@ signup.post = function(req, res, next) {
             // находим Nobody юзера и переделываем его в Player
             user = users.findNobodyWithSid(req.session.id);
             users.changeToPlayer(user);
+            console.log(user);
             user.updateSocketSession();
         }
     });
 };
 
-module.exports = signup;
+module.exports = login;

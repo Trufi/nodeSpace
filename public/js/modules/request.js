@@ -45,7 +45,19 @@ define(
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    callback()
+                    callback();
+                }
+            });
+        };
+
+        request.login = function(email, pass, callback) {
+            $.ajax({
+                url: '/login',
+                method: 'POST',
+                data: 'login=' + email + '&pass=' + pass,
+                success: function(data) {
+                    callback();
+                    console.log(data);
                 }
             });
         };

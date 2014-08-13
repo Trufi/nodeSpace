@@ -105,6 +105,25 @@ define(
                 text: 'Ok',
                 position: [-150, 5],
                 click: function() {
+                    var email = login.value(),
+                        passVal = pass.value(),
+                        validNoErrors = false;
+
+                    if (valid.email(email)) {
+                        if (valid.passwordLength(passVal)) {
+                            validNoErrors = true;
+                        } else {
+                            error.setText(config.errors.minPasswordLength);
+                        }
+                    } else {
+                        error.setText(config.errors.emailNotValid);
+                    }
+
+                    if (validNoErrors) {
+                        request.login(email, passVal, function() {
+                            console.log('login done');
+                        });
+                    }
                 }
             }));
 
@@ -117,6 +136,15 @@ define(
                     state.firstMenu.show();
                 }
             }));
+
+            error = interface.text.create({
+                text: '',
+                color: 'ff0000',
+                position: [160, 30],
+                fontSize: 18,
+                anchor: [0, 0.5]
+            });
+            state.loginMenu.addChild(error);
         }
 
         function createRegMenu() {

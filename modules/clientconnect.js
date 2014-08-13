@@ -48,6 +48,7 @@ function getUser(socket, callback) {
 
             if (sid) {
                 log.silly('User\'s sid = ' + sid);
+                socket.handshake.sid = sid;
                 loadSession(sid, callback);
             } else {
                 callback(new Error('sid is empty'));
@@ -58,6 +59,7 @@ function getUser(socket, callback) {
                 callback(new Error('session is empty'));
             } else {
                 socket.handshake.session = session;
+
                 loadUserFromDB(session, callback);
             }
         },
@@ -82,18 +84,25 @@ function getUser(socket, callback) {
 
 io.sockets.on('connection', function (socket) {
     log.info('User connection');
-    var user;
 
     async.parallel([
         function(callback) {
             getUser(socket, callback)
         },
         function(callback) {
+            var timeout = setTimeout(function() {
+                log.silly('users load timeout');
+                callback(new Error('users load timeout'));
+            }, config.waitingUsersLoad);
+
             socket.once('clientOnLoad', function() {
+                clearTimeout(timeout);
                 callback(null, null);
             });
         }
     ],  function(err, results) {
+        if (err) return err;
+
         var user = results[0];
 
         user.sendFirstState();

@@ -71,4 +71,8 @@ Player.prototype.action = function(name) {
     }
 };
 
+Player.prototype.updateSocketSession = function() {
+    // TODO: this.socket.handshake ...
+};
+
 module.exports = Player;

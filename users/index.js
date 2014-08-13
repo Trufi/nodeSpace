@@ -28,10 +28,27 @@ users.player.create = function(options) {
     return user;
 };
 
-users.findPlayerWithSid = function(sid) {
-    return _.find(users.player.list, function(el) {
-        return el.socket.handshake.session.id === sid;
+users.findNobodyWithSid = function(sid) {
+    return _.find(users.nobody.list, function(el) {
+        var id = el.socket.handshake.sid;
+        console.log(id);
+        if (id !== undefined) {
+            return id === sid;
+        } else {
+            return false;
+        }
     });
+};
+
+users.changeToPlayer = function(user) {
+    var newUser;
+
+    if (user instanceof Nobody) {
+        delete users.nobody.list[user.id];
+        newUser = new Player({socket: user.socket});
+        users.player.list[newUser.id] = newUser;
+        newUser.send('changeStatus', newUser);
+    }
 };
 
 module.exports = users;
