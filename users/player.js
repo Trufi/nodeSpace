@@ -3,7 +3,7 @@ var game = require('game');
 var body = require('game/body');
 var action = require('game/actions');
 
-var Player = function User(options) {
+var Player = function Player(options) {
     this.id = options.id;
     this.socket = options.socket;
 

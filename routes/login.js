@@ -67,8 +67,12 @@ login.post = function(req, res, next) {
 
             // находим Nobody юзера и переделываем его в Player
             user = users.findNobodyWithSid(req.session.id);
+            if (user === undefined) {
+                log.error('users with sid %s not found', req.session.id);
+                return next(new Error('users not found'));
+            }
+
             users.changeToPlayer(user);
-            console.log(user);
             user.updateSocketSession();
         }
     });

@@ -31,7 +31,6 @@ users.player.create = function(options) {
 users.findNobodyWithSid = function(sid) {
     return _.find(users.nobody.list, function(el) {
         var id = el.socket.handshake.sid;
-        console.log(id);
         if (id !== undefined) {
             return id === sid;
         } else {
@@ -45,9 +44,9 @@ users.changeToPlayer = function(user) {
 
     if (user instanceof Nobody) {
         delete users.nobody.list[user.id];
-        newUser = new Player({socket: user.socket});
+        newUser = new Player({socket: user.socket, id: user.id});
         users.player.list[newUser.id] = newUser;
-        newUser.send('changeStatus', newUser);
+        newUser.send('changeStatus', newUser.getFirstInfo());
     }
 };
 
