@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var log = require('modules/log')(module);
 
-var routes = require('routes/index');
-// var users = require('./routes/users');
 
 var config = require('config');
 var sockets = require('modules/socket');
@@ -22,6 +20,12 @@ var server = app.listen(config.port, config.host, function () {
 });
 
 sockets.init(server);
+
+var clientConnect = require('modules/clientconnect');
+
+var routes = require('routes/index');
+// var users = require('./routes/users');
+
 
 // Init game
 require('game');
@@ -47,8 +51,6 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore
 }));
-
-var clientConnect = require('modules/clientconnect');
 
 app.use(express.static(path.join(__dirname, 'public')));
 

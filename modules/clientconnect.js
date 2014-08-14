@@ -131,4 +131,4 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-module.exports.loadSession = loadSession;
+exports.loadSession = loadSession;
