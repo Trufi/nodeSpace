@@ -77,7 +77,6 @@ signup.post = function(req, res, next) {
                 log.error('user not update to player, sid %s', req.session.id);
                 return next(new Error('user not update to player'));
             }
-            user.updateSocketSession();
             log.info('user login as %s, username: %s', login, user.name);
         }
     });

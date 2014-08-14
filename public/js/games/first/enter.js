@@ -290,8 +290,14 @@ define(
             this.loginMenu.hide();
         };
 
-        state.next = function() {
-            game.changeState(nextStage);
+        state.next = function(options) {
+            game.changeState(nextStage, options);
+        };
+
+        state.changeStatus = function(player) {
+            if (player.type === 1) {
+                state.next({user: player});
+            }
         };
 
         return state;

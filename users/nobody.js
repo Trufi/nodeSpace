@@ -22,15 +22,4 @@ Nobody.prototype.send = function(name, data) {
     this.socket.emit(name, data);
 };
 
-Nobody.prototype.updateSocketSession = function() {
-    clientConnect.loadSession(this.socket.handshake.sid, function(session) {
-        if (!session) {
-            callback(new Error('session is empty'));
-        } else {
-            socket.handshake.session = session;
-            callback(null);
-        }
-    });
-};
-
 module.exports = Nobody;

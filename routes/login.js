@@ -67,6 +67,7 @@ login.post = function(req, res, next) {
 
             // находим Nobody юзера и переделываем его в Player
             user = users.findNobodyWithSid(req.session.id);
+
             if (user === undefined) {
                 log.error('users with sid %s not found', req.session.id);
                 return next(new Error('users not found'));
@@ -77,7 +78,6 @@ login.post = function(req, res, next) {
                 log.error('user not update to player, sid %s', req.session.id);
                 return next(new Error('user not update to player'));
             }
-            user.updateSocketSession();
             log.info('user login as %s, username: %s', login, user.name);
         }
     });

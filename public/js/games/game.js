@@ -34,6 +34,8 @@ define(
 
         game.dataFromServer;
 
+        game.dataChangeStatus;
+
         // игровое состояние
         game.state;
 
@@ -189,6 +191,10 @@ define(
                 }
             });
 
+            request.changeStatus(function(data) {
+                _this.dataChangeStatus = data;
+            });
+
             this.state.start(options);
 
             this.updateFromServerEnable();
@@ -202,6 +208,11 @@ define(
                 el.updateSprite();
             });
 
+            if (this.dataChangeStatus !== undefined) {
+                this.state.changeStatus(this.dataChangeStatus);
+                this.dataChangeStatus = undefined;
+            }
+
             this.updateBackground();
 
             this.state.update();
@@ -213,10 +224,10 @@ define(
             this.state.render();
         };
 
-        game.changeState = function(state) {
+        game.changeState = function(state, options) {
             if (this.state !== undefined) {
                 this.state.close();
-                state.start();
+                state.start(options);
             }
             this.state = state;
         };

@@ -29,6 +29,12 @@ define(
             });
         };
 
+        request.changeStatus = function(callback) {
+            socket.on('changeStatus', function(data) {
+                callback(data);
+            });
+        };
+
         request.onUpdateGameState = function(callback) {
             socket.on('updateGameState', function(data) {
                 callback(data);
@@ -57,7 +63,6 @@ define(
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
                     callback();
-                    console.log(data);
                 }
             });
         };

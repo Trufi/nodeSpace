@@ -72,15 +72,4 @@ Player.prototype.action = function(name) {
     }
 };
 
-Player.prototype.updateSocketSession = function(callback) {
-    clientConnect.loadSession(this.socket.handshake.sid, function(session) {
-        if (!session) {
-            callback(new Error('session is empty'));
-        } else {
-            socket.handshake.session = session;
-            callback(null);
-        }
-    });
-};
-
 module.exports = Player;
