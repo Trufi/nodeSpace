@@ -24,11 +24,10 @@ function loadUserFromDB(session, callback) {
     if (db.users === undefined) {
         callback(new Error('db not initialized'));
     } else if (session.login) {
-        db.users.find({login: session.login}, function(err, doc) {
+        db.users.findOne({login: session.login}, function(err, doc) {
             if (err) {
                 callback(err);
             }
-
             callback(null, doc);
         });
     } else {
@@ -64,7 +63,7 @@ function getUser(socket, callback) {
             }
         },
         function(userDoc) {
-            var user = users.player.create({socket: socket, doc: userDoc});
+            var user = users.player.create({socket: socket, db: userDoc});
             log.silly('user taked from db as Player, username: ' + user.name);
             callback(null, user);
         }
