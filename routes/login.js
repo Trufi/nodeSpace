@@ -74,6 +74,7 @@ login.post = function(req, res, next) {
             }
 
             user = users.changeToPlayer(user, {doc: arg2});
+
             if (user === undefined) {
                 log.error('user not update to player, sid %s', req.session.id);
                 return next(new Error('user not update to player'));

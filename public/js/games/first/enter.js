@@ -16,6 +16,9 @@ define(
         state.regMenu;
         state.followBodyNumber;
 
+        // вначале undefined, после логина, квик старта или регистрации получает id
+        state.playerId;
+
 
         function createFirstMenu() {
             var buttonQuickStart,
@@ -29,7 +32,7 @@ define(
             buttonQuickStart = interface.button.create({
                 text: 'Quick start',
                 click: function() {
-                    state.next();
+                    //state.next();
                 },
                 position: [-150, -85]
             });
@@ -120,8 +123,10 @@ define(
                     }
 
                     if (validNoErrors) {
-                        request.login(email, passVal, function() {
-                            console.log('login done');
+                        request.login(email, passVal, function(data) {
+                            if (data.error === 1) {
+                                error.setText(config.errors.unknownEmailOrPass);
+                            }
                         });
                     }
                 }
@@ -229,8 +234,10 @@ define(
                     }
 
                     if (validNoErrors) {
-                        request.signUp(email, passVal, function() {
-                            console.log('done');
+                        request.signUp(email, passVal, function(data) {
+                            if (data.error === 1) {
+                                error.setText(config.errors.emailBusy);
+                            }
                         });
                     }
                 }
@@ -265,6 +272,10 @@ define(
             createRegMenu();
 
             this.lastTimeChangeCamera = Date.now();
+
+            request.changeStatusToPlayer(function(playerId) {
+                state.playerId = playerId;
+            })
         };
 
         state.update = function() {
@@ -279,6 +290,10 @@ define(
             if (key.pressed.SPACE || (now - this.lastTimeChangeCamera) > 7000) {
                 changeCamera();
             }
+
+            if (this.playerId !== undefined && game.users[this.playerId] !== undefined) {
+                this.next({playerId: this.playerId});
+            }
         };
 
         state.render = function() {
@@ -288,16 +303,11 @@ define(
         state.close = function() {
             this.firstMenu.hide();
             this.loginMenu.hide();
+            this.regMenu.hide();
         };
 
         state.next = function(options) {
             game.changeState(nextStage, options);
-        };
-
-        state.changeStatus = function(player) {
-            if (player.type === 1) {
-                state.next({user: player});
-            }
         };
 
         return state;

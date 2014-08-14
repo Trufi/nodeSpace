@@ -29,8 +29,8 @@ define(
             });
         };
 
-        request.changeStatus = function(callback) {
-            socket.on('changeStatus', function(data) {
+        request.changeStatusToPlayer = function(callback) {
+            socket.once('changeStatusToPlayer', function(data) {
                 callback(data);
             });
         };
@@ -51,7 +51,7 @@ define(
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    callback();
+                    callback(data);
                 }
             });
         };
@@ -62,7 +62,7 @@ define(
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    callback();
+                    callback(data);
                 }
             });
         };

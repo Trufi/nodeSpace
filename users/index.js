@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Nobody = require('./nobody');
 var Player = require('./player');
+var log = require('modules/log')(module);
 
 var users = {};
 
@@ -50,7 +51,8 @@ users.changeToPlayer = function(user, options) {
         delete users.nobody.list[user.id];
         newUser = new Player(options);
         users.player.list[newUser.id] = newUser;
-        newUser.send('changeStatus', newUser.getFirstInfo());
+        newUser.send('changeStatusToPlayer', newUser.id);
+        log.silly('send changeStatusToPlayer, name: %s', newUser.name);
     }
 
     return newUser;

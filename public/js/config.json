@@ -9,6 +9,8 @@
     "errors": {
         "minPasswordLength": "Password length must be greater than 3",
         "passwordsDontMatch": "Passwords dont match",
-        "emailNotValid": "Enter right email"
+        "emailNotValid": "Enter right email",
+        "unknownEmailOrPass": "Unknown email or password",
+        "emailBusy": "Email busy"
     }
 }

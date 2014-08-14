@@ -34,8 +34,6 @@ define(
 
         game.dataFromServer;
 
-        game.dataChangeStatus;
-
         // игровое состояние
         game.state;
 
@@ -191,10 +189,6 @@ define(
                 }
             });
 
-            request.changeStatus(function(data) {
-                _this.dataChangeStatus = data;
-            });
-
             this.state.start(options);
 
             this.updateFromServerEnable();
@@ -202,12 +196,6 @@ define(
         };
 
         game.update = function() {
-            // проверка на обновление статуса пользователя
-            if (this.dataChangeStatus !== undefined) {
-                this.state.changeStatus(this.dataChangeStatus);
-                this.dataChangeStatus = undefined;
-            }
-
             this.camera.update();
 
             _(game.bodies).forEach(function(el) {
