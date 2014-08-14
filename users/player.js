@@ -3,6 +3,7 @@ var game = require('game');
 var body = require('game/body');
 var action = require('game/actions');
 var db = require('modules/db');
+var ObjectID = require('modules/db').ObjectID;
 
 var Player = function Player(options) {
     this.id = options.id;
@@ -10,22 +11,14 @@ var Player = function Player(options) {
 
     options.doc = options.doc || {};
 
-    if (options.doc.name === undefined) {
-        this.name = 'Anon' + (++Player._nameCounter);
-        this.isAnonName = true;
-    } else {
-        this.name = options.doc.name;
-        this.isAnonName = false;
-    }
-
+    this.name = options.doc.name || options.name;
     this.game = game.getGameForPlayer(this);
     this.game.addUser(this);
+    this.dbId = options.doc._id;
 
     this.actions = {};
     this.ship;
 };
-
-Player._nameCounter = 0;
 
 Player.prototype.sendFirstState = function() {
     var state = {};
@@ -78,6 +71,22 @@ Player.prototype.action = function(name) {
     if (this.actions[name] !== undefined) {
         this.actions[name].use();
     }
+};
+
+Player.prototype.getDbInfo = function() {
+    var info = {};
+    info.name = this.name;
+    return info;
+};
+
+Player.prototype.save = function() {
+/*    if (this.dbId === undefined) {
+        db.users.insert(this.getDbInfo(), function(err) {
+            if (err) return log.error(err);
+        });
+    } else {
+        db.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDbInfo()});
+    }*/
 };
 
 module.exports = Player;

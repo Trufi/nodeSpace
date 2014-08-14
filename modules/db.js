@@ -2,35 +2,21 @@ var mongodb = require('mongodb');
 var mongoClient = mongodb.MongoClient;
 //var format = require('util').format;
 var config = require('config');
+var users = require('users');
+var log = require('modules/log')(module);
+var EventEmmiter = require('events').EventEmitter;
+
+var db = new EventEmmiter();
+db.db = undefined;
+db.users = undefined;
 
 mongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.db, function(err, _db) {
     if (err) throw err;
 
-    exports.db = _db;
-
-    /*var sessions = db.collection('sessions');
-    sessions.find().toArray(function(err, res) {
-        console.log(res);
-    });*/
-
-/*    var collection = db.collection('test_insert');
-    collection.insert({a:2}, function(err, docs) {
-
-        collection.count(function(err, count) {
-            console.log(format("count = %s", count));
-        });
-
-        // Locate all the entries using find
-        collection.find().toArray(function(err, results) {
-            console.dir(results);
-            // Let's close the db
-            db.close();
-        });
-    });*/
-
-    exports.users = _db.collection('users');
+    db.db = _db;
+    db.users = _db.collection('users');
+    db.emit('ready');
+    log.info('Database ready');
 });
 
-/*
-exports.db = db;
-exports.users = users;*/
+module.exports = db;

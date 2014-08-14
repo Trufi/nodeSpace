@@ -22,6 +22,9 @@ define(
         // предлагать или нет смену имени плеера после входа в игру
         state.proposeChangeName = false;
 
+        // предлагать или нет сохранение после быстрого старта
+        state.proposeSignUp = false;
+
 
         function createFirstMenu() {
             var buttonQuickStart,
@@ -37,6 +40,7 @@ define(
                 click: function() {
                     request.quickStart();
                     state.proposeChangeName = false;
+                    state.proposeSignUp = true;
                 },
                 position: [-150, -85]
             });
@@ -133,6 +137,7 @@ define(
                             }
                         }, function(){
                             state.proposeChangeName = false;
+                            state.proposeSignUp = false;
                         });
                     }
                 }
@@ -246,6 +251,7 @@ define(
                             }
                         }, function(){
                             state.proposeChangeName = true;
+                            state.proposeSignUp = false;
                         });
                     }
                 }
@@ -317,7 +323,8 @@ define(
         state.next = function() {
             var options = {
                 playerId: this.playerId,
-                proposeChangeName: this.proposeChangeName
+                proposeChangeName: this.proposeChangeName,
+                proposeSignUp: this.proposeSignUp
             };
 
             game.changeState(nextStage, options);

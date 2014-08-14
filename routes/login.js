@@ -30,6 +30,26 @@ function userAuth(login, pass, callback) {
     });
 }
 
+function findAngChangeUser(id, opt, next) {
+    var user;
+
+    // находим Nobody юзера и переделываем его в Player
+    user = users.findNobodyWithSid(id);
+
+    if (user === undefined) {
+        log.error('users with sid %s not found', id);
+        return next(new Error('users not found'));
+    }
+
+    user = users.changeToPlayer(user, opt);
+
+    if (user === undefined) {
+        log.error('user not update to player, sid %s', id);
+        return next(new Error('user not update to player'));
+    }
+    log.info('user login as %s, username: %s', login, user.name);
+}
+
 login.post = function(req, res, next) {
     var login = req.body.login,
         pass = req.body.pass;

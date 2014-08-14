@@ -2,6 +2,8 @@ var _ = require('lodash');
 var Nobody = require('./nobody');
 var Player = require('./player');
 var log = require('modules/log')(module);
+var config = require('config');
+var db = require('modules/db');
 
 var users = {};
 
@@ -56,6 +58,29 @@ users.changeToPlayer = function(user, options) {
     }
 
     return newUser;
+};
+
+users._count = 0;
+users.count = function() {
+    return ++this._count;
+};
+db.once('ready', function() {
+    db.users.count(function(err, count) {
+        if (err) {
+            return log.error(err);
+        }
+        users._count = count;
+    });
+});
+
+users.createNewInDatabase = function(options, callback) {
+    options.name = config.users.anonName + users.count;
+
+    db.users.insert(options, function(err) {
+        if (err) return callback(err);
+        log.info('Create new user in database, opt: ' + options);
+        callback(null, null);
+    });
 };
 
 module.exports = users;

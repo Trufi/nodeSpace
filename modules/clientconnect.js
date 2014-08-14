@@ -145,13 +145,14 @@ io.sockets.on('connection', function (socket) {
             return next(new Error('users not found'));
         }
 
-        user = users.changeToPlayer(user);
+        user = users.changeToPlayer(user, {name: config.users.anonName + users.count()});
 
         if (user === undefined) {
             log.error('user not update to player, sid %s', socket.handshake.sid);
             return next(new Error('user not update to player'));
         }
         log.info('user quickstart, username: %s', user.name);
+        user.save();
     });
 });
 

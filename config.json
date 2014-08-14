@@ -19,5 +19,8 @@
         "port": 27017
     },
     "actionsCooldown": 50,
-    "waitingUsersLoad": 300000
+    "waitingUsersLoad": 300000,
+    "users": {
+        "anonName": "Anon "
+    }
 }

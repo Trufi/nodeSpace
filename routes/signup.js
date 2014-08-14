@@ -2,6 +2,7 @@ var log = require('modules/log')(module);
 var db = require('modules/db');
 var crypto = require('crypto');
 var users = require('users');
+var config = require('config');
 
 var signup = {};
 
@@ -21,11 +22,7 @@ function userAuth(login, pass, callback) {
         } else {
             salt = Math.random() + '';
             password = crypto.createHmac('sha1', salt).update(pass).digest('hex');
-            db.users.insert({login: login, salt: salt, password: password}, function(err, arrDoc) {
-                if (err) return callback(err);
-                log.info('Create new user in database, login: %s', arrDoc[0].login);
-                callback(null, null);
-            });
+            callback(null, {login: login, salt: salt, password: password});
         }
     });
 }
@@ -65,6 +62,8 @@ signup.post = function(req, res, next) {
             req.session.login = login;
             res.send({error: null});
 
+            if (err) return next(err);
+
             // находим Nobody юзера и переделываем его в Player
             user = users.findNobodyWithSid(req.session.id);
 
@@ -73,13 +72,14 @@ signup.post = function(req, res, next) {
                 return next(new Error('users not found'));
             }
 
-            user = users.changeToPlayer(user);
+            user = users.changeToPlayer(user, {name: config.users.anonName + users.count()});
 
             if (user === undefined) {
                 log.error('user not update to player, sid %s', req.session.id);
                 return next(new Error('user not update to player'));
             }
             log.info('user login as %s, username: %s', login, user.name);
+            user.save();
         }
     });
 };
