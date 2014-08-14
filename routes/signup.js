@@ -22,7 +22,10 @@ function userAuth(login, pass, callback) {
         } else {
             salt = Math.random() + '';
             password = crypto.createHmac('sha1', salt).update(pass).digest('hex');
-            callback(null, {login: login, salt: salt, password: password});
+            db.users.insert({login: login, salt: salt, password: password}, function(err, arrDoc) {
+                if (err) return callback(err);
+                callback(null, arrDoc[0]);
+            });
         }
     });
 }
@@ -71,8 +74,7 @@ signup.post = function(req, res, next) {
                 log.error('users with sid %s not found', req.session.id);
                 return next(new Error('users not found'));
             }
-
-            user = users.changeToPlayer(user, {name: config.users.anonName + users.count()});
+            user = users.changeToPlayer(user, {name: config.users.anonName + users.count(), db: arg2});
 
             if (user === undefined) {
                 log.error('user not update to player, sid %s', req.session.id);

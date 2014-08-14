@@ -93,7 +93,7 @@ login.post = function(req, res, next) {
                 return next(new Error('users not found'));
             }
 
-            user = users.changeToPlayer(user, {doc: arg2});
+            user = users.changeToPlayer(user, {db: arg2});
 
             if (user === undefined) {
                 log.error('user not update to player, sid %s', req.session.id);

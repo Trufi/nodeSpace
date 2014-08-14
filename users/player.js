@@ -3,18 +3,18 @@ var game = require('game');
 var body = require('game/body');
 var action = require('game/actions');
 var db = require('modules/db');
-var ObjectID = require('modules/db').ObjectID;
+var ObjectID = require('mongodb').ObjectID;
 
 var Player = function Player(options) {
     this.id = options.id;
     this.socket = options.socket;
 
-    options.doc = options.doc || {};
+    options.db = options.db || {};
 
-    this.name = options.doc.name || options.name;
+    this.name = options.db.name || options.name;
     this.game = game.getGameForPlayer(this);
     this.game.addUser(this);
-    this.dbId = options.doc._id;
+    this.dbId = options.db._id;
 
     this.actions = {};
     this.ship;
@@ -80,13 +80,15 @@ Player.prototype.getDbInfo = function() {
 };
 
 Player.prototype.save = function() {
-/*    if (this.dbId === undefined) {
+    if (this.dbId === undefined) {
         db.users.insert(this.getDbInfo(), function(err) {
             if (err) return log.error(err);
         });
     } else {
-        db.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDbInfo()});
-    }*/
+        db.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDbInfo()}, function(err) {
+            if (err) return log.error(err);
+        });
+    }
 };
 
 module.exports = Player;
