@@ -39,15 +39,21 @@ users.findNobodyWithSid = function(sid) {
     });
 };
 
-users.changeToPlayer = function(user) {
+users.changeToPlayer = function(user, options) {
     var newUser;
 
     if (user instanceof Nobody) {
+        options = options || {};
+        options.id = user.id;
+        options.socket = user.socket;
+
         delete users.nobody.list[user.id];
-        newUser = new Player({socket: user.socket, id: user.id});
+        newUser = new Player(options);
         users.player.list[newUser.id] = newUser;
         newUser.send('changeStatus', newUser.getFirstInfo());
     }
+
+    return newUser;
 };
 
 module.exports = users;

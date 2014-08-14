@@ -2,6 +2,7 @@ var _ = require('lodash');
 var game = require('game');
 var body = require('game/body');
 var action = require('game/actions');
+var clientConnect = require('modules/clientconnect');
 
 var Player = function Player(options) {
     this.id = options.id;
@@ -71,8 +72,15 @@ Player.prototype.action = function(name) {
     }
 };
 
-Player.prototype.updateSocketSession = function() {
-    // TODO: this.socket.handshake ...
+Player.prototype.updateSocketSession = function(callback) {
+    clientConnect.loadSession(this.socket.handshake.sid, function(session) {
+        if (!session) {
+            callback(new Error('session is empty'));
+        } else {
+            socket.handshake.session = session;
+            callback(null);
+        }
+    });
 };
 
 module.exports = Player;

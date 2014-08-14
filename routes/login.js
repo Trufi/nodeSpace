@@ -18,7 +18,7 @@ function userAuth(login, pass, callback) {
         if (doc && doc.salt && doc.password) {
             password = crypto.createHmac('sha1', doc.salt).update(pass).digest('hex');
             if (password === doc.password) {
-                callback(null, null);
+                callback(null, doc);
             } else {
                 callback(null, 1);
                 log.silly('passwords not match, login: %s, password: %s', login, pass);
@@ -72,8 +72,13 @@ login.post = function(req, res, next) {
                 return next(new Error('users not found'));
             }
 
-            users.changeToPlayer(user);
+            user = users.changeToPlayer(user, {doc: arg2});
+            if (user === undefined) {
+                log.error('user not update to player, sid %s', req.session.id);
+                return next(new Error('user not update to player'));
+            }
             user.updateSocketSession();
+            log.info('user login as %s, username: %s', login, user.name);
         }
     });
 };
