@@ -19,6 +19,9 @@ define(
         // вначале undefined, после логина, квик старта или регистрации получает id
         state.playerId;
 
+        // предлагать или нет смену имени плеера после входа в игру
+        state.proposeChangeName = false;
+
 
         function createFirstMenu() {
             var buttonQuickStart,
@@ -32,7 +35,8 @@ define(
             buttonQuickStart = interface.button.create({
                 text: 'Quick start',
                 click: function() {
-                    //state.next();
+                    request.quickStart();
+                    state.proposeChangeName = false;
                 },
                 position: [-150, -85]
             });
@@ -127,6 +131,8 @@ define(
                             if (data.error === 1) {
                                 error.setText(config.errors.unknownEmailOrPass);
                             }
+                        }, function(){
+                            state.proposeChangeName = false;
                         });
                     }
                 }
@@ -238,6 +244,8 @@ define(
                             if (data.error === 1) {
                                 error.setText(config.errors.emailBusy);
                             }
+                        }, function(){
+                            state.proposeChangeName = true;
                         });
                     }
                 }
@@ -292,7 +300,7 @@ define(
             }
 
             if (this.playerId !== undefined && game.users[this.playerId] !== undefined) {
-                this.next({playerId: this.playerId});
+                this.next();
             }
         };
 
@@ -306,7 +314,12 @@ define(
             this.regMenu.hide();
         };
 
-        state.next = function(options) {
+        state.next = function() {
+            var options = {
+                playerId: this.playerId,
+                proposeChangeName: this.proposeChangeName
+            };
+
             game.changeState(nextStage, options);
         };
 

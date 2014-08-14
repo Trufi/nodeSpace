@@ -21,6 +21,10 @@ define(
                 target: game.bodies[1],
                 stage: game.stage
             });
+
+            if (options.proposeChangeName) {
+                console.log('TODO: смена имени');
+            }
         };
 
         state.update = function() {

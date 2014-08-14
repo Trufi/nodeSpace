@@ -129,6 +129,30 @@ io.sockets.on('connection', function (socket) {
             });
         }
     });
+
+    socket.on('quickStart', function() {
+        var user;
+
+        if (socket.handshake.sid === undefined) {
+            return log.warn('quickstart socket.handshake.sid  = undefined');
+        }
+
+        // находим Nobody юзера и переделываем его в Player
+        user = users.findNobodyWithSid(socket.handshake.sid);
+
+        if (user === undefined) {
+            log.error('users with sid %s not found', socket.handshake.sid);
+            return next(new Error('users not found'));
+        }
+
+        user = users.changeToPlayer(user);
+
+        if (user === undefined) {
+            log.error('user not update to player, sid %s', socket.handshake.sid);
+            return next(new Error('user not update to player'));
+        }
+        log.info('user quickstart, username: %s', user.name);
+    });
 });
 
 exports.loadSession = loadSession;

@@ -23,10 +23,10 @@ define(
             });
 
         request.gameInit = function(callback) {
-            socket.emit('clientOnLoad');
             socket.once('userFirstState', function (data) {
                 callback(data);
             });
+            socket.emit('clientOnLoad');
         };
 
         request.changeStatusToPlayer = function(callback) {
@@ -45,26 +45,32 @@ define(
             socket.emit('playerActions', data);
         };
 
-        request.signUp = function(email, pass, callback) {
+        request.signUp = function(email, pass, successCallback, completeCallback) {
             $.ajax({
                 url: '/signup',
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    callback(data);
-                }
+                    successCallback(data);
+                },
+                complete: completeCallback
             });
         };
 
-        request.login = function(email, pass, callback) {
+        request.login = function(email, pass, successCallback, completeCallback) {
             $.ajax({
                 url: '/login',
                 method: 'POST',
                 data: 'login=' + email + '&pass=' + pass,
                 success: function(data) {
-                    callback(data);
-                }
+                    successCallback(data);
+                },
+                complete: completeCallback
             });
+        };
+
+        request.quickStart = function() {
+            socket.emit('quickStart');
         };
 
         return request;

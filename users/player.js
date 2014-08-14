@@ -2,14 +2,22 @@ var _ = require('lodash');
 var game = require('game');
 var body = require('game/body');
 var action = require('game/actions');
-var clientConnect = require('modules/clientconnect');
+var db = require('modules/db');
 
 var Player = function Player(options) {
     this.id = options.id;
     this.socket = options.socket;
 
     options.doc = options.doc || {};
-    this.name = options.doc.name || 'Anon' + (++Player._idCounter);
+
+    if (options.doc.name === undefined) {
+        this.name = 'Anon' + (++Player._nameCounter);
+        this.isAnonName = true;
+    } else {
+        this.name = options.doc.name;
+        this.isAnonName = false;
+    }
+
     this.game = game.getGameForPlayer(this);
     this.game.addUser(this);
 
@@ -17,7 +25,7 @@ var Player = function Player(options) {
     this.ship;
 };
 
-Player._idCounter = 0;
+Player._nameCounter = 0;
 
 Player.prototype.sendFirstState = function() {
     var state = {};
