@@ -202,16 +202,17 @@ define(
         };
 
         game.update = function() {
+            // проверка на обновление статуса пользователя
+            if (this.dataChangeStatus !== undefined) {
+                this.state.changeStatus(this.dataChangeStatus);
+                this.dataChangeStatus = undefined;
+            }
+
             this.camera.update();
 
             _(game.bodies).forEach(function(el) {
                 el.updateSprite();
             });
-
-            if (this.dataChangeStatus !== undefined) {
-                this.state.changeStatus(this.dataChangeStatus);
-                this.dataChangeStatus = undefined;
-            }
 
             this.updateBackground();
 
