@@ -85,6 +85,7 @@ Player.prototype.save = function() {
             if (err) return log.error(err);
         });
     } else {
+        console.log(this.dbId);
         db.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDbInfo()}, function(err) {
             if (err) return log.error(err);
         });

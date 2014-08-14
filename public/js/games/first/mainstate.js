@@ -11,7 +11,7 @@ define(
 
         state.start = function(options) {
             // присваиваем User игроку
-            player.setUser(game.users[options.playerId]);
+            player.setUser(game.users[options.playerId || options.user.id]);
 
             this.followBodyNumber = 3;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
