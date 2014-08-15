@@ -138,8 +138,17 @@ define(
                 });
 
                 _(data.newData.users).forEach(function(el) {
+                    var user;
+
                     if (_this.users[el.id] === undefined) {
-                        _this.addUser(new User(el));
+                        user = new User(el);
+
+                        _this.addUser(user);
+
+                        // if user have ship
+                        if (el.shipId !== undefined) {
+                            user.setShip(_this.bodies[el.shipId]);
+                        }
                     }
                 });
             }
@@ -205,6 +214,8 @@ define(
             this.updateBackground();
 
             this.state.update();
+
+            player.sendActionToServer();
 
             key.reset();
         };

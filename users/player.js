@@ -8,6 +8,7 @@ var ObjectID = require('mongodb').ObjectID;
 var Player = function Player(options) {
     this.id = options.id;
     this.socket = options.socket;
+    this.socket.handshake.user = this;
 
     options.db = options.db || {};
 
@@ -17,7 +18,9 @@ var Player = function Player(options) {
     this.dbId = options.db._id;
 
     this.actions = {};
+
     this.ship;
+    this.createShip(options);
 };
 
 Player.prototype.sendFirstState = function() {
@@ -53,18 +56,23 @@ Player.prototype.send = function(name, data) {
     this.socket.emit(name, data);
 };
 
-Player.prototype.createShip = function() {
+Player.prototype.createShip = function(options) {
     var _this = this;
 
     this.ship = body.create({
-        type: 10,
-        position: [-100, -100],
+        type: options.db.shipType || 10,
+        position: options.db.position || [-100, -100],
+        velocity: options.db.velocity || [0, 0],
+        angularVelocity: options.db.angularVelocity || 0,
+        angle: options.db.angle || 0,
         mass: 50
     });
 
     _(this.ship.actions).forEach(function(el, i) {
         _this.actions[i] = el;
     });
+
+    this.game.addBody(this.ship);
 };
 
 Player.prototype.action = function(name) {
@@ -76,6 +84,11 @@ Player.prototype.action = function(name) {
 Player.prototype.getDbInfo = function() {
     var info = {};
     info.name = this.name;
+    info.shipType = this.ship.type;
+    info.position = [this.ship.body.position[0], this.ship.body.position[1]];
+    info.velocity = [this.ship.body.velocity[0], this.ship.body.velocity[1]];
+    info.angularVelocity = this.ship.body.angularVelocity;
+    info.angle = this.ship.body.angle;
     return info;
 };
 
@@ -85,7 +98,6 @@ Player.prototype.save = function() {
             if (err) return log.error(err);
         });
     } else {
-        console.log(this.dbId);
         db.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDbInfo()}, function(err) {
             if (err) return log.error(err);
         });

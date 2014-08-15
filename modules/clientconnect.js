@@ -122,6 +122,8 @@ io.sockets.on('connection', function (socket) {
     });*/
 
     socket.on('playerActions', function(data) {
+        var user = socket.handshake.user;
+
         if (user !== undefined) {
             _(data).forEach(function (el) {
                 user.action(el);

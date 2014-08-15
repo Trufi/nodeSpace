@@ -13,8 +13,7 @@ define(
             // присваиваем User игроку
             player.setUser(game.users[options.playerId || options.user.id]);
 
-            this.followBodyNumber = 3;
-            game.camera.followTo(game.bodies[this.followBodyNumber]);
+            game.camera.followTo(player.user.ship);
 
             this.scrArrow = new ScreenArrow({
                 camera: game.camera,

@@ -14,9 +14,9 @@ define(
 
         utils.inherits(Move, Action);
 
-        Move.prototype._run = function() {
+        /*Move.prototype._run = function() {
             this.ship[this.moveName]();
-        };
+        };*/
 
 
         return Move;

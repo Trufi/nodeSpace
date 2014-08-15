@@ -90,7 +90,8 @@ define(
         });
 
         window.addEventListener('keyup', function(ev) {
-            keyDown[codesToKey[ev.keyCode]] = false;
+            var keyCode = ev.keyCode || ev.which;
+            keyDown[codesToKey[keyCode]] = false;
         });
 
         window.addEventListener('wheel', function(ev) {
