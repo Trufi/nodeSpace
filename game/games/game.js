@@ -8,6 +8,7 @@ var Game = function Game() {
     this.applyDamping = false;
     this.interval = undefined;
     this.users = {};
+    this.spectators = {};
     this.bodies = {};
 
     this.assets = {
@@ -40,7 +41,7 @@ Game.prototype.start = function() {
         var currentTimeStep = Date.now();
 
         _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
-        _this.sendStateToUsers();
+        _this.sendState();
 
         _this.lastTimeStep = currentTimeStep;
     }, 1000 * this.timeStep);
@@ -50,23 +51,28 @@ Game.prototype.stop = function() {
     clearInterval(this.interval);
 };
 
-Game.prototype.sendStateToUsers = function() {
+Game.prototype.sendState = function() {
     var _this = this,
         hasNew = false;
+
+    function send(user) {
+        var gameState = _this.getGameState(user);
+
+        if (hasNew) {
+            gameState.newData = _this.getGameNewState(user);
+        }
+
+        user.send('updateGameState', gameState);
+    }
 
     if (this.newBodies.length > 0 || this.newUsers.length > 0) {
         hasNew = true;
     }
 
-    _(this.users).forEach(function(el) {
-        var gameState = _this.getGameState(el);
+    _(this.users).forEach(send);
+    _(this.spectators).forEach(send);
 
-        if (hasNew) {
-            gameState.newData = _this.getGameNewState(el);
-        }
 
-        el.send('updateGameState', gameState);
-    });
 
     if (hasNew) {
         _this.newBodies = [];
@@ -128,15 +134,26 @@ Game.prototype.getGameNewState = function(user) {
     return state;
 };
 
-Game.prototype.addUser = function(user) {
+Game.prototype.addPlayer = function(user) {
     this.users[user.id] = user;
+    this.addBody(user.ship);
 
     this.newUsers.push(user);
 };
 
-Game.prototype.removeUser = function(user) {
+Game.prototype.removePlayer = function(user) {
     if (this.users[user.id] !== undefined) {
         delete this.users[user.id];
+    }
+};
+
+Game.prototype.addSpectator = function(user) {
+    this.spectators[user.id] = user;
+};
+
+Game.prototype.removeSpectator = function(user) {
+    if (this.spectators[user.id] !== undefined) {
+        delete this.spectators[user.id];
     }
 };
 
@@ -145,6 +162,19 @@ Game.prototype.addBody = function(body) {
     body.addToWorld(this.world);
 
     this.newBodies.push(body);
+};
+
+Game.prototype.getDateForNewPlayer = function() {
+    var date = {};
+
+    date.gameType = 0;
+    date.shipType = 10;
+    date.velocity = [5, 0];
+    date.position = [0, 0];
+    date.angularVelocity = 0;
+    date.angle = 0;
+
+    return date;
 };
 
 module.exports = Game;

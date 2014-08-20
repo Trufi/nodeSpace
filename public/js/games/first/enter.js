@@ -287,9 +287,9 @@ define(
 
             this.lastTimeChangeCamera = Date.now();
 
-            request.changeStatusToPlayer(function(playerId) {
-                state.playerId = playerId;
-            })
+            request.changeStatusToPlayer(function(data) {
+                state.changeStatusData = data;
+            });
         };
 
         state.update = function() {
@@ -305,7 +305,7 @@ define(
                 changeCamera();
             }
 
-            if (this.playerId !== undefined && game.users[this.playerId] !== undefined) {
+            if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user.id] !== undefined) {
                 this.next();
             }
         };
@@ -322,7 +322,7 @@ define(
 
         state.next = function() {
             var options = {
-                playerId: this.playerId,
+                changeStatusData: this.changeStatusData,
                 proposeChangeName: this.proposeChangeName,
                 proposeSignUp: this.proposeSignUp
             };

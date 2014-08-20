@@ -7,12 +7,12 @@ var ObjectID = require('mongodb').ObjectID;
 
 var Player = function Player(options) {
     this.id = options.id;
-    this.socket = options.socket;
-    this.socket.handshake.user = this;
+    //this.socket = options.socket;
+    //this.socket.handshake.user = this;
 
     options.db = options.db || {};
 
-    this.name = options.db.name || options.name;
+    //this.name = options.db.name || options.name;
     this.game = game.getGameForPlayer(this);
     this.game.addUser(this);
     this.dbId = options.db._id;
@@ -23,14 +23,14 @@ var Player = function Player(options) {
     this.createShip(options);
 };
 
-Player.prototype.sendFirstState = function() {
+/*Player.prototype.sendFirstState = function() {
     var state = {};
 
     state.game = this.game.getGameFirstState();
     state.user = this.getFirstInfo();
 
     this.socket.emit('userFirstState', state);
-};
+};*/
 
 Player.prototype.getInfo = function() {
     var info = {};
@@ -52,9 +52,9 @@ Player.prototype.getFirstInfo = function() {
     return info;
 };
 
-Player.prototype.send = function(name, data) {
+/*Player.prototype.send = function(name, data) {
     this.socket.emit(name, data);
-};
+};*/
 
 Player.prototype.createShip = function(options) {
     var _this = this;

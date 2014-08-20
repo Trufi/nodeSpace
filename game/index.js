@@ -2,7 +2,7 @@ var first = require('./games/first');
 
 var game = {};
 
-game.getGameForNobody = function() {
+game.getGameForSpectator = function() {
     return first;
 };
 

@@ -1,34 +1,35 @@
 var _ = require('lodash');
-var Nobody = require('./nobody');
+var Spectator = require('./nobody');
 var Player = require('./player');
 var log = require('modules/log')(module);
 var config = require('config');
 var db = require('modules/db');
 
-var users = {};
+var players = {};
 
-users._idCounter = 0;
+players._idCounter = 0;
 
-users.nobody = {};
-users.nobody.list = {};
-users.nobody.create = function(options) {
-    options.id = ++users._idCounter;
+players.list = {};
+players.create = function(options) {
+    options = options || {};
+    options.id = ++this._idCounter;
 
-    var user = new Nobody(options);
-    users.nobody.list[user.id] = user;
+    var player = new Player(options);
+    this.list[player.id] = player;
 
-    return user;
+    return player;
 };
 
-users.player = {};
-users.player.list = {};
-users.player.create = function(options) {
-    options.id = ++users._idCounter;
+players.spectator = {};
+players.spectator.list = {};
+players.spectator.create = function(options) {
+    options = options || {};
+    options.id = ++this._idCounter;
 
-    var user = new Player(options);
-    users.player.list[user.id] = user;
+    var spectator = new Spectator(options);
+    this.list[spectator.id] = spectator;
 
-    return user;
+    return spectator;
 };
 
 users.findNobodyWithSid = function(sid) {

@@ -198,7 +198,7 @@ define(
                 }
             });
 
-            this.state.start(options);
+            this.state.start({changeStatusData: options});
 
             this.updateFromServerEnable();
             this.loop();

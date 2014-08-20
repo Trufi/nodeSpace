@@ -5,13 +5,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var log = require('modules/log')(module);
-
-
 var config = require('config');
-var sockets = require('modules/socket');
+var socket = require('socket');
+var sessionStore = require('mongo/sessionStore');
 
-var sessionStore = require('modules/sessionStore');
-
+require('mongo');
 
 var app = express();
 
@@ -19,9 +17,9 @@ var server = app.listen(config.port, config.host, function () {
     log.info('server listen on %s port and %s host ', config.port, config.host);
 });
 
-sockets.init(server);
+socket.initialize(server);
 
-var clientConnect = require('modules/clientconnect');
+//var clientConnect = require('modules/clientconnect');
 
 var routes = require('routes/index');
 // var users = require('./routes/users');
@@ -29,9 +27,6 @@ var routes = require('routes/index');
 
 // Init game
 require('game');
-
-//var gameMain = require('./game/main');
-//gameMain.start();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
