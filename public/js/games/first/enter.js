@@ -130,6 +130,8 @@ define(
                         request.login(email, passVal, function(data) {
                             if (data.error === 1) {
                                 error.setText(config.errors.unknownEmailOrPass);
+                            } else {
+                                state.loginMenu.hide();
                             }
                         });
                     }

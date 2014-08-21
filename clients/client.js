@@ -61,6 +61,7 @@ Client.prototype.activateGame = function() {
     }
 
     this.socketOn();
+    this.socket.emit('userFirstState', this.getFirstState());
 };
 
 Client.prototype.socketOn = function() {
@@ -71,8 +72,7 @@ Client.prototype.socketOn = function() {
             _(data).forEach(function (el) {
                 _this.action(el);
             });
-        })
-        .emit('userFirstState', this.getFirstState());
+        });
 };
 
 Client.prototype.action = function(name) {

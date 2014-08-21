@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var log = require('modules/log')(module);
 var sessionStore = require('mongo/sessionStore');
 var common = require('./common');
@@ -6,6 +7,20 @@ var crypto = require('crypto');
 var config = require('config');
 
 module.exports = function (clients) {
+    clients.enableSocketAuth = function(client) {
+        client.socket.once('quickStart', function() {
+            clients.quickStart(client);
+        });
+
+        client.socket.on('signup', function(data) {
+            clients.signup(client, data);
+        });
+
+        client.socket.on('login', function(data) {
+            clients.login(client, data);
+        });
+    };
+
     clients.loginFromCookie = function(client, callback) {
         common.loadUserFromDb(client.session.name, function (err, doc) {
             if (err) return callback(err);
@@ -46,10 +61,6 @@ module.exports = function (clients) {
         log.silly('User quickstart, id: %s, name: %s', client.id, client.name);
     };
 
-    clients.login = function(req, res, next) {
-
-    };
-
     clients.signup = function(client, data) {
         var email = data.email,
             pass = data.pass;
@@ -78,7 +89,7 @@ module.exports = function (clients) {
                 client.send('signupAnswer', {error: 1, message: 'email already busy'});
                 log.silly('email %s already busy, client id: %s', email, client.id);
             } else {
-                client.socket.once('enterName', function(data) {
+                client.socket.on('enterName', function(data) {
                     var name = data.name;
 
                     if (name === undefined) {
@@ -119,6 +130,7 @@ module.exports = function (clients) {
                                 }
 
                                 client.send('enterNameAnswer', {error: null});
+                                client.socket.removeAllListeners('enterName');
                                 clients.initNewPlayer(client, {name: name, _id: arrDoc[0]._id});
                                 log.silly('User signup, id: %s, name: %s', client.id, client.name);
                             });
@@ -129,5 +141,75 @@ module.exports = function (clients) {
                 log.silly('User send signupAnswer, email: %s, id: %s', email, client.id);
             }
         });
+    };
+
+    clients.login = function(client, data) {
+        var email = data.email,
+            pass = data.pass;
+
+        if (client.session.name !== undefined) {
+            return log.warn('client already login as %s, id: %s', client.session.name, client.id);
+        }
+
+        if (email === undefined || pass === undefined) {
+            return log.warn('email or password are undefined, email: %s, pass: %s', email, pass);
+        }
+
+        if (!/.+@.+\..+/i.test(email)) {
+            return log.warn('email not valid, email: %s, pass: %s', email, pass);
+        }
+
+        if (pass.length <= 3) {
+            return log.warn('password length <= 3, email: %s, pass: %s', email, pass);
+        }
+
+        mongo.users.findOne({email: email}, function(err, doc) {
+            var password, game, searchResult, tempSocket;
+
+            if (err) {
+                client.send('loginAnswer', {error: 500, message: 'server error'});
+                return log.error(err.message);
+            }
+
+            if (doc && doc.salt && doc.password) {
+                password = crypto.createHmac('sha1', doc.salt).update(pass).digest('hex');
+
+                if (password !== doc.password) {
+                    client.send('loginAnswer', {error: 1, message: 'email or pass not find'});
+                    return log.silly('passwords not match, email: %s, id: %s', email, client.id);
+                }
+
+                // если есть уже такой пользователь с таким sid
+                searchResult = _.find(clients.list, function(el) {
+                    return el.gameEnable && (el.name === doc.name);
+                });
+
+                if (searchResult !== undefined) {
+                    log.silly('Client already enable, name: ' + searchResult.name);
+                    tempSocket = client.socket;
+                    client = searchResult;
+                    client.socket = tempSocket;
+                    client.socketOn();
+                } else {
+                    game = client.game;
+                    client.applyDate(doc);
+                    game.removeSpectator(client);
+                    game.addPlayer(client);
+                }
+
+                client.send('changeStatusToPlayer', client.getFirstState());
+                client.session.name = client.name;
+                sessionStore.set(client.sid, client.session, function (err) {
+                    if (err) log.error(err.message);
+                });
+
+                log.silly('User login, name: %s, id: %s', client.name, client.id);
+            } else {
+                client.send('loginAnswer', {error: 1, message: 'email or pass not find'});
+                log.silly('email not found in db, email: %s, id: %s', email, client.id);
+            }
+        });
+
+
     };
 };

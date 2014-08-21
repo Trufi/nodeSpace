@@ -74,13 +74,7 @@ clients.initialize = function(socket) {
 
         client.activateGame();
 
-        socket.once('quickStart', function() {
-            clients.quickStart(client);
-        });
-
-        socket.once('signup', function(data) {
-            clients.signup(client, data);
-        });
+        clients.enableSocketAuth(client);
     });
 };
 
