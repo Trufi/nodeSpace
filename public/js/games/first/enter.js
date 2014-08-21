@@ -19,9 +19,6 @@ define(
         // вначале undefined, после логина, квик старта или регистрации получает id
         state.playerId;
 
-        // предлагать или нет смену имени плеера после входа в игру
-        state.proposeChangeName = false;
-
         // предлагать или нет сохранение после быстрого старта
         state.proposeSignUp = false;
 
@@ -39,7 +36,6 @@ define(
                 text: 'Quick start',
                 click: function() {
                     request.quickStart();
-                    state.proposeChangeName = false;
                     state.proposeSignUp = true;
                 },
                 position: [-150, -85]
@@ -135,9 +131,6 @@ define(
                             if (data.error === 1) {
                                 error.setText(config.errors.unknownEmailOrPass);
                             }
-                        }, function(){
-                            state.proposeChangeName = false;
-                            state.proposeSignUp = false;
                         });
                     }
                 }
@@ -248,10 +241,12 @@ define(
                         request.signUp(email, passVal, function(data) {
                             if (data.error === 1) {
                                 error.setText(config.errors.emailBusy);
+                            } else if (data.error === 500) {
+                                error.setText(config.errors.serverError);
+                            } else {
+                                state.regMenu.hide();
+                                state.choiceMenu.show();
                             }
-                        }, function(){
-                            state.proposeChangeName = true;
-                            state.proposeSignUp = false;
                         });
                     }
                 }
@@ -277,6 +272,58 @@ define(
             state.regMenu.addChild(error);
         }
 
+        function choiceNameMenu() {
+            var name, error;
+
+            state.choiceMenu = interface.frame.create({
+                anchor: 'CENTER',
+                visible: false
+            });
+
+            state.choiceMenu.addChild(interface.text.create({
+                text: 'Enter your name',
+                position: [0, -60],
+                anchor: [0.5, 1]
+            }));
+
+            name = interface.editbox.create({
+                position: [-150, -55]
+            });
+            state.choiceMenu.addChild(name);
+
+            state.choiceMenu.addChild(interface.button.create({
+                color: 'orange',
+                text: 'Ok',
+                position: [-150, 5],
+                click: function() {
+                    var nameVal = name.value();
+
+                    if (valid.name(nameVal)) {
+                        request.enterName(nameVal, function(data) {
+                            if (data.error === 1) {
+                                error.setText(config.errors.nameBusy);
+                            } else if (data.error === 500) {
+                                error.setText(config.errors.serverError);
+                            } else {
+                                state.choiceMenu.hide();
+                            }
+                        });
+                    } else {
+                        error.setText(config.errors.nameNotValid);
+                    }
+                }
+            }));
+
+            error = interface.text.create({
+                text: '',
+                color: 'ff0000',
+                position: [160, 30],
+                fontSize: 18,
+                anchor: [0, 0.5]
+            });
+            state.choiceMenu.addChild(error);
+        }
+
         state.start = function() {
             this.followBodyNumber = 1;
             game.camera.followTo(game.bodies[this.followBodyNumber]);
@@ -284,6 +331,7 @@ define(
             createFirstMenu();
             createLoginMenu();
             createRegMenu();
+            choiceNameMenu();
 
             this.lastTimeChangeCamera = Date.now();
 
@@ -323,7 +371,6 @@ define(
         state.next = function() {
             var options = {
                 changeStatusData: this.changeStatusData,
-                proposeChangeName: this.proposeChangeName,
                 proposeSignUp: this.proposeSignUp
             };
 

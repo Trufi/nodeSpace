@@ -14,6 +14,10 @@ define(
             return /.+@.+\..+/i.test(str);
         };
 
+        valid.name = function(str) {
+            return (str.length > 3) && !/[^a-z0-9\s]/i.test(str);
+        };
+
         return valid;
     }
 );

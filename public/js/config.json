@@ -11,6 +11,9 @@
         "passwordsDontMatch": "Passwords dont match",
         "emailNotValid": "Enter right email",
         "unknownEmailOrPass": "Unknown email or password",
-        "emailBusy": "Email busy"
+        "emailBusy": "Email busy",
+        "nameNotValid": "Name length must be greater than 3",
+        "nameBusy": "Name already busy",
+        "serverError": "Server error"
     }
 }

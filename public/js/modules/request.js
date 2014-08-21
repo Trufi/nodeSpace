@@ -45,7 +45,7 @@ define(
             socket.emit('playerActions', data);
         };
 
-        request.signUp = function(email, pass, successCallback, completeCallback) {
+/*        request.signUp = function(email, pass, successCallback, completeCallback) {
             $.ajax({
                 url: '/signup',
                 method: 'POST',
@@ -55,6 +55,20 @@ define(
                 },
                 complete: completeCallback
             });
+        };*/
+
+        request.signUp = function(email, pass, callback) {
+            socket.once('signupAnswer', function(data) {
+                callback(data);
+            });
+            socket.emit('signup', {email: email, pass: pass});
+        };
+
+        request.enterName = function(name, callback) {
+            socket.once('enterNameAnswer', function(data) {
+                callback(data);
+            });
+            socket.emit('enterName', {name: name});
         };
 
         request.login = function(email, pass, successCallback, completeCallback) {

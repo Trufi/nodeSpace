@@ -39,24 +39,17 @@ clients.initialize = function(socket) {
                 client.socket = socket;
                 callback(null, null);
             } else {
-                async.waterfall([
-                    function (callback) {
+                common.loadSession(sid, function(err, session) {
+                    if (err) return callback(err);
+                    if (!session) return callback(new Error('Session is empty, sid: ' + sid));
+                    client.session = session;
+                    log.silly('Set client session, sid: %s', client.sid);
 
-                        common.loadSession(sid, callback);
-                    },
-                    function (session) {
-                        if (!session) return callback(new Error('Session is empty, sid: ' + sid));
-                        client.session = session;
-                        log.silly('Set client session, sid: %s', client.sid);
-
-                        if (session.name !== undefined) {
-                            clients.loginFromCookie(client, callback);
-                        } else {
-                            callback(null, null);
-                        }
+                    if (session.name !== undefined) {
+                        clients.loginFromCookie(client, callback);
+                    } else {
+                        callback(null, null);
                     }
-                ], function (err) {
-                    if (err) callback(err);
                 });
             }
         },
@@ -81,8 +74,12 @@ clients.initialize = function(socket) {
 
         client.activateGame();
 
-        socket.on('quickStart', function() {
+        socket.once('quickStart', function() {
             clients.quickStart(client);
+        });
+
+        socket.once('signup', function(data) {
+            clients.signup(client, data);
         });
     });
 };

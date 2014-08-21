@@ -23,23 +23,23 @@ var Client = function(options) {
     this.actions = {};
 };
 
-Client.prototype.applyDate = function(date) {
-    this.gameType = date.gameType || 0;
-    this.name = date.name || (config.users.anonName + ++mongo.usersCount);
-    this.dbId = date._id;
+Client.prototype.applyDate = function(data) {
+    this.gameType = data.gameType || 0;
+    this.name = data.name || (config.users.anonName + ++mongo.usersCount);
+    this.dbId = data._id;
 
-    this.createShip(date);
+    this.createShip(data);
 };
 
-Client.prototype.createShip = function(date) {
+Client.prototype.createShip = function(data) {
     var _this = this;
 
     this.ship = body.create({
-        type: date.shipType || 10,
-        position: date.position || [-100, -100],
-        velocity: date.velocity || [0, 0],
-        angularVelocity: date.angularVelocity || 0,
-        angle: date.angle || 0,
+        type: data.shipType || 10,
+        position: data.position || [-100, -100],
+        velocity: data.velocity || [0, 0],
+        angularVelocity: data.angularVelocity || 0,
+        angle: data.angle || 0,
         mass: 50
     });
 
