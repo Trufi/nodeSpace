@@ -20,8 +20,11 @@ module.exports = function (clients) {
         var game = client.game,
             gameDate = game.getDateForNewPlayer();
 
-        if (options.name !== 'undefined') {
+        if (options.name !== undefined) {
             gameDate.name = options.name;
+        }
+        if (options._id !== undefined) {
+            gameDate._id = options._id;
         }
 
         client.applyDate(gameDate);
@@ -109,14 +112,14 @@ module.exports = function (clients) {
                         } else {
                             salt = Math.random() + '';
                             password = crypto.createHmac('sha1', salt).update(pass).digest('hex');
-                            mongo.users.insert({email: email, salt: salt, password: password, name: name}, function(err) {
+                            mongo.users.insert({email: email, salt: salt, password: password, name: name}, function(err, arrDoc) {
                                 if (err) {
                                     client.send('signupAnswer', {error: 500, message: 'server error'});
                                     return log.error(err.message);
                                 }
 
                                 client.send('enterNameAnswer', {error: null});
-                                clients.initNewPlayer(client, {name: name});
+                                clients.initNewPlayer(client, {name: name, _id: arrDoc[0]._id});
                                 log.silly('User signup, id: %s, name: %s', client.id, client.name);
                             });
                         }
