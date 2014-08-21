@@ -1,6 +1,5 @@
 define(
     function(require) {
-        var $ = require('jquery');
         var config = require('json!config');
         var io = require('socketio');
 
@@ -68,6 +67,12 @@ define(
 
         request.quickStart = function() {
             socket.emit('quickStart');
+        };
+
+        request.onGameClose = function(callback) {
+            socket.on('gameClose', function() {
+                callback();
+            });
         };
 
         return request;

@@ -177,4 +177,15 @@ Game.prototype.getDateForNewPlayer = function() {
     return date;
 };
 
+Game.prototype.close = function() {
+    clearInterval(this.interval);
+
+    _(this.users).forEach(function(el) {
+        el.send('gameClose');
+        el.save();
+    });
+
+    // TODO: доделать
+};
+
 module.exports = Game;

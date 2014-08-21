@@ -37,7 +37,11 @@ define(
         // игровое состояние
         game.state;
 
+        game.isEnable = true;
+
         game.loop = function() {
+            if (!this.isEnable) return;
+
             var _this = this;
             var currentTime = Date.now();
 
@@ -198,6 +202,8 @@ define(
                 }
             });
 
+            request.onGameClose(_.bind(this.close, this));
+
             this.state.start({changeStatusData: options});
 
             this.updateFromServerEnable();
@@ -230,6 +236,10 @@ define(
                 state.start(options);
             }
             this.state = state;
+        };
+
+        game.close = function() {
+            this.isEnable = false;
         };
 
         return game;

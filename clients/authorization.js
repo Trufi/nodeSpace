@@ -8,17 +8,23 @@ var config = require('config');
 
 module.exports = function (clients) {
     clients.enableSocketAuth = function(client) {
-        client.socket.once('quickStart', function() {
-            clients.quickStart(client);
-        });
+        client.socket
+            .once('quickStart', function() {
+                clients.quickStart(client);
+            })
+            .on('signup', function(data) {
+                clients.signup(client, data);
+            })
+            .on('login', function(data) {
+                clients.login(client, data);
+            });
+    };
 
-        client.socket.on('signup', function(data) {
-            clients.signup(client, data);
-        });
-
-        client.socket.on('login', function(data) {
-            clients.login(client, data);
-        });
+    clients.disableSocketAuth = function(client) {
+        client.socket
+            .removeAllListeners('quickStart')
+            .removeAllListeners('signup')
+            .removeAllListeners('login');
     };
 
     clients.loginFromCookie = function(client, callback) {
@@ -59,6 +65,7 @@ module.exports = function (clients) {
     clients.quickStart = function(client) {
         clients.initNewPlayer(client);
         log.silly('User quickstart, id: %s, name: %s', client.id, client.name);
+        clients.disableSocketAuth(client);
     };
 
     clients.signup = function(client, data) {
@@ -133,6 +140,7 @@ module.exports = function (clients) {
                                 client.socket.removeAllListeners('enterName');
                                 clients.initNewPlayer(client, {name: name, _id: arrDoc[0]._id});
                                 log.silly('User signup, id: %s, name: %s', client.id, client.name);
+                                clients.disableSocketAuth(client);
                             });
                         }
                     });
@@ -204,6 +212,7 @@ module.exports = function (clients) {
                 });
 
                 log.silly('User login, name: %s, id: %s', client.name, client.id);
+                clients.disableSocketAuth(client);
             } else {
                 client.send('loginAnswer', {error: 1, message: 'email or pass not find'});
                 log.silly('email not found in db, email: %s, id: %s', email, client.id);
