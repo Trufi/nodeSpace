@@ -14,9 +14,11 @@ define(
             this.type = options.type;
             this.body;
             this.sprite;
+            this.shape;
 
-            this.actionsArray = [];
             this.actions = {};
+            // список доступных действий этого корабля
+            this.actionsArray = [];
         };
 
         Body.prototype.createBody = function(options) {
@@ -29,6 +31,8 @@ define(
                 angularDamping: 0,
                 angle: options.angle
             });
+
+            this.body._gameBody = this;
         };
 
         Body.prototype.applyShape = function() {};

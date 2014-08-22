@@ -9,13 +9,14 @@ var Body = function Body(options) {
     this.type = options.type;
     this.body;
     this.texture;
+    this.ship;
 
     this.actions = {};
     // список доступных действий этого корабля
     this.actionsArray = [];
     // список использованный действий в шаге игры
     this.actionsUsed = [];
-}
+};
 
 Body._idCounter = 0;
 
@@ -29,6 +30,8 @@ Body.prototype.createBody = function(options) {
         angularDamping: 0,
         angle: options.angle || 0
     });
+
+    this.body._gameBody = this;
 };
 
 Body.prototype.applyShape = function() {

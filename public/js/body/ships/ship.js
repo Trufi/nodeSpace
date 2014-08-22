@@ -8,6 +8,7 @@ define(
         var config = require('json!config');
         var assets = require('modules/assets');
         var camera = require('modules/camera');
+        var mask = require('../mask');
 
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
@@ -20,7 +21,10 @@ define(
         utils.inherits(Ship, Body);
 
         Ship.prototype.applyShape = function() {
-            this.body.addShape(new p2.Rectangle(60, 40));
+            this.shape = new p2.Rectangle(60, 40);
+            this.shape.collisionGroup = mask.SHIP;
+            this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
+            this.body.addShape(this.shape);
         };
 
         Ship.prototype.createSprite = function() {

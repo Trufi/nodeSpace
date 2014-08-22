@@ -6,6 +6,7 @@ define(
         var utils = require('utils');
         var Body = require('./body');
         var assets = require('modules/assets');
+        var mask = require('./mask');
 
         var Asteroid = function Asteroid(options) {
             Asteroid.super_.apply(this, arguments);
@@ -14,7 +15,10 @@ define(
         utils.inherits(Asteroid, Body);
 
         Asteroid.prototype.applyShape = function() {
-            this.body.addShape(new p2.Circle(87.5));
+            this.shape = new p2.Circle(87.5);
+            this.shape.collisionGroup = mask.BODY;
+            this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
+            this.body.addShape(this.shape);
         };
 
         Asteroid.prototype.createSprite = function() {

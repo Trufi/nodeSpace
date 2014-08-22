@@ -3,6 +3,8 @@ var p2 = require('p2');
 var _ = require('lodash');
 var Body = require('../body');
 var config = require('config');
+var mask = require('../mask');
+
 
 var Ship = function Ship(options) {
     Ship.super_.apply(this, arguments);
@@ -19,7 +21,10 @@ var Ship = function Ship(options) {
 utils.inherits(Ship, Body);
 
 Ship.prototype.applyShape = function() {
-    this.body.addShape(new p2.Rectangle(60, 40));
+    this.shape = new p2.Rectangle(60, 40);
+    this.shape.collisionGroup = mask.SHIP;
+    this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
+    this.body.addShape(this.shape);
 };
 
 // газ
