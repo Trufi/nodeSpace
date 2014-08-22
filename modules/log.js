@@ -17,4 +17,3 @@ function createLogger(path) {
 module.exports = function(module) {
     return createLogger(module.filename);
 };
-

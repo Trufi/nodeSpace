@@ -10,7 +10,7 @@ exports.create = function(options) {
 
     options = options || {};
     options.type = options.type || 0;
-    options.id = ++ idCounter;
+    options.id = ++idCounter;
 
     switch (options.type) {
         case 0:

@@ -83,4 +83,11 @@ app.use(function(err, req, res, next) {
     });
 });
 
+
+
+/*var util = require('util');
+setInterval(function() {
+    console.log(util.inspect(process.memoryUsage()));
+}, 1000);*/
+
 module.exports = app;

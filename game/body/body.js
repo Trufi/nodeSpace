@@ -90,6 +90,7 @@ Body.prototype.destroy = function() {
         this.game.removeBody(this);
     }
     this.body._gameBody = undefined;
+    this.body.removeShape();
 };
 
 module.exports = Body;
