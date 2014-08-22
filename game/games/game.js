@@ -43,6 +43,8 @@ Game.prototype.start = function() {
         _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
         _this.sendState();
 
+        _this.resetBodyUsedActions();
+
         _this.lastTimeStep = currentTimeStep;
     }, 1000 * this.timeStep);
 };
@@ -93,6 +95,12 @@ Game.prototype.getGameState = function(user) {
     });
 
     return state;
+};
+
+Game.prototype.resetBodyUsedActions = function() {
+    _(this.bodies).forEach(function(el) {
+        el.resetActionsUsed();
+    });
 };
 
 // данные отправляемые при подключении пользователя

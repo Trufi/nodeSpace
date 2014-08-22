@@ -56,10 +56,22 @@ define(
         };
 
         Body.prototype.update = function(data) {
+            var _this = this;
+
             this.body.position = data.position;
             this.body.velocity = data.velocity;
             this.body.angle = data.angle;
             this.body.angularVelocity = data.angularVelocity;
+
+            _(data.actionsUsed).forEach(function(el) {
+                _this.action(el);
+            });
+        };
+
+        Body.prototype.action = function(name) {
+            if (this.actions[name] !== undefined) {
+                this.actions[name].use();
+            }
         };
 
         return Body;

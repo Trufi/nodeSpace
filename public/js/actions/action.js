@@ -33,11 +33,7 @@ define(
         };
 
         Action.prototype.isAnimate = function() {
-            if (Date.now() - this.lastTimeUsed < this.durationAnimation) {
-                return true;
-            } else {
-                return false;
-            }
+            return (Date.now() - this.lastTimeUsed) < this.durationAnimation;
         };
 
         return Action;

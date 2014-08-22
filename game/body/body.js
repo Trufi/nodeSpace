@@ -10,8 +10,11 @@ var Body = function Body(options) {
     this.body;
     this.texture;
 
-    this.actionsArray = [];
     this.actions = {};
+    // список доступных действий этого корабля
+    this.actionsArray = [];
+    // список использованный действий в шаге игры
+    this.actionsUsed = [];
 }
 
 Body._idCounter = 0;
@@ -74,8 +77,13 @@ Body.prototype.getInfo = function() {
         ],
         angularVelocity: this.body.angularVelocity,
         angle: this.body.angle,
-        id: this.id
+        id: this.id,
+        actionsUsed: this.actionsUsed
     };
+};
+
+Body.prototype.resetActionsUsed = function() {
+    this.actionsUsed = [];
 };
 
 module.exports = Body;

@@ -9,7 +9,11 @@ var Ship = function Ship(options) {
 
     this.forceThrust = options.forceThrust || 10000;
     this.forceSide = options.forceSide || 500;
+
+    // список доступных действий этого корабля
     this.actionsArray = ['thrust', 'reverse', 'left', 'right'];
+    // список использованный действий в шаге игры
+    this.actionsUsed = [];
 };
 
 utils.inherits(Ship, Body);

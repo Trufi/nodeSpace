@@ -6,6 +6,11 @@ var mongo = require('mongo');
 var crypto = require('crypto');
 var config = require('config');
 
+var rexp = {
+    mail: /.+@.+\..+/i,
+    name: /[^a-z0-9\s]/i
+};
+
 module.exports = function (clients) {
     clients.enableSocketAuth = function(client) {
         client.socket
@@ -78,7 +83,7 @@ module.exports = function (clients) {
         if (email === undefined || pass === undefined) {
             return log.warn('email or password are undefined, email: %s, pass: %s', email, pass);
         }
-        if (!/.+@.+\..+/i.test(email)) {
+        if (!rexp.mail.test(email)) {
             return log.warn('email not valid, email: %s, pass: %s', email, pass);
         }
 
@@ -112,7 +117,7 @@ module.exports = function (clients) {
                         return log.error('EnterName name length <= 3, client id: %s', client.id);
                     }
 
-                    if (/[^a-z0-9\s]/i.test(name)) {
+                    if (rexp.name.test(name)) {
                         return log.error('EnterName name not valid, client id: %s', client.id);
                     }
 
@@ -163,7 +168,7 @@ module.exports = function (clients) {
             return log.warn('email or password are undefined, email: %s, pass: %s', email, pass);
         }
 
-        if (!/.+@.+\..+/i.test(email)) {
+        if (!rexp.mail.test(email)) {
             return log.warn('email not valid, email: %s, pass: %s', email, pass);
         }
 
@@ -218,7 +223,5 @@ module.exports = function (clients) {
                 log.silly('email not found in db, email: %s, id: %s', email, client.id);
             }
         });
-
-
     };
 };

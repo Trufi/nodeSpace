@@ -11,6 +11,7 @@ var Move = function Move(options) {
 utils.inherits(Move, Action);
 
 Move.prototype._run = function() {
+    this.ship.actionsUsed.push(this.moveName);
     this.ship[this.moveName]();
 };
 
