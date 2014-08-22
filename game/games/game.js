@@ -17,11 +17,13 @@ var Game = function Game() {
             backroundTest: 'bg.jpeg',
             asteroid: 'asteroid.png',
             rectangle: 'rect.png',
-            ship: 'ship2.png'
+            ship: 'ship2.png',
+            bullet: 'bullet.gif'
         }
     };
 
     this.newBodies = [];
+    this.removeBodies = [];
     this.newUsers = [];
 
     this.world = new p2.World({
@@ -40,6 +42,10 @@ Game.prototype.start = function() {
     this.interval = setInterval(function() {
         var currentTimeStep = Date.now();
 
+        _(_this.bodies).forEach(function(el) {
+            el.update(currentTimeStep);
+        });
+
         _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
         _this.sendState();
 
@@ -55,7 +61,7 @@ Game.prototype.stop = function() {
 
 Game.prototype.sendState = function() {
     var _this = this,
-        hasNew = false;
+        hasNew, hasRemove;
 
     function send(user) {
         var gameState = _this.getGameState(user);
@@ -64,21 +70,28 @@ Game.prototype.sendState = function() {
             gameState.newData = _this.getGameNewState(user);
         }
 
+        if (hasRemove) {
+            gameState.removeData = {
+                bodies: _this.removeBodies
+            };
+        }
+
         user.send('updateGameState', gameState);
     }
 
-    if (this.newBodies.length > 0 || this.newUsers.length > 0) {
-        hasNew = true;
-    }
+    hasNew = this.newBodies.length > 0 || this.newUsers.length > 0;
+    hasRemove = this.removeBodies.length > 0;
 
     _(this.users).forEach(send);
     _(this.spectators).forEach(send);
 
-
-
     if (hasNew) {
-        _this.newBodies = [];
-        _this.newUsers = [];
+        this.newBodies = [];
+        this.newUsers = [];
+    }
+
+    if (hasRemove) {
+        this.removeBodies = [];
     }
 };
 
@@ -167,9 +180,17 @@ Game.prototype.removeSpectator = function(user) {
 
 Game.prototype.addBody = function(body) {
     this.bodies[body.id] = body;
-    body.addToWorld(this.world);
+    body.game = this;
+    this.world.addBody(body.body);
 
     this.newBodies.push(body);
+};
+
+Game.prototype.removeBody = function(body) {
+    delete this.bodies[body.id];
+    this.world.removeBody(body);
+    body.game = undefined;
+    this.removeBodies.push(body.id);
 };
 
 Game.prototype.getDateForNewPlayer = function() {

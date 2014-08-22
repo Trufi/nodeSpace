@@ -86,6 +86,11 @@ define(
             body.addToGame(this);
         };
 
+        game.removeBody = function(body) {
+            delete this.bodies[body.id];
+            body.removeFromGame();
+        };
+
         game.createBackground = function(texture) {
             this.background = new PIXI.TilingSprite(texture, render.resolution[0] / this.camera.scale, render.resolution[1] / this.camera.scale);
             this.background.position.x = 0;
@@ -154,6 +159,12 @@ define(
                             user.setShip(_this.bodies[el.shipId]);
                         }
                     }
+                });
+            }
+
+            if (data.removeData !== undefined) {
+                _(data.removeData.bodies).forEach(function(el) {
+                    _this.bodies[el].destroy();
                 });
             }
         };

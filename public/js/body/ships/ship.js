@@ -15,7 +15,7 @@ define(
 
             this.forceThrust = options.forceThrust || 10000;
             this.forceSide = options.forceSide || 500;
-            this.actionsArray = ['thrust', 'reverse', 'left', 'right'];
+            this.actionsArray = ['thrust', 'reverse', 'left', 'right', 'fire'];
         };
 
         utils.inherits(Ship, Body);

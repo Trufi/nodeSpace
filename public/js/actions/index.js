@@ -1,6 +1,7 @@
 define(
     function(require) {
         var Move = require('./move');
+        var Fire = require('./fire');
 
         var module = {};
 
@@ -19,6 +20,9 @@ define(
                     break;
                 case 'right':
                     newAction = new Move(options);
+                    break;
+                case 'fire':
+                    newAction = new Fire(options);
                     break;
             }
 

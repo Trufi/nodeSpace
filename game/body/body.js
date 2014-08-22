@@ -5,20 +5,18 @@ var action = require('../actions/index');
 
 // Класс простейшего тела
 var Body = function Body(options) {
-    this.id = ++Body._idCounter;
+    this.id = options.id;
     this.type = options.type;
     this.body;
     this.texture;
-    this.ship;
+    this.game;
 
     this.actions = {};
-    // список доступных действий этого корабля
+    // список доступных действий этого тела
     this.actionsArray = [];
     // список использованный действий в шаге игры
     this.actionsUsed = [];
 };
-
-Body._idCounter = 0;
 
 Body.prototype.createBody = function(options) {
     this.body = new p2.Body({
@@ -44,10 +42,6 @@ Body.prototype.applyActions = function() {
     _(this.actionsArray).forEach(function(el) {
         _this.actions[el] = action.create({body: _this, name: el});
     });
-};
-
-Body.prototype.addToWorld = function(world) {
-    world.addBody(this.body);
 };
 
 Body.prototype.getFirstInfo = function() {
@@ -87,6 +81,15 @@ Body.prototype.getInfo = function() {
 
 Body.prototype.resetActionsUsed = function() {
     this.actionsUsed = [];
+};
+
+Body.prototype.update = function() {};
+
+Body.prototype.destroy = function() {
+    if (this.game !== undefined) {
+        this.game.removeBody(this);
+    }
+    this.body._gameBody = undefined;
 };
 
 module.exports = Body;

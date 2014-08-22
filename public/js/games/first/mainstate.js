@@ -47,6 +47,10 @@ define(
                 // TODO: торможение
             }
 
+            if (key.down.SPACE) {
+                player.action('fire');
+            }
+
             this.scrArrow.update();
         };
 

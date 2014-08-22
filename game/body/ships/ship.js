@@ -4,23 +4,24 @@ var _ = require('lodash');
 var Body = require('../body');
 var config = require('config');
 var mask = require('../mask');
-
+var body = require('../index');
 
 var Ship = function Ship(options) {
     Ship.super_.apply(this, arguments);
 
     this.forceThrust = options.forceThrust || 10000;
     this.forceSide = options.forceSide || 500;
+    this.bulletVelocity = 500;
 
     // список доступных действий этого корабля
-    this.actionsArray = ['thrust', 'reverse', 'left', 'right'];
+    this.actionsArray = ['thrust', 'reverse', 'left', 'right', 'fire'];
     // список использованный действий в шаге игры
     this.actionsUsed = [];
 };
 
 utils.inherits(Ship, Body);
 
-Ship.prototype.applyShape = function() {
+Ship.prototype.applyShape = function () {
     this.shape = new p2.Rectangle(60, 40);
     this.shape.collisionGroup = mask.SHIP;
     this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
@@ -28,7 +29,7 @@ Ship.prototype.applyShape = function() {
 };
 
 // газ
-Ship.prototype.thrust = function() {
+Ship.prototype.thrust = function () {
     var worldPoint = [],
         force = [this.forceThrust * Math.cos(this.body.angle), this.forceThrust * Math.sin(this.body.angle)];
 
@@ -36,7 +37,7 @@ Ship.prototype.thrust = function() {
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.reverse = function() {
+Ship.prototype.reverse = function () {
     var worldPoint = [],
         force = [-this.forceSide * Math.cos(this.body.angle), -this.forceSide * Math.sin(this.body.angle)];
 
@@ -44,7 +45,7 @@ Ship.prototype.reverse = function() {
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.left = function() {
+Ship.prototype.left = function () {
     var worldPoint = [],
         force;
 
@@ -58,7 +59,7 @@ Ship.prototype.left = function() {
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.right = function() {
+Ship.prototype.right = function () {
     var worldPoint = [],
         force;
 
@@ -72,6 +73,20 @@ Ship.prototype.right = function() {
     this.body.applyForce(force, worldPoint);
 };
 
+Ship.prototype.fire = function() {
+    var worldPoint = [];
+    this.body.toWorldFrame(worldPoint, [31, 0]);
 
+    this.game.addBody(
+        body.create({
+            type: 1000,
+            position: [worldPoint[0], worldPoint[1]],
+            velocity: [
+                this.bulletVelocity * Math.cos(this.body.angle) + this.body.velocity[0],
+                this.bulletVelocity * Math.sin(this.body.angle) + this.body.velocity[1]
+            ]
+        })
+    );
+};
 
 module.exports = Ship;

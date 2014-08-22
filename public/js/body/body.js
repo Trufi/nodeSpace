@@ -15,6 +15,7 @@ define(
             this.body;
             this.sprite;
             this.shape;
+            this.game;
 
             this.actions = {};
             // список доступных действий этого корабля
@@ -50,6 +51,13 @@ define(
         Body.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
             game.stage.addChild(this.sprite);
+            this.game = game;
+        };
+
+        Body.prototype.removeFromGame = function() {
+            this.game.world.removeBody(this.body);
+            this.game.stage.removeChild(this.sprite);
+            this.game = undefined;
         };
 
         Body.prototype.updateSprite = function() {
@@ -76,6 +84,13 @@ define(
             if (this.actions[name] !== undefined) {
                 this.actions[name].use();
             }
+        };
+
+        Body.prototype.destroy = function() {
+            if (this.game !== undefined) {
+                this.game.removeBody(this);
+            }
+            this.body._gameBody = undefined;
         };
 
         return Body;

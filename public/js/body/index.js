@@ -3,6 +3,8 @@ define(
         var Asteroid = require('./asteroid');
         var Rectangle = require('./rectangle');
         var Ship = require('./ships/ship');
+        var Bullet = require('./bullets/bullet');
+
         var exports = {};
 
         exports.create = function(options) {
@@ -20,6 +22,9 @@ define(
                     break;
                 case 10:
                     newBody = new Ship(options);
+                    break;
+                case 1000:
+                    newBody = new Bullet(options);
                     break;
             }
 
