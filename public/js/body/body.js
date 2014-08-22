@@ -16,6 +16,7 @@ define(
             this.sprite;
             this.shape;
             this.game;
+            this.hp = options.hp;
 
             this.actions = {};
             // список доступных действий этого корабля
@@ -74,6 +75,8 @@ define(
             this.body.velocity = data.velocity;
             this.body.angle = data.angle;
             this.body.angularVelocity = data.angularVelocity;
+
+            this.hp = data.hp;
 
             _(data.actionsUsed).forEach(function(el) {
                 _this.action(el);

@@ -33,3 +33,17 @@ exports.create = function(options) {
 
     return newBody;
 };
+
+exports.collide = function(a, b) {
+    if (a instanceof Bullet) {
+        b.damage(a.addDamage);
+    } else {
+        b.damage();
+    }
+
+    if (b instanceof Bullet) {
+        a.damage(b.addDamage);
+    } else {
+        a.damage();
+    }
+};

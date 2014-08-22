@@ -13,6 +13,8 @@ var Ship = function Ship(options) {
     this.forceSide = options.forceSide || 500;
     this.bulletVelocity = 500;
 
+    this.hp = 100;
+
     // список доступных действий этого корабля
     this.actionsArray = ['thrust', 'reverse', 'left', 'right', 'fire'];
     // список использованный действий в шаге игры
@@ -75,7 +77,7 @@ Ship.prototype.right = function () {
 
 Ship.prototype.fire = function() {
     var worldPoint = [];
-    this.body.toWorldFrame(worldPoint, [31, 0]);
+    this.body.toWorldFrame(worldPoint, [50, 0]);
 
     this.game.addBody(
         body.create({
@@ -87,6 +89,12 @@ Ship.prototype.fire = function() {
             ]
         })
     );
+};
+
+Ship.prototype.damage = function(addDamage) {
+    addDamage = addDamage || 1;
+    var damage = addDamage * Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 1000;
+    this.hp = this.hp - damage;
 };
 
 module.exports = Ship;

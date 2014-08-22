@@ -10,6 +10,7 @@ var Body = function Body(options) {
     this.body;
     this.texture;
     this.game;
+    this.hp = 0;
 
     this.actions = {};
     // список доступных действий этого тела
@@ -58,7 +59,8 @@ Body.prototype.getFirstInfo = function() {
         ],
         angularVelocity: this.body.angularVelocity,
         angle: this.body.angle,
-        id: this.id
+        id: this.id,
+        hp: this.hp
     };
 };
 
@@ -75,7 +77,8 @@ Body.prototype.getInfo = function() {
         angularVelocity: this.body.angularVelocity,
         angle: this.body.angle,
         id: this.id,
-        actionsUsed: this.actionsUsed
+        actionsUsed: this.actionsUsed,
+        hp: this.hp
     };
 };
 
@@ -92,5 +95,7 @@ Body.prototype.destroy = function() {
     this.body._gameBody = undefined;
     this.body.removeShape();
 };
+
+Body.prototype.damage = function() {};
 
 module.exports = Body;

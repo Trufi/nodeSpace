@@ -6,7 +6,8 @@ var mask = require('../mask');
 var Bullet = function Bullet(options) {
     Bullet.super_.apply(this, arguments);
 
-    this.timeLive = 2000;
+    this.timeLive = 5000;
+    this.addDamage = 500;
     this.timeCreate;
 };
 
@@ -14,7 +15,7 @@ utils.inherits(Bullet, Body);
 
 Bullet.prototype.createBody = function(options) {
     this.body = new p2.Body({
-        mass: 1,
+        mass: 0.01,
         position: options.position || [0, 0],
         velocity: options.velocity || [0, 0],
         damping: 0,

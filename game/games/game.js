@@ -32,6 +32,8 @@ var Game = function Game() {
         gravity: this.gravity,
         applyDamping: this.applyDamping
     });
+
+    this.world.on('impact', this.impactEvent);
 };
 
 Game._idCounter = 0;
@@ -218,6 +220,10 @@ Game.prototype.close = function() {
     });
 
     // TODO: доделать
+};
+
+Game.prototype.impactEvent = function(ev) {
+    body.collide(ev.bodyA._gameBody, ev.bodyB._gameBody);
 };
 
 module.exports = Game;
