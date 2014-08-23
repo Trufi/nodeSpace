@@ -13,6 +13,14 @@ define(
 
             loadObj.texture.screenArrow = 'screenarrow.png';
             loadObj.texture.debug = 'debug.png';
+            loadObj.texture.cameraDebug = 'camera_debug.png';
+            loadObj.texture.cameraDebugGreen = 'camera_debug_green.png';
+            loadObj.texture.cameraDebugYellow = 'camera_debug_yellow.png';
+
+            loadObj.texture.bg_0 = 'bg_0.png';
+            loadObj.texture.bg_1 = 'bg_1.png';
+            loadObj.texture.bg_2 = 'bg_2.png';
+            loadObj.texture.bg_3 = 'bg_3.png';
 
             // загрузка текстур
             _(loadObj.texture).forEach(function(el) {

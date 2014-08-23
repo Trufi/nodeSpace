@@ -51,8 +51,6 @@ define(
                 player.action('fire');
             }
 
-            console.log(player.user.ship.hp);
-
             this.scrArrow.update();
         };
 

@@ -92,21 +92,92 @@ define(
         };
 
         game.createBackground = function(texture) {
-            this.background = new PIXI.TilingSprite(texture, render.resolution[0] / this.camera.scale, render.resolution[1] / this.camera.scale);
+            /*this.background = new PIXI.TilingSprite(texture, render.resolution[0] / this.camera.scale, render.resolution[1] / this.camera.scale);
             this.background.position.x = 0;
             this.background.position.y = 0;
             this.background.tilePosition.x = 0;
             this.background.tilePosition.y = 0;
             this.stage.addChild(this.background);
-            this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
+            this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);*/
+
+            this.background = [];
+
+            var scale = this.camera.scale;
+            this.background[0] = new PIXI.TilingSprite(assets.texture.bg_0, render.resolution[0] / scale, render.resolution[1] / scale);
+            this.background[0].position.x = 0;
+            this.background[0].position.y = 0;
+            this.background[0].tilePosition.x = 0;
+            this.background[0].tilePosition.y = 0;
+            //this.background[0].scale = new PIXI.Point(scale, scale);
+            this.stage.addChild(this.background[0]);
+
+            this.background[1] = new PIXI.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
+            this.background[1].position.x = 0;
+            this.background[1].position.y = 0;
+            this.background[1].tilePosition.x = 0;
+            this.background[1].tilePosition.y = 0;
+            //this.background[1].scale = new PIXI.Point(scale, scale);
+            this.stage.addChild(this.background[1]);
+
+            this.background[2] = new PIXI.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
+            this.background[2].position.x = 0;
+            this.background[2].position.y = 0;
+            this.background[2].tilePosition.x = 0;
+            this.background[2].tilePosition.y = 0;
+            this.background[2].scale = new PIXI.Point(scale, scale);
+            this.stage.addChild(this.background[2]);
+
+            this.background[3] = new PIXI.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
+            this.background[3].position.x = 0;
+            this.background[3].position.y = 0;
+            this.background[3].tilePosition.x = 0;
+            this.background[3].tilePosition.y = 0;
+            this.background[3].scale = new PIXI.Point(scale, scale);
+            this.stage.addChild(this.background[3]);
         };
 
         game.updateBackground = function() {
-            this.background.width = render.resolution[0] / this.camera.scale;
+            var bgSc = 0.05;
+            var scale = 1 + bgSc * (this.camera.scale - 1);
+            this.background[0].width = render.resolution[0] / scale;
+            this.background[0].height = render.resolution[1] / scale;
+            this.background[0].scale = new PIXI.Point(scale, scale);
+            this.background[0].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2  - this.camera.position[0] * bgSc;
+            this.background[0].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2  - this.camera.position[1] * bgSc;
+
+            bgSc = 0.1;
+            scale = 1 + bgSc * (this.camera.scale - 1);
+            this.background[1].width = render.resolution[0] / scale;
+            this.background[1].height = render.resolution[1] / scale;
+            this.background[1].scale = new PIXI.Point(scale, scale);
+            this.background[1].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2 - this.camera.position[0] * bgSc;
+            this.background[1].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2 - this.camera.position[1] * bgSc;
+
+            bgSc = 0.2;
+            scale = 1 + bgSc * (this.camera.scale - 1);
+            this.background[2].width = render.resolution[0] / scale;
+            this.background[2].height = render.resolution[1] / scale;
+            this.background[2].scale = new PIXI.Point(scale, scale);
+            this.background[2].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2  - this.camera.position[0] * bgSc;
+            this.background[2].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2  - this.camera.position[1] * bgSc;
+
+            scale = this.camera.scale;
+            if (scale > 0.47) {
+                this.background[3].width = render.resolution[0] / scale;
+                this.background[3].height = render.resolution[1] / scale;
+                this.background[3].scale = new PIXI.Point(scale, scale);
+                this.background[3].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2 - this.camera.position[0];
+                this.background[3].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2 - this.camera.position[1];
+                this.background[3].visible = true;
+            } else {
+                this.background[3].visible = false;
+            }
+
+            /*this.background.width = render.resolution[0] / this.camera.scale;
             this.background.height = render.resolution[1] / this.camera.scale;
             this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
             this.background.tilePosition.x = render.resolution[0] * (1 / this.camera.scale - 1) / 2  - this.camera.position[0];
-            this.background.tilePosition.y = render.resolution[1] * (1 / this.camera.scale - 1) / 2  - this.camera.position[1];
+            this.background.tilePosition.y = render.resolution[1] * (1 / this.camera.scale - 1) / 2  - this.camera.position[1];*/
 
             /*this.background.tilePosition.x = -this.camera.position[0];
             this.background.tilePosition.y = -this.camera.position[1];*/

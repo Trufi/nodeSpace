@@ -203,7 +203,7 @@ Game.prototype.getDateForNewPlayer = function() {
 
     date.gameType = 0;
     date.shipType = 10;
-    date.velocity = [5, 0];
+    date.velocity = [0, 0];
     date.position = [-100, -100];
     date.angularVelocity = 0;
     date.angle = 0;

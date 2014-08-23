@@ -8,6 +8,7 @@ var Bullet = function Bullet(options) {
 
     this.timeLive = 5000;
     this.addDamage = 500;
+    this.reflectAngle = 0.8;
     this.timeCreate;
 };
 
@@ -38,6 +39,16 @@ Bullet.prototype.applyShape = function() {
 
 Bullet.prototype.update = function(now) {
     if (now - this.timeCreate > this.timeLive) {
+        this.destroy();
+    }
+};
+
+Bullet.prototype.damage = function() {
+    var v2 = [this.body.velocity[0], this.body.velocity[1]],
+        v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
+        a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1]))));
+
+    if (a > this.reflectAngle) {
         this.destroy();
     }
 };
