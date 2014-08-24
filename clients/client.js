@@ -40,7 +40,8 @@ Client.prototype.createShip = function(data) {
         velocity: data.velocity || [0, 0],
         angularVelocity: data.angularVelocity || 0,
         angle: data.angle || 0,
-        mass: 50
+        mass: 50,
+        name: this.name
     });
 
     _(this.ship.actions).forEach(function(el, i) {

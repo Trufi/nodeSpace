@@ -6,6 +6,12 @@
     "actionsCooldown": 50,
     "buttonFontFamily": "Arial",
     "buttonFontWeight": "normal",
+    "interface": {
+        "bodyInfo": {
+            "fontWeight": "normal",
+            "fontFamily": "Arial"
+        }
+    },
     "errors": {
         "minPasswordLength": "Password length must be greater than 3",
         "passwordsDontMatch": "Passwords dont match",

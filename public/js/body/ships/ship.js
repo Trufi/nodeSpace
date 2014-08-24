@@ -34,6 +34,8 @@ define(
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
 
+            this.spriteSize = 60;
+
 
             // спрайт для thrust
             this.spriteThrust = new PIXI.Sprite(assets.texture.thrust);
@@ -85,7 +87,7 @@ define(
 
         Ship.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
-            game.stage.addChild(this.sprite);
+            game.layers[2].addChild(this.sprite);
         };
 
         return Ship;

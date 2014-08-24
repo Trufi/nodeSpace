@@ -65,8 +65,6 @@ define(
         };
 
         Button.prototype._createBackground = function() {
-            var _this = this;
-
             this.sprite = new PIXI.Graphics();
             this.sprite.lineStyle(1, parseInt('0x' + this.strokeColor, 16), 1);
             this.sprite.beginFill(parseInt('0x' + this.strokeColor, 16), 0.5);

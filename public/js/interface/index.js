@@ -6,6 +6,7 @@ define(
         interface.button = require('./button');
         interface.editbox = require('./editbox');
         interface.text = require('./text');
+        interface.bodyInfo = require('./bodyinfo');
 
         return interface;
     }

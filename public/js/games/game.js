@@ -24,6 +24,7 @@ define(
         game.users = {};
         // stage из pixi.js
         game.stage;
+        game.layers = [];
 
         game.camera;
 
@@ -109,7 +110,7 @@ define(
             this.background[1].tilePosition.x = 0;
             this.background[1].tilePosition.y = 0;
             //this.background[1].scale = new PIXI.Point(scale, scale);
-            this.stage.addChild(this.background[1]);
+            this.layers[0].addChild(this.background[1]);
 
             this.background[2] = new PIXI.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
             this.background[2].position.x = 0;
@@ -117,7 +118,7 @@ define(
             this.background[2].tilePosition.x = 0;
             this.background[2].tilePosition.y = 0;
             this.background[2].scale = new PIXI.Point(scale, scale);
-            this.stage.addChild(this.background[2]);
+            this.layers[0].addChild(this.background[2]);
 
             this.background[3] = new PIXI.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
             this.background[3].position.x = 0;
@@ -125,7 +126,7 @@ define(
             this.background[3].tilePosition.x = 0;
             this.background[3].tilePosition.y = 0;
             this.background[3].scale = new PIXI.Point(scale, scale);
-            this.stage.addChild(this.background[3]);
+            this.layers[0].addChild(this.background[3]);
         };
 
         game.updateBackground = function() {
@@ -236,6 +237,7 @@ define(
 
         game.start = function(options) {
             var _this = this;
+            var i;
 
             this.world = new p2.World({
                 gravity: options.game.world.gravity,
@@ -243,6 +245,10 @@ define(
             });
 
             this.stage = new PIXI.Stage(0x000000);
+            for (i = 0; i < 5; i++) {
+                this.layers[i] = new PIXI.DisplayObjectContainer();
+                this.stage.addChild(this.layers[i]);
+            }
 
             // create camera
             this.camera = camera.create(render.resolution[0], render.resolution[1]);

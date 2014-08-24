@@ -1,16 +1,16 @@
 define(
     function(require) {
         var _ = require('lodash');
-        var p2 = require('p2');
         var PIXI = require('pixi');
         var assets = require('modules/assets');
+        var game = require('games/game');
 
         var Arrow = function Arrow(options) {
             this.padding = 30;
             this.sprite;
             this.text;
             this.camera;
-            this.stage = options.stage;
+            //this.stage = options.stage;
 
             this.setCamera(options.camera);
 
@@ -47,7 +47,7 @@ define(
             this.sprite = new PIXI.Sprite(assets.texture.screenArrow);
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
-            this.stage.addChild(this.sprite);
+            game.layers[4].addChild(this.sprite);
         };
 
         Arrow.prototype.createText = function() {

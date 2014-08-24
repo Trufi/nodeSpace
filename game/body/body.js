@@ -10,6 +10,7 @@ var Body = function Body(options) {
     this.body;
     this.texture;
     this.game;
+    this.name = options.name || 'Unknown';
     this.hp = 0;
 
     this.actions = {};
@@ -60,7 +61,8 @@ Body.prototype.getFirstInfo = function() {
         angularVelocity: this.body.angularVelocity,
         angle: this.body.angle,
         id: this.id,
-        hp: this.hp
+        hp: this.hp,
+        name: this.name
     };
 };
 

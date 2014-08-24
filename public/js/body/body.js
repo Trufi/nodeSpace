@@ -14,8 +14,10 @@ define(
             this.type = options.type;
             this.body;
             this.sprite;
+            this.spriteSize = 100;
             this.shape;
             this.game;
+            this.name = options.name || 'Unknown';
             this.hp = options.hp;
 
             this.actions = {};
@@ -51,13 +53,13 @@ define(
 
         Body.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
-            game.stage.addChild(this.sprite);
+            game.layers[2].addChild(this.sprite);
             this.game = game;
         };
 
         Body.prototype.removeFromGame = function() {
             this.game.world.removeBody(this.body);
-            this.game.stage.removeChild(this.sprite);
+            this.game.layers[2].removeChild(this.sprite);
             this.game = undefined;
         };
 

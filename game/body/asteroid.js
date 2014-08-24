@@ -6,6 +6,8 @@ var mask = require('./mask');
 
 var Asteroid = function Asteroid(options) {
     Asteroid.super_.apply(this, arguments);
+
+    this.name = 'Asteroid';
 };
 
 utils.inherits(Asteroid, Body);

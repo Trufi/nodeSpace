@@ -6,6 +6,7 @@ define(
         var key = require('modules/key');
         var player = require('modules/player');
         var ScreenArrow = require('interface/screenArrow');
+        var interface = require('interface/index');
 
         var state = {};
 
@@ -17,13 +18,14 @@ define(
 
             this.scrArrow = new ScreenArrow({
                 camera: game.camera,
-                target: game.bodies[1],
-                stage: game.stage
+                target: game.bodies[1]
             });
 
-            if (options.proposeChangeName) {
-                console.log('TODO: смена имени');
-            }
+            _(game.users).forEach(function(el) {
+                interface.bodyInfo.create({
+                    body: el.ship
+                });
+            });
         };
 
         state.update = function() {
@@ -52,6 +54,7 @@ define(
             }
 
             this.scrArrow.update();
+            interface.bodyInfo.update();
         };
 
         state.render = function() {
