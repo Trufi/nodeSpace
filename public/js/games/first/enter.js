@@ -66,11 +66,14 @@ define(
         }
 
         function createLoginMenu() {
-            var login, pass;
+            var login, pass, ok;
 
             state.loginMenu = interface.frame.create({
                 anchor: 'CENTER',
-                visible: false
+                visible: false,
+                onShow: function() {
+                    login.active();
+                }
             });
 
             state.loginMenu.addChild(interface.text.create({
@@ -80,7 +83,10 @@ define(
             }));
 
             login = interface.editbox.create({
-                position: [-150, -115]
+                position: [-150, -115],
+                onNext: function() {
+                    pass.active();
+                }
             });
             state.loginMenu.addChild(login);
 
@@ -95,7 +101,10 @@ define(
             pass = interface.editbox.create({
                 color: 'red',
                 position: [-150, -55],
-                type: 'pass'
+                type: 'pass',
+                onNext: function() {
+                    ok.click();
+                }
             });
             state.loginMenu.addChild(pass);
 
@@ -107,7 +116,7 @@ define(
                 })
             );
 
-            state.loginMenu.addChild(interface.button.create({
+            ok = interface.button.create({
                 color: 'orange',
                 text: 'Ok',
                 position: [-150, 5],
@@ -136,7 +145,8 @@ define(
                         });
                     }
                 }
-            }));
+            });
+            state.loginMenu.addChild(ok);
 
             state.loginMenu.addChild(interface.button.create({
                 color: 'green',
@@ -159,11 +169,14 @@ define(
         }
 
         function createRegMenu() {
-            var login, pass, confirmPass, error;
+            var login, pass, confirmPass, ok, error;
 
             state.regMenu = interface.frame.create({
                 anchor: 'CENTER',
-                visible: false
+                visible: false,
+                onShow: function() {
+                    login.active();
+                }
             });
 
             state.regMenu.addChild(interface.text.create({
@@ -173,7 +186,10 @@ define(
             }));
 
             login = interface.editbox.create({
-                position: [-150, -145]
+                position: [-150, -145],
+                onNext: function() {
+                    pass.active();
+                }
             });
             state.regMenu.addChild(login);
 
@@ -188,7 +204,10 @@ define(
             pass = interface.editbox.create({
                 color: 'red',
                 position: [-150, -85],
-                type: 'pass'
+                type: 'pass',
+                onNext: function() {
+                    confirmPass.active();
+                }
             });
             state.regMenu.addChild(pass);
 
@@ -203,7 +222,10 @@ define(
             confirmPass = interface.editbox.create({
                 color: 'red',
                 position: [-150, -25],
-                type: 'pass'
+                type: 'pass',
+                onNext: function() {
+                    ok.click();
+                }
             });
             state.regMenu.addChild(confirmPass);
 
@@ -215,7 +237,7 @@ define(
                 })
             );
 
-            state.regMenu.addChild(interface.button.create({
+            ok = interface.button.create({
                 color: 'orange',
                 text: 'Ok',
                 position: [-150, 35],
@@ -252,7 +274,8 @@ define(
                         });
                     }
                 }
-            }));
+            });
+            state.regMenu.addChild(ok);
 
             state.regMenu.addChild(interface.button.create({
                 color: 'green',
@@ -275,11 +298,14 @@ define(
         }
 
         function choiceNameMenu() {
-            var name, error;
+            var name, error, ok;
 
             state.choiceMenu = interface.frame.create({
                 anchor: 'CENTER',
-                visible: false
+                visible: false,
+                onShow: function() {
+                    name.active();
+                }
             });
 
             state.choiceMenu.addChild(interface.text.create({
@@ -289,11 +315,14 @@ define(
             }));
 
             name = interface.editbox.create({
-                position: [-150, -55]
+                position: [-150, -55],
+                onNext: function() {
+                    ok.click();
+                }
             });
             state.choiceMenu.addChild(name);
 
-            state.choiceMenu.addChild(interface.button.create({
+            ok = interface.button.create({
                 color: 'orange',
                 text: 'Ok',
                 position: [-150, 5],
@@ -314,7 +343,8 @@ define(
                         error.setText(config.errors.nameNotValid);
                     }
                 }
-            }));
+            });
+            state.choiceMenu.addChild(ok);
 
             error = interface.text.create({
                 text: '',

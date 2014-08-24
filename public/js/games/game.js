@@ -92,14 +92,6 @@ define(
         };
 
         game.createBackground = function(texture) {
-            /*this.background = new PIXI.TilingSprite(texture, render.resolution[0] / this.camera.scale, render.resolution[1] / this.camera.scale);
-            this.background.position.x = 0;
-            this.background.position.y = 0;
-            this.background.tilePosition.x = 0;
-            this.background.tilePosition.y = 0;
-            this.stage.addChild(this.background);
-            this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);*/
-
             this.background = [];
 
             var scale = this.camera.scale;
@@ -172,15 +164,6 @@ define(
             } else {
                 this.background[3].visible = false;
             }
-
-            /*this.background.width = render.resolution[0] / this.camera.scale;
-            this.background.height = render.resolution[1] / this.camera.scale;
-            this.background.scale = new PIXI.Point(this.camera.scale, this.camera.scale);
-            this.background.tilePosition.x = render.resolution[0] * (1 / this.camera.scale - 1) / 2  - this.camera.position[0];
-            this.background.tilePosition.y = render.resolution[1] * (1 / this.camera.scale - 1) / 2  - this.camera.position[1];*/
-
-            /*this.background.tilePosition.x = -this.camera.position[0];
-            this.background.tilePosition.y = -this.camera.position[1];*/
         };
 
         game.load = function(options, callback) {

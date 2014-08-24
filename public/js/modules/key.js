@@ -36,11 +36,12 @@ define(
             8: 'BACKSPACE',
             46: 'DELETE',
             35: 'END',
-            36: 'HOME'
+            36: 'HOME',
+            9: 'TAB'
         };
 
-
-        var defaultKeyBlock = [8];
+        // кнопки которые блокируют действия браузера
+        var defaultKeyBlock = [8, 9];
         var keyPressed = {};
         var keyDown = {};
 
@@ -48,7 +49,7 @@ define(
         var isWriteText = false;
         var writeTextCallback;
         // кнопки которые будут передаваться в writeTextCallback при событии keydown
-        var keyForTextEdit = [13, 37, 39, 8, 46, 35, 36];
+        var keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
 
 
         window.addEventListener('keydown', function(ev) {

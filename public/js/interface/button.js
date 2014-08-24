@@ -55,9 +55,13 @@ define(
 
             this.displayObject.mouseover = _.bind(this._mouseover, this);
             this.displayObject.mouseout = _.bind(this._mouseout, this);
-            if (options.click !== undefined) {
-                this.click(options.click);
+
+            if (typeof options.click === 'function') {
+                this.click = options.click;
+            } else {
+                this.click = function() {};
             }
+            this.displayObject.click = this.click;
         };
 
         Button.prototype._createBackground = function() {
@@ -94,10 +98,6 @@ define(
             this.spriteText.position.x = (this.width - this.spriteText.width) / 2;
             this.spriteText.position.y = (this.height - this.spriteText.height) / 2;
             this.displayObject.addChild(this.spriteText);
-        };
-
-        Button.prototype.click = function(callback) {
-            this.displayObject.click = callback;
         };
 
         Button.prototype._mouseover = function() {

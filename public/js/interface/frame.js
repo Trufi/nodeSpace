@@ -20,6 +20,12 @@ define(
             }
             this.position = options.position || [0, 0];
 
+            if (typeof options.onShow === 'function') {
+                this.onShow = options.onShow;
+            } else {
+                this.onShow = function() {};
+            }
+
             this.displayObject = new PIXI.DisplayObjectContainer();
             this.displayObject.width = this.width;
             this.displayObject.height = this.height;
@@ -44,6 +50,7 @@ define(
 
         Frame.prototype.show = function() {
             this.displayObject.visible = true;
+            this.onShow();
         };
 
         Frame.prototype.hide = function() {

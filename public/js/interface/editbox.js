@@ -29,6 +29,12 @@ define(
             this.height = options.height || 50;
             this.position = options.position || [0, 0];
 
+            if (typeof options.onNext === 'function') {
+                this.onNext = options.onNext;
+            } else {
+                this.onNext = function() {};
+            }
+
             this.displayObject = new PIXI.DisplayObjectContainer();
             this.displayObject.buttonMode = true;
             this.displayObject.interactive = true;
@@ -72,8 +78,6 @@ define(
         };
 
         Editbox.prototype._createBackground = function() {
-            var _this = this;
-
             this.sprite = new PIXI.Graphics();
             this.sprite.lineStyle(1, parseInt('0x' + this.strokeColor, 16), 1);
             this.sprite.beginFill(parseInt('0x' + this.strokeColor, 16), 0.5);
@@ -211,62 +215,75 @@ define(
 
         Editbox.prototype._enter = function(ch) {
             this.deactive();
+            this.onNext();
+        };
+
+        Editbox.prototype._tab = function(ch) {
+            this.deactive();
+            this.onNext();
         };
 
         Editbox.prototype.active = function() {
             var _this = this;
-            this.isActive = true;
-            this.cursorPosition = this.text.length;
 
-            if (editbox._active !== undefined) {
-                editbox._active.deactive();
-            }
-            editbox._active = this;
+            // bad
+            setTimeout(function() {
+                _this.isActive = true;
+                _this.cursorPosition = _this.text.length;
 
-
-            this.updateCursor();
-
-            key.enableWriteText(function(ch) {
-                var str;
-
-                switch (ch) {
-                    case 'LEFT':
-                        _this._cursorLeft();
-                        break;
-                    case 'RIGHT':
-                        _this._cursorRight();
-                        break;
-                    case 'BACKSPACE':
-                        _this._backspace();
-                        break;
-                    case 'DELETE':
-                        _this._delete();
-                        break;
-                    case 'HOME':
-                        _this._cursorHome();
-                        break;
-                    case 'END':
-                        _this._cursorEnd();
-                        break;
-                    case 'ENTER':
-                        _this._enter();
-                        break;
-                    default:
-                        _this._addCharToText(ch);
+                if (editbox._active !== undefined) {
+                    editbox._active.deactive();
                 }
+                editbox._active = _this;
 
-                if (_this.type === 'pass') {
-                    str = (new Array(_this.text.length + 1)).join('*');
-                } else {
-                    str = _this.text;
-                }
-                _this.spriteText.setText(str);
-                _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
-                setTimeout(function() {
-                    _this.checkForAlign();
-                    _this.updateCursor();
-                }, 30);
-            });
+
+                _this.updateCursor();
+
+                key.enableWriteText(function(ch) {
+                    var str;
+
+                    switch (ch) {
+                        case 'LEFT':
+                            _this._cursorLeft();
+                            break;
+                        case 'RIGHT':
+                            _this._cursorRight();
+                            break;
+                        case 'BACKSPACE':
+                            _this._backspace();
+                            break;
+                        case 'DELETE':
+                            _this._delete();
+                            break;
+                        case 'HOME':
+                            _this._cursorHome();
+                            break;
+                        case 'END':
+                            _this._cursorEnd();
+                            break;
+                        case 'ENTER':
+                            _this._enter();
+                            break;
+                        case 'TAB':
+                            _this._tab();
+                            break;
+                        default:
+                            _this._addCharToText(ch);
+                    }
+
+                    if (_this.type === 'pass') {
+                        str = (new Array(_this.text.length + 1)).join('*');
+                    } else {
+                        str = _this.text;
+                    }
+                    _this.spriteText.setText(str);
+                    _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
+                    setTimeout(function() {
+                        _this.checkForAlign();
+                        _this.updateCursor();
+                    }, 30);
+                });
+            }, 0);
         };
 
         Editbox.prototype.deactive = function() {
@@ -278,12 +295,7 @@ define(
         };
 
         Editbox.prototype._click = function() {
-            var _this = this;
-
-            // bad
-            setTimeout(function() {
-                _this.active();
-            }, 0);
+            this.active();
         };
 
         Editbox.prototype._mouseover = function() {
