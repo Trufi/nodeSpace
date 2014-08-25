@@ -21,7 +21,7 @@ define(
             this.padding = 30;
 
             this.displayObject = new PIXI.DisplayObjectContainer();
-            game.layers[1].addChild(this.displayObject);
+            game.layers[4].addChild(this.displayObject);
             this.spriteName;
             this.spriteHp;
 

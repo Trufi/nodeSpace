@@ -5,6 +5,7 @@ var action = require('game/actions');
 var mongo = require('mongo');
 var ObjectID = require('mongodb').ObjectID;
 var log = require('modules/log')(module);
+var debug = require('modules/debug');
 var config = require('config');
 
 // В клиенте содержится сокет, игрок клиента, сессия и информация о ней
@@ -16,6 +17,8 @@ var Client = function(options) {
     this.name;
 
     this.socket = options.socket;
+
+    debug.pingOn(this);
 
     this.gameEnable = false;
     this.gameType;

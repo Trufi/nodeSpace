@@ -7,6 +7,7 @@ define(
         var player = require('modules/player');
         var ScreenArrow = require('interface/screenArrow');
         var interface = require('interface/index');
+        var debug = require('modules/debug');
 
         var state = {};
 
@@ -26,6 +27,8 @@ define(
                     body: el.ship
                 });
             });
+
+            debug.pingOn();
         };
 
         state.update = function() {

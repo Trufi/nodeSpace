@@ -75,6 +75,11 @@ define(
             });
         };
 
+        request.ping = function(callback) {
+            socket.on('pingAnswer', callback);
+            socket.emit('ping');
+        };
+
         return request;
     }
 );

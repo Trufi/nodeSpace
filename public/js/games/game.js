@@ -33,7 +33,9 @@ define(
 
         game.lastGameStepTime;
 
-        game.dataFromServer;
+        game.dataFromServer = [];
+        game.updateData = [];
+        game.ping = 10;
 
         // игровое состояние
         game.state;
@@ -102,7 +104,7 @@ define(
             this.background[0].tilePosition.x = 0;
             this.background[0].tilePosition.y = 0;
             //this.background[0].scale = new PIXI.Point(scale, scale);
-            this.stage.addChild(this.background[0]);
+            this.layers[0].addChild(this.background[0]);
 
             this.background[1] = new PIXI.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
             this.background[1].position.x = 0;
@@ -177,22 +179,13 @@ define(
             var _this = this;
 
             request.onUpdateGameState(function(data) {
-                _this.dataFromServer = data;
-                _this.dataFromServer.time = Date.now();
+                _this.dataFromServer.push(data);
             });
         };
 
-        game.updateFromDataServer = function() {
+        // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
+        game.updateImportant = function(data) {
             var _this = this;
-            var data = this.dataFromServer;
-
-            this.lastGameStepTime = data.time;
-
-            _(data.bodies).forEach(function(el) {
-                if (_this.bodies[el.id] !== undefined) {
-                    _this.bodies[el.id].update(el);
-                }
-            });
 
             if (data.newData !== undefined) {
                 _(data.newData.bodies).forEach(function(el) {
@@ -219,16 +212,60 @@ define(
 
             if (data.removeData !== undefined) {
                 _(data.removeData.bodies).forEach(function(el) {
-                    _this.bodies[el].destroy();
+                    // TODO: почему возникает?
+                    if (_this.bodies[el] !== undefined) {
+                        _this.bodies[el].destroy();
+                    } else {
+                        console.log('Error remove data ' + Date.now());
+                    }
                 });
             }
         };
 
-        game.worldStep = function(currentTime) {
-            if (this.dataFromServer !== undefined) {
-                this.updateFromDataServer();
-                this.dataFromServer = undefined;
+        game.updateFromDataServer = function(now) {
+            var _this = this;
+            var lastData;
+
+            if (this.dataFromServer.length > 0) {
+                // отсортируем данные по времени пришедшие с сервера
+                //this.dataFromServer = _.sortBy(this.dataFromServer, 'time');
+                // и добавим их в очередь
+                this.updateData = this.updateData.concat(this.dataFromServer);
+                this.dataFromServer = [];
             }
+
+            this.updateData = _.sortBy(this.updateData, 'time');
+            // формируем массив данных для обновления
+            var arrData = [];
+            _(this.updateData).forEach(function(el, i) {
+                if (el.time < now - _this.ping) {
+                    arrData.push(el);
+
+                    console.log(now - _this.ping - el.time);
+                }
+            });
+
+            var arrDataLen = arrData.length;
+            if (arrDataLen > 0) {
+                this.updateData = this.updateData.slice(arrDataLen);
+                _.forEach(arrData, function (data) {
+                    _this.updateImportant(data);
+                });
+
+                lastData = arrData[arrDataLen - 1];
+
+                _(lastData.bodies).forEach(function (el) {
+                    if (_this.bodies[el.id] !== undefined) {
+                        _this.bodies[el.id].update(el);
+                    }
+                });
+
+                this.lastGameStepTime = lastData.time + this.ping;
+            }
+        };
+
+        game.worldStep = function(currentTime) {
+            this.updateFromDataServer(currentTime);
 
             if (currentTime !== this.lastGameStepTime) {
                 this.world.step((currentTime - this.lastGameStepTime) / 1000);

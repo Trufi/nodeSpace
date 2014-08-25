@@ -7,7 +7,7 @@ var io;
 
 exports.initialize = function (server) {
     io = socketio.listen(server, {log: true});
-    io.set('origins', config.host + ':' + config.port);
+    //io.set('origins', config.host + ':' + config.port);
     log.info('socket.io initialized');
 
     io.sockets.on('connection', function (socket) {

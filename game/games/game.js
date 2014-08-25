@@ -5,7 +5,12 @@ var body = require('game/body');
 
 var Game = function Game() {
     this.id = ++Game._idCounter;
+
     this.timeStep = 1 / 60;
+
+    this.sendStateInterval = 0;
+    this.sendStateLastTime = 0;
+
     this.gravity = [0, 0];
     this.applyDamping = false;
     this.interval = undefined;
@@ -52,7 +57,7 @@ Game.prototype.start = function() {
 
         _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
 
-        _this.sendState();
+        _this.sendState(currentTimeStep);
 
         _this.resetBodyUsedActions();
 
@@ -64,12 +69,13 @@ Game.prototype.stop = function() {
     clearInterval(this.interval);
 };
 
-Game.prototype.sendState = function() {
+Game.prototype.sendState = function(now) {
     var _this = this,
         hasNew, hasRemove;
 
     function send(user) {
         var gameState = _this.getGameState(user);
+        gameState.time = now;
 
         if (hasNew) {
             gameState.newData = _this.getGameNewState(user);
@@ -81,22 +87,28 @@ Game.prototype.sendState = function() {
             };
         }
 
-        user.send('updateGameState', gameState);
+        //setTimeout(function() {
+            user.send('updateGameState', gameState);
+        //}, Math.floor(Math.random() * 500));
     }
 
-    hasNew = this.newBodies.length > 0 || this.newUsers.length > 0;
-    hasRemove = this.removeBodies.length > 0;
+    if (now - this.sendStateLastTime > this.sendStateInterval) {
+        this.sendStateLastTime = now;
 
-    _(this.users).forEach(send);
-    _(this.spectators).forEach(send);
+        hasNew = this.newBodies.length > 0 || this.newUsers.length > 0;
+        hasRemove = this.removeBodies.length > 0;
 
-    if (hasNew) {
-        this.newBodies = [];
-        this.newUsers = [];
-    }
+        _(this.users).forEach(send);
+        _(this.spectators).forEach(send);
 
-    if (hasRemove) {
-        this.removeBodies = [];
+        if (hasNew) {
+            this.newBodies = [];
+            this.newUsers = [];
+        }
+
+        if (hasRemove) {
+            this.removeBodies = [];
+        }
     }
 };
 
@@ -126,7 +138,7 @@ Game.prototype.getGameFirstState = function(user) {
     var state = {};
 
     state.assets = this.assets;
-
+    state.time = Date.now();
     state.world = {};
     state.world.worldSize = this.worldSize;
     state.world.timeStep = this.timeStep;
