@@ -227,9 +227,7 @@ define(
             var lastData;
 
             if (this.dataFromServer.length > 0) {
-                // отсортируем данные по времени пришедшие с сервера
-                //this.dataFromServer = _.sortBy(this.dataFromServer, 'time');
-                // и добавим их в очередь
+                // данные по времени пришедшие с сервера добавим в очередь
                 this.updateData = this.updateData.concat(this.dataFromServer);
                 this.dataFromServer = [];
             }
@@ -253,10 +251,9 @@ define(
                 });
 
                 lastData = arrData[arrDataLen - 1];
-
-                _(lastData.bodies).forEach(function (el) {
-                    if (_this.bodies[el.id] !== undefined) {
-                        _this.bodies[el.id].update(el);
+                _(lastData[0][0]).forEach(function (el) {
+                    if (_this.bodies[el[0]] !== undefined) {
+                        _this.bodies[el[0]].update(el);
                     }
                 });
 

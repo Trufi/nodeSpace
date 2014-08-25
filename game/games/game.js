@@ -74,7 +74,8 @@ Game.prototype.sendState = function(now) {
         hasNew, hasRemove;
 
     function send(user) {
-        var gameState = _this.getGameState(user);
+        var gameState = {};
+        gameState[0] = _this.getGameState(user);
         gameState.time = now;
 
         if (hasNew) {
@@ -114,13 +115,13 @@ Game.prototype.sendState = function(now) {
 
 // данные, которые отправляются через каждый шаг
 Game.prototype.getGameState = function(user) {
-    var state = {};
+    var state = [];
 
-    state.bodies = _.map(this.bodies, function(el) {
+    state[0] = _.map(this.bodies, function(el) {
         return el.getInfo();
     });
 
-    state.users = _.map(this.users, function(el) {
+    state[1] = _.map(this.users, function(el) {
         return el.getInfo();
     });
 

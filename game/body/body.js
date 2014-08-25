@@ -67,7 +67,7 @@ Body.prototype.getFirstInfo = function() {
 };
 
 Body.prototype.getInfo = function() {
-    return {
+/*    return {
         position: [
             this.body.position[0],
             this.body.position[1]
@@ -81,7 +81,16 @@ Body.prototype.getInfo = function() {
         id: this.id,
         actionsUsed: this.actionsUsed,
         hp: this.hp
-    };
+    };*/
+    var info = [];
+    info[0] = this.id;
+    info[1] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
+    info[2] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
+    info[3] = Math.floor(this.body.angularVelocity * 100) / 100;
+    info[4] = Math.floor(this.body.angle * 100) / 100;
+    info[5] = this.actionsUsed;
+    info[6] = Math.floor(this.hp * 100) / 100;
+    return info;
 };
 
 Body.prototype.resetActionsUsed = function() {

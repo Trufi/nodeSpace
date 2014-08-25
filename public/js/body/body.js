@@ -73,14 +73,15 @@ define(
         Body.prototype.update = function(data) {
             var _this = this;
 
-            this.body.position = data.position;
-            this.body.velocity = data.velocity;
-            this.body.angle = data.angle;
-            this.body.angularVelocity = data.angularVelocity;
+            this.body.position[0] = data[1][0];
+            this.body.position[1] = data[1][1];
+            this.body.velocity[0] = data[2][0];
+            this.body.velocity[1] = data[2][1];
+            this.body.angularVelocity = data[3];
+            this.body.angle = data[4];
 
-            this.hp = data.hp;
-
-            _(data.actionsUsed).forEach(function(el) {
+            this.hp = data[6];
+            _(data[5]).forEach(function(el) {
                 _this.action(el);
             });
         };
