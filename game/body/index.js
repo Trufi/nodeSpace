@@ -3,14 +3,14 @@ var Rectangle = require('./rectangle');
 var Ship = require('./ships/ship');
 var Bullet = require('./bullets/bullet');
 
-var idCounter = 0;
+var idCounter = 1;
 
 exports.create = function(options) {
     var newBody;
 
     options = options || {};
     options.type = options.type || 2;
-    options.id = ++idCounter;
+    options.id = idCounter++;
 
     switch (options.type) {
         case 1:

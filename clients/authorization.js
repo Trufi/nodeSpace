@@ -35,7 +35,7 @@ module.exports = function (clients) {
     clients.loginFromCookie = function(client, callback) {
         common.loadUserFromDb(client.session.name, function (err, doc) {
             if (err) return callback(err);
-            client.applyDate(doc);
+            client.applyData(doc);
             callback(null, null);
         });
     };
@@ -44,16 +44,16 @@ module.exports = function (clients) {
         options = options || {};
 
         var game = client.game,
-            gameDate = game.getDateForNewPlayer();
+            gameData = game.getDateForNewPlayer();
 
         if (options.name !== undefined) {
-            gameDate.name = options.name;
+            gameData.name = options.name;
         }
         if (options._id !== undefined) {
-            gameDate._id = options._id;
+            gameData._id = options._id;
         }
 
-        client.applyDate(gameDate);
+        client.applyData(gameData);
         client.save();
         game.removeSpectator(client);
         game.addPlayer(client);
@@ -205,12 +205,12 @@ module.exports = function (clients) {
                     client.socketOn();
                 } else {
                     game = client.game;
-                    client.applyDate(doc);
+                    client.applyData(doc);
                     game.removeSpectator(client);
                     game.addPlayer(client);
                 }
 
-                client.send('changeStatusToPlayer', client.getFirstState());
+                client.send(6, client.getFirstState());
                 client.session.name = client.name;
                 sessionStore.set(client.sid, client.session, function (err) {
                     if (err) log.error(err.message);

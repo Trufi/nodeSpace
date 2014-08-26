@@ -13,6 +13,7 @@ define(
         var key = require('modules/key');
         var player = require('modules/player');
         var body = require('body/index');
+        var ping = require('modules/ping');
 
         var game = {};
 
@@ -35,7 +36,7 @@ define(
 
         game.dataFromServer = [];
         game.updateData = [];
-        game.ping = 10;
+        game.ping = ping.get();
 
         // минимальный интервал через который сервер посылает данные
         game.serverSendStateInterval = 0;
@@ -186,51 +187,55 @@ define(
         // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
         game.updateImportant = function(now, data) {
             var _this = this;
-
-            _(data[0][0]).forEach(function(el) {
+            // actions data
+            _(data[1][0]).forEach(function(el) {
                 if (_this.bodies[el[0]] !== undefined) {
                     _this.bodies[el[0]].updateActions(now, el);
                 }
             });
-
-            if (data.newData !== undefined) {
-                _(data.newData.bodies).forEach(function(el) {
-                    if (_this.bodies[el.id] === undefined) {
-                        _this.addBody(body.create(el));
-                    }
-                });
-
-                _(data.newData.users).forEach(function(el) {
-                    var user;
-
-                    if (_this.users[el.id] === undefined) {
-                        user = new User(el);
-
-                        _this.addUser(user);
-
-                        // if user have ship
-                        if (el.shipId !== undefined) {
-                            user.setShip(_this.bodies[el.shipId]);
+            // new data
+            if (data[2]) {
+                if (data[2][0] !== 0) {
+                    _(data[2][0]).forEach(function (el) {
+                        if (_this.bodies[el[0]] === undefined) {
+                            _this.addBody(body.create(el));
                         }
-                    }
-                });
-            }
+                    });
+                }
+                if (data[2][1] !== 0) {
+                    _(data[2][1]).forEach(function (el) {
+                        var user;
 
-            if (data.removeData !== undefined) {
-                _(data.removeData.bodies).forEach(function(el) {
-                    // TODO: почему возникает?
-                    if (_this.bodies[el] !== undefined) {
-                        _this.bodies[el].destroy();
-                    } else {
-                        console.log('Error remove data ' + Date.now());
-                    }
-                });
+                        if (_this.users[el[0]] === undefined) {
+                            user = new User(el);
+
+                            _this.addUser(user);
+
+                            // if user have ship
+                            if (el[3]) {
+                                user.setShip(_this.bodies[el[3]]);
+                            }
+                        }
+                    });
+                }
+            }
+            // remove data
+            if (data[3]) {
+                if (data[3][0] !== 0) {
+                    _(data[3][0]).forEach(function (el) {
+                        if (_this.bodies[el] !== undefined) {
+                            _this.bodies[el].destroy();
+                        } else {
+                            console.log('Error remove data ' + el);
+                        }
+                    });
+                }
             }
         };
 
         game.updateFromDataServer = function(now) {
-            var _this = this;
-            var lastData;
+            var _this = this,
+                arrData, arrDataLen, lastData;
 
             if (this.dataFromServer.length > 0) {
                 // данные по времени пришедшие с сервера добавим в очередь
@@ -238,18 +243,17 @@ define(
                 this.dataFromServer = [];
             }
 
-            this.updateData = _.sortBy(this.updateData, 'time');
+            this.updateData = _.sortBy(this.updateData, 0);
             // формируем массив данных для обновления
-            var arrData = [];
+            arrData = [];
             _(this.updateData).forEach(function(el, i) {
-                if (el.time < now - _this.ping) {
+                if (el[0] < now - _this.ping) {
                     arrData.push(el);
-
-                    //console.log(now - _this.ping - el.time);
+                    //console.log(now - _this.ping - el[0);
                 }
             });
 
-            var arrDataLen = arrData.length;
+            arrDataLen = arrData.length;
             if (arrDataLen > 0) {
                 this.updateData = this.updateData.slice(arrDataLen);
                 _.forEach(arrData, function (data) {
@@ -257,21 +261,21 @@ define(
                 });
 
                 lastData = arrData[arrDataLen - 1];
-                _(lastData[0][0]).forEach(function (el) {
+                _(lastData[1][0]).forEach(function (el) {
                     if (_this.bodies[el[0]] !== undefined) {
-                        _this.bodies[el[0]].update(now, el);
+                        _this.bodies[el[0]].update(lastData[0], el);
                     }
                 });
 
-                this.lastGameStepTime = lastData.time + this.ping;
+                this.lastGameStepTime = lastData[0] + this.ping;
             }
         };
 
-        game.worldStep = function(currentTime) {
-            this.updateFromDataServer(currentTime);
+        game.worldStep = function(now) {
+            this.updateFromDataServer(now);
 
-            if (currentTime !== this.lastGameStepTime) {
-                this.world.step((currentTime - this.lastGameStepTime) / 1000);
+            if (now !== this.lastGameStepTime) {
+                this.world.step((now - this.lastGameStepTime) / 1000);
             }
         };
 
@@ -279,6 +283,7 @@ define(
             var _this = this;
             var i;
 
+            ping.on();
             this.serverSendStateInterval = options.game.sendStateInterval;
 
             this.world = new p2.World({
@@ -310,8 +315,8 @@ define(
                 _this.addUser(user);
 
                 // if user have ship
-                if (el.shipId !== undefined) {
-                    user.setShip(_this.bodies[el.shipId]);
+                if (el[3]) {
+                    user.setShip(_this.bodies[el[3]]);
                 }
             });
 
@@ -324,6 +329,7 @@ define(
         };
 
         game.update = function(now) {
+            this.ping = ping.get() / 2;
             this.camera.update();
 
             _(game.bodies).forEach(function(el) {

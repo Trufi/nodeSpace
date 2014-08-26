@@ -71,6 +71,8 @@ clients.initialize = function(socket) {
             if (client !== undefined) {
                 client.destroy();
             }
+
+            return;
         }
 
         client.activateGame();

@@ -385,7 +385,7 @@ define(
                 changeCamera();
             }
 
-            if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user.id] !== undefined) {
+            if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user[0]] !== undefined) {
                 this.next();
             }
         };

@@ -13,7 +13,7 @@ define(
 
         state.start = function(options) {
             // присваиваем User игроку
-            player.setUser(game.users[options.changeStatusData.user.id || options.user.id]);
+            player.setUser(game.users[options.changeStatusData.user[0] || options.user[0]]);
 
             game.camera.followTo(player.user.ship);
 
@@ -58,6 +58,7 @@ define(
 
             this.scrArrow.update();
             interface.bodyInfo.update();
+            debug.update();
         };
 
         state.render = function() {

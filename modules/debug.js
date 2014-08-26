@@ -1,3 +1,4 @@
+/*
 var debug = {};
 
 debug.pingOn = function(client) {
@@ -10,4 +11,4 @@ debug.pingOff = function(client) {
     client.socket.removeAllListeners('ping');
 };
 
-module.exports = debug;
+module.exports = debug;*/

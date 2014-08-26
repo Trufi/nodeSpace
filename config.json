@@ -25,5 +25,6 @@
     "users": {
         "limit": 20,
         "anonName": "Anon "
-    }
+    },
+    "bodies": {}
 }

@@ -60,7 +60,7 @@ Game.prototype.start = function() {
             el.update(now);
         });
 
-        _this.world.step((now - _this.lastTimeStep) / 1000);
+        _this.world.step((now + 1 - _this.lastTimeStep) / 1000);
 
         _this.sendState(now);
 
@@ -77,18 +77,24 @@ Game.prototype.sendState = function(now) {
         hasNew, hasRemove;
 
     function send(user) {
-        var gameState = {};
-        gameState[0] = _this.getGameState(user);
-        gameState.time = now;
+        var gameState = [];
+        gameState[0] = now;
+        gameState[1] = _this.getGameState(user);
 
+        // новые данные
         if (hasNew) {
-            gameState.newData = _this.getGameNewState(user);
+            gameState[2] = _this.getGameNewState(user);
+        } else {
+            gameState[2] = 0;
         }
 
+        // данные которые нужно удалить
         if (hasRemove) {
-            gameState.removeData = {
-                bodies: _this.removeBodies
-            };
+            gameState[3] = [
+                _this.removeBodies
+            ];
+        } else {
+            gameState[3] = 0;
         }
 
         //setTimeout(function() {
@@ -179,18 +185,17 @@ Game.prototype.getGameFirstState = function(user) {
 
 // данные о новых телах и пользователях
 Game.prototype.getGameNewState = function(user) {
-    var state = {};
+    var state = [];
 
-    state.bodies = [];
+    state[0] = [];
     _(this.newBodies).forEach(function(el) {
         var info = el.getFirstInfo();
         if (info !== undefined) {
-            state.bodies.push(info);
+            state[0].push(info);
         }
     });
 
-
-    state.users = _.map(this.newUsers, function(el) {
+    state[1] = _.map(this.newUsers, function(el) {
         return el.getFirstInfo();
     });
 

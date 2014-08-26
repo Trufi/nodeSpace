@@ -76,8 +76,8 @@ define(
         };
 
         request.ping = function(callback) {
-            socket.on('pingAnswer', callback);
-            socket.emit('ping');
+            socket.once(8, callback);
+            socket.emit(7);
         };
 
         return request;

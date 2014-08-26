@@ -2,6 +2,7 @@ var p2 = require('p2');
 var shapes = require('./shapes');
 var _ = require('lodash');
 var action = require('../actions/index');
+var config = require('config');
 
 // Класс простейшего тела
 var Body = function Body(options) {
@@ -47,8 +48,15 @@ Body.prototype.applyActions = function() {
 };
 
 Body.prototype.getFirstInfo = function() {
-    var info = this.getInfo();
+    var info = [];
+    info[0] = this.id;
     info[1] = this.type;
+    info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
+    info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
+    info[4] = Math.floor(this.body.angularVelocity * 100) / 100;
+    info[5] = Math.floor(this.body.angle * 100) / 100;
+    info[6] = this.actionsUsed;
+    info[7] = Math.floor(this.hp * 100) / 100;
     info[8] = this.body.mass;
 
     if (this.name !== undefined) {

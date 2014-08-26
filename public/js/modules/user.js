@@ -1,7 +1,7 @@
 define(
     function(require) {
         var User = function User(options) {
-            this.id = options.id;
+            this.id = options[0];
             this.ship;
             this.actions = {};
         };

@@ -5,7 +5,6 @@ var action = require('game/actions');
 var mongo = require('mongo');
 var ObjectID = require('mongodb').ObjectID;
 var log = require('modules/log')(module);
-var debug = require('modules/debug');
 var config = require('config');
 
 // В клиенте содержится сокет, игрок клиента, сессия и информация о ней
@@ -18,8 +17,6 @@ var Client = function(options) {
 
     this.socket = options.socket;
 
-    debug.pingOn(this);
-
     this.gameEnable = false;
     this.gameType;
     this.ship;
@@ -29,7 +26,7 @@ var Client = function(options) {
     this.actionsDone = [];
 };
 
-Client.prototype.applyDate = function(data) {
+Client.prototype.applyData = function(data) {
     this.gameType = data.gameType || 0;
     this.name = data.name || (config.users.anonName + ++mongo.usersCount);
     this.dbId = data._id;
@@ -75,11 +72,15 @@ Client.prototype.socketOn = function() {
     var _this = this;
     log.silly('Client socketOn, id: %s', this.id);
     this.socket
+        .removeAllListeners(5)
+        .removeAllListeners(7)
         .on(5, function(data) {
             _(data).forEach(function (el) {
                 _this.actionsDone.push(el);
-                //_this.action(el);
             });
+        })
+        .on(7, function() {
+            _this.socket.emit(8);
         });
 };
 
@@ -135,22 +136,21 @@ Client.prototype.getFirstState = function() {
 };
 
 Client.prototype.getInfo = function() {
-    var info = {};
-    info.id = this.id;
+    var info = [];
+    info[0] = this.id;
     return info;
 };
 
 Client.prototype.getFirstInfo = function() {
-    var info = {};
-
-    info.id = this.id;
+    var info = [];
+    info[0] = this.id;
 
     if (this.name !== undefined) {
-        info.type = 1;
-        info.name = this.name;
-        info.shipId = this.ship.id;
+        info[1] = 1; // type
+        info[2] = this.name;
+        info[3] = this.ship.id;
     } else {
-        info.type = 0;
+        info[1] = 0; // type
     }
 
     return info;
