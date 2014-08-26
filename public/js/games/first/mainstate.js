@@ -69,6 +69,18 @@ define(
 
         };
 
+        state.newData = function(data) {
+            _(data[1]).forEach(function(el) {
+                interface.bodyInfo.create({
+                    body: game.users[el[0]].ship
+                });
+            });
+        };
+
+        state.removeData = function(data) {
+
+        };
+
         return state;
     }
 );

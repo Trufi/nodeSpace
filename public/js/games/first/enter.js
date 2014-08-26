@@ -409,6 +409,10 @@ define(
             game.changeState(nextStage, options);
         };
 
+        state.newData = function() {};
+
+        state.removeData = function() {};
+
         return state;
     }
 );

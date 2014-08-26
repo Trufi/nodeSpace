@@ -220,6 +220,8 @@ define(
                         }
                     });
                 }
+
+                this.state.newData(data[2]);
             }
             // remove data
             if (data[3]) {
@@ -232,6 +234,8 @@ define(
                         }
                     });
                 }
+
+                this.state.removeData(data[2]);
             }
         };
 
@@ -251,7 +255,7 @@ define(
             _(this.updateData).forEach(function(el, i) {
                 if (el[0] < now - _this.ping) {
                     arrData.push(el);
-                    //console.log(now - _this.ping - el[0);
+                    //console.log(now - _this.ping - el[0]);
                 }
             });
 
