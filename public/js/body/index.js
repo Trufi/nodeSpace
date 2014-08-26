@@ -8,17 +8,17 @@ define(
         var exports = {};
 
         exports.create = function(options) {
-            var newBody;
+            var newBody, type;
 
-            options = options || {};
-            options.type = options.type || 0;
+            options = options || [];
+            type = options[1] || 2;
 
-            switch (options.type) {
-                case 0:
-                    newBody = new Rectangle(options);
-                    break;
+            switch (type) {
                 case 1:
                     newBody = new Asteroid(options);
+                    break;
+                case 2:
+                    newBody = new Rectangle(options);
                     break;
                 case 10:
                     newBody = new Ship(options);
@@ -26,6 +26,8 @@ define(
                 case 1000:
                     newBody = new Bullet(options);
                     break;
+                default:
+                    newBody = new Rectangle(options);
             }
 
             newBody.applyActions();

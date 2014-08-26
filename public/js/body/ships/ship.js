@@ -15,7 +15,7 @@ define(
 
             this.forceThrust = options.forceThrust || 10000;
             this.forceSide = options.forceSide || 500;
-            this.actionsArray = ['thrust', 'reverse', 'left', 'right', 'fire'];
+            this.actionsArray = [1, 2, 3, 4, 5];
         };
 
         utils.inherits(Ship, Body);
@@ -62,24 +62,24 @@ define(
             this.spriteSide[3] = createSideSprite(0, 10);
         };
 
-        Ship.prototype.updateSprite = function() {
+        Ship.prototype.updateSprite = function(now) {
             this.sprite.position.x = camera.x(this.body.position[0]);
             this.sprite.position.y = camera.y(this.body.position[1]);
             this.sprite.rotation = this.body.angle;
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
 
             // проверям actions
-            this.spriteThrust.visible = this.actions.thrust.isAnimate();
+            this.spriteThrust.visible = this.actions[1].isAnimate(now);
 
             this.spriteSide[0].visible = false;
             this.spriteSide[1].visible = false;
             this.spriteSide[2].visible = false;
             this.spriteSide[3].visible = false;
 
-            if (this.actions.left.isAnimate()) {
+            if (this.actions[3].isAnimate(now)) {
                 this.spriteSide[0].visible = true;
                 this.spriteSide[3].visible = true;
-            } else if (this.actions.right.isAnimate()) {
+            } else if (this.actions[4].isAnimate(now)) {
                 this.spriteSide[1].visible = true;
                 this.spriteSide[2].visible = true;
             }

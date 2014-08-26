@@ -53,4 +53,15 @@ Bullet.prototype.damage = function() {
     }
 };
 
+Bullet.prototype.getFirstInfo = function() {
+    var info = [];
+    info[0] = this.id;
+    info[1] = this.type;
+    info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
+    info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
+    return info;
+};
+
+Bullet.prototype.getInfo = function() {};
+
 module.exports = Bullet;

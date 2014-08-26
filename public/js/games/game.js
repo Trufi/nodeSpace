@@ -37,6 +37,9 @@ define(
         game.updateData = [];
         game.ping = 10;
 
+        // минимальный интервал через который сервер посылает данные
+        game.serverSendStateInterval = 0;
+
         // игровое состояние
         game.state;
 
@@ -46,25 +49,22 @@ define(
             if (!this.isEnable) return;
 
             var _this = this;
-            var currentTime = Date.now();
+            var now = Date.now();
 
-            //console.log(parseInt(1000 / (currentTime - this.lastGameStepTime), 10));
-
-            if (currentTime < this.lastGameStepTime) {
+            if (now < this.lastGameStepTime) {
                 return;
             }
 
             // шаг мира p2.js
-            //this.world.step((currentTime - this.lastGameStepTime) / 1000);
-            this.worldStep(currentTime);
+            this.worldStep(now);
 
             // производим различные действия для нового шага
-            this.update();
+            this.update(now);
 
             // отрисовываем сцену
             render.draw(this.stage);
 
-            this.lastGameStepTime = currentTime;
+            this.lastGameStepTime = now;
 
 
             requestAnimFrame(function() {
@@ -184,8 +184,14 @@ define(
         };
 
         // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
-        game.updateImportant = function(data) {
+        game.updateImportant = function(now, data) {
             var _this = this;
+
+            _(data[0][0]).forEach(function(el) {
+                if (_this.bodies[el[0]] !== undefined) {
+                    _this.bodies[el[0]].updateActions(now, el);
+                }
+            });
 
             if (data.newData !== undefined) {
                 _(data.newData.bodies).forEach(function(el) {
@@ -239,7 +245,7 @@ define(
                 if (el.time < now - _this.ping) {
                     arrData.push(el);
 
-                    console.log(now - _this.ping - el.time);
+                    //console.log(now - _this.ping - el.time);
                 }
             });
 
@@ -247,13 +253,13 @@ define(
             if (arrDataLen > 0) {
                 this.updateData = this.updateData.slice(arrDataLen);
                 _.forEach(arrData, function (data) {
-                    _this.updateImportant(data);
+                    _this.updateImportant(now, data);
                 });
 
                 lastData = arrData[arrDataLen - 1];
                 _(lastData[0][0]).forEach(function (el) {
                     if (_this.bodies[el[0]] !== undefined) {
-                        _this.bodies[el[0]].update(el);
+                        _this.bodies[el[0]].update(now, el);
                     }
                 });
 
@@ -272,6 +278,8 @@ define(
         game.start = function(options) {
             var _this = this;
             var i;
+
+            this.serverSendStateInterval = options.game.sendStateInterval;
 
             this.world = new p2.World({
                 gravity: options.game.world.gravity,
@@ -315,16 +323,16 @@ define(
             this.loop();
         };
 
-        game.update = function() {
+        game.update = function(now) {
             this.camera.update();
 
             _(game.bodies).forEach(function(el) {
-                el.updateSprite();
+                el.updateSprite(now);
             });
 
             this.updateBackground();
 
-            this.state.update();
+            this.state.update(now);
 
             player.sendActionToServer();
 

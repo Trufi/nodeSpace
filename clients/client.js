@@ -24,6 +24,9 @@ var Client = function(options) {
     this.gameType;
     this.ship;
     this.actions = {};
+
+    // здесь хранятся действия до следующего шага игры
+    this.actionsDone = [];
 };
 
 Client.prototype.applyDate = function(data) {
@@ -65,23 +68,34 @@ Client.prototype.activateGame = function() {
     }
 
     this.socketOn();
-    this.socket.emit('userFirstState', this.getFirstState());
+    this.socket.emit(2, this.getFirstState());
 };
 
 Client.prototype.socketOn = function() {
     var _this = this;
     log.silly('Client socketOn, id: %s', this.id);
     this.socket
-        .on('playerActions', function(data) {
+        .on(5, function(data) {
             _(data).forEach(function (el) {
-                _this.action(el);
+                _this.actionsDone.push(el);
+                //_this.action(el);
             });
         });
 };
 
-Client.prototype.action = function(name) {
+Client.prototype.updateActions = function(now) {
+    var _this = this;
+
+    _(this.actionsDone).forEach(function(el) {
+        _this.action(now, el);
+    });
+
+    this.actionsDone = [];
+};
+
+Client.prototype.action = function(now, name) {
     if (this.actions[name] !== undefined) {
-        this.actions[name].use();
+        this.actions[name].use(now);
     }
 };
 

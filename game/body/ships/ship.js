@@ -16,9 +16,7 @@ var Ship = function Ship(options) {
     this.hp = 100;
 
     // список доступных действий этого корабля
-    this.actionsArray = ['thrust', 'reverse', 'left', 'right', 'fire'];
-    // список использованный действий в шаге игры
-    this.actionsUsed = [];
+    this.actionsArray = [1, 2, 3, 4, 5];
 };
 
 utils.inherits(Ship, Body);

@@ -5,19 +5,19 @@ exports.create = function(options) {
     var newAction;
 
     switch (options.name) {
-        case 'thrust':
+        case 1:
             newAction = new Move(options);
             break;
-        case 'reverse':
+        case 2:
             newAction = new Move(options);
             break;
-        case 'left':
+        case 3:
             newAction = new Move(options);
             break;
-        case 'right':
+        case 4:
             newAction = new Move(options);
             break;
-        case 'fire':
+        case 5:
             newAction = new Fire(options);
             break;
     }

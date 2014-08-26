@@ -9,15 +9,15 @@ exports.create = function(options) {
     var newBody;
 
     options = options || {};
-    options.type = options.type || 0;
+    options.type = options.type || 2;
     options.id = ++idCounter;
 
     switch (options.type) {
-        case 0:
-            newBody = new Rectangle(options);
-            break;
         case 1:
             newBody = new Asteroid(options);
+            break;
+        case 2:
+            newBody = new Rectangle(options);
             break;
         case 10:
             newBody = new Ship(options);
@@ -25,6 +25,8 @@ exports.create = function(options) {
         case 1000:
             newBody = new Bullet(options);
             break;
+        default:
+            newBody = new Rectangle(options);
     }
 
     newBody.applyActions();

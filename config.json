@@ -17,9 +17,13 @@
         "host": "127.0.0.1",
         "port": 27017
     },
-    "actionsCooldown": 50,
+    "sendStateInterval": 50,
+    "actions": {
+        "cooldown": 50
+    },
     "waitingUsersLoad": 300000,
     "users": {
+        "limit": 20,
         "anonName": "Anon "
     }
 }

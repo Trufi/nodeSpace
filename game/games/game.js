@@ -2,13 +2,14 @@ var p2 = require('p2');
 var _ = require('lodash');
 
 var body = require('game/body');
+var config = require('config');
 
 var Game = function Game() {
     this.id = ++Game._idCounter;
 
     this.timeStep = 1 / 60;
 
-    this.sendStateInterval = 0;
+    this.sendStateInterval = config.sendStateInterval;
     this.sendStateLastTime = 0;
 
     this.gravity = [0, 0];
@@ -49,19 +50,21 @@ Game.prototype.start = function() {
     this.lastTimeStep = Date.now();
 
     this.interval = setInterval(function() {
-        var currentTimeStep = Date.now();
+        var now = Date.now();
 
-        _(_this.bodies).forEach(function(el) {
-            el.update(currentTimeStep);
+        _(_this.users).forEach(function(el) {
+            el.updateActions(now);
         });
 
-        _this.world.step((currentTimeStep - _this.lastTimeStep) / 1000);
+        _(_this.bodies).forEach(function(el) {
+            el.update(now);
+        });
 
-        _this.sendState(currentTimeStep);
+        _this.world.step((now - _this.lastTimeStep) / 1000);
 
-        _this.resetBodyUsedActions();
+        _this.sendState(now);
 
-        _this.lastTimeStep = currentTimeStep;
+        _this.lastTimeStep = now;
     }, 1000 * this.timeStep);
 };
 
@@ -89,7 +92,7 @@ Game.prototype.sendState = function(now) {
         }
 
         //setTimeout(function() {
-            user.send('updateGameState', gameState);
+            user.send(3, gameState);
         //}, Math.floor(Math.random() * 500));
     }
 
@@ -110,6 +113,8 @@ Game.prototype.sendState = function(now) {
         if (hasRemove) {
             this.removeBodies = [];
         }
+
+        _this.resetBodyUsedActions();
     }
 };
 
@@ -117,12 +122,20 @@ Game.prototype.sendState = function(now) {
 Game.prototype.getGameState = function(user) {
     var state = [];
 
-    state[0] = _.map(this.bodies, function(el) {
-        return el.getInfo();
+    state[0] = [];
+    _(this.bodies).forEach(function(el) {
+        var info = el.getInfo();
+        if (info !== undefined) {
+            state[0].push(info);
+        }
     });
 
-    state[1] = _.map(this.users, function(el) {
-        return el.getInfo();
+    state[1] = [];
+    _(this.users).forEach(function(el) {
+        var info = el.getInfo();
+        if (info !== undefined) {
+            state[1].push(info);
+        }
     });
 
     return state;
@@ -147,8 +160,14 @@ Game.prototype.getGameFirstState = function(user) {
     state.world.gravity = this.gravity;
     state.world.applyDamping = this.applyDamping;
 
-    state.bodies = _.map(this.bodies, function(el) {
-        return el.getFirstInfo();
+    state.sendStateInterval = this.sendStateInterval;
+
+    state.bodies = [];
+    _(this.bodies).forEach(function(el) {
+        var info = el.getFirstInfo();
+        if (info !== undefined) {
+            state.bodies.push(info);
+        }
     });
 
     state.users = _.map(this.users, function(el) {
@@ -162,9 +181,14 @@ Game.prototype.getGameFirstState = function(user) {
 Game.prototype.getGameNewState = function(user) {
     var state = {};
 
-    state.bodies = _.map(this.newBodies, function(el) {
-        return el.getFirstInfo();
+    state.bodies = [];
+    _(this.newBodies).forEach(function(el) {
+        var info = el.getFirstInfo();
+        if (info !== undefined) {
+            state.bodies.push(info);
+        }
     });
+
 
     state.users = _.map(this.newUsers, function(el) {
         return el.getFirstInfo();

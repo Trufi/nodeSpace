@@ -22,26 +22,26 @@ define(
             });
 
         request.gameInit = function(callback) {
-            socket.once('userFirstState', function (data) {
+            socket.once(2, function (data) {
                 callback(data);
             });
-            socket.emit('clientOnLoad');
+            socket.emit(1);
         };
 
         request.changeStatusToPlayer = function(callback) {
-            socket.once('changeStatusToPlayer', function(data) {
+            socket.once(6, function(data) {
                 callback(data);
             });
         };
 
         request.onUpdateGameState = function(callback) {
-            socket.on('updateGameState', function(data) {
+            socket.on(3, function(data) {
                 callback(data);
             });
         };
 
         request.sendToServer = function(data) {
-            socket.emit('playerActions', data);
+            socket.emit(5, data);
         };
 
         request.signUp = function(email, pass, callback) {

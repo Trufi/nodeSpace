@@ -4,6 +4,7 @@ var Action = require('./action');
 var Fire = function Fire(options) {
     Fire.super_.apply(this, arguments);
 
+    this.type = 5;
     this.cooldown = 50;
     this.ship = options.body;
 };
@@ -11,7 +12,7 @@ var Fire = function Fire(options) {
 utils.inherits(Fire, Action);
 
 Fire.prototype._run = function() {
-    this.ship.actionsUsed.push('fire');
+    this.ship.actionsUsed.push(this.type);
     this.ship.fire();
 };
 

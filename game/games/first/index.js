@@ -24,7 +24,7 @@ game.addBody(body.create({
 }));
 
 game.addBody(body.create({
-    type: 0,
+    type: 2,
     position: [10, 1000],
     velocity: [50, -150],
     angularVelocity: 0.5,

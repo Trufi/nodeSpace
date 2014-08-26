@@ -10,15 +10,15 @@ define(
 
         // Класс простейшего тела
         var Body = function Body(options) {
-            this.id = options.id;
-            this.type = options.type;
+            this.id = options[0];
+            this.type = options[1];
             this.body;
             this.sprite;
             this.spriteSize = 100;
             this.shape;
             this.game;
-            this.name = options.name || 'Unknown';
-            this.hp = options.hp;
+            this.name = options[9] || 'Unknown';
+            this.hp = options[7];
 
             this.actions = {};
             // список доступных действий этого корабля
@@ -27,13 +27,13 @@ define(
 
         Body.prototype.createBody = function(options) {
             this.body = new p2.Body({
-                mass: options.mass,
-                position: options.position,
-                velocity: options.velocity,
+                mass: options[8],
+                position: options[2],
+                velocity: options[3],
                 damping: 0,
-                angularVelocity: options.angularVelocity,
+                angularVelocity: options[4],
                 angularDamping: 0,
-                angle: options.angle
+                angle: options[5]
             });
 
             this.body._gameBody = this;
@@ -70,25 +70,27 @@ define(
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 
-        Body.prototype.update = function(data) {
+        Body.prototype.update = function(now, data) {
+            this.body.position[0] = data[2][0];
+            this.body.position[1] = data[2][1];
+            this.body.velocity[0] = data[3][0];
+            this.body.velocity[1] = data[3][1];
+            this.body.angularVelocity = data[4];
+            this.body.angle = data[5];
+            this.hp = data[7];
+        };
+
+        Body.prototype.updateActions = function(now, data) {
             var _this = this;
 
-            this.body.position[0] = data[1][0];
-            this.body.position[1] = data[1][1];
-            this.body.velocity[0] = data[2][0];
-            this.body.velocity[1] = data[2][1];
-            this.body.angularVelocity = data[3];
-            this.body.angle = data[4];
-
-            this.hp = data[6];
-            _(data[5]).forEach(function(el) {
-                _this.action(el);
+            _(data[6]).forEach(function(el) {
+                _this.action(now, el);
             });
         };
 
-        Body.prototype.action = function(name) {
+        Body.prototype.action = function(now, name) {
             if (this.actions[name] !== undefined) {
-                this.actions[name].use();
+                this.actions[name].use(now);
             }
         };
 

@@ -58,7 +58,7 @@ module.exports = function (clients) {
         game.removeSpectator(client);
         game.addPlayer(client);
 
-        client.send('changeStatusToPlayer', client.getFirstState());
+        client.send(6, client.getFirstState());
 
         client.session.name = client.name;
         sessionStore.set(client.sid, client.session, function(err) {

@@ -10,7 +10,7 @@ var Body = function Body(options) {
     this.body;
     this.texture;
     this.game;
-    this.name = options.name || 'Unknown';
+    this.name = options.name;
     this.hp = 0;
 
     this.actions = {};
@@ -47,49 +47,30 @@ Body.prototype.applyActions = function() {
 };
 
 Body.prototype.getFirstInfo = function() {
-    return {
-        type: this.type,
-        mass: this.body.mass,
-        position: [
-            this.body.position[0],
-            this.body.position[1]
-        ],
-        velocity: [
-            this.body.velocity[0],
-            this.body.velocity[1]
-        ],
-        angularVelocity: this.body.angularVelocity,
-        angle: this.body.angle,
-        id: this.id,
-        hp: this.hp,
-        name: this.name
-    };
+    var info = this.getInfo();
+    info[1] = this.type;
+    info[8] = this.body.mass;
+
+    if (this.name !== undefined) {
+        info[9] = this.name;
+    }
+
+    return info;
 };
 
 Body.prototype.getInfo = function() {
-/*    return {
-        position: [
-            this.body.position[0],
-            this.body.position[1]
-        ],
-        velocity: [
-            this.body.velocity[0],
-            this.body.velocity[1]
-        ],
-        angularVelocity: this.body.angularVelocity,
-        angle: this.body.angle,
-        id: this.id,
-        actionsUsed: this.actionsUsed,
-        hp: this.hp
-    };*/
     var info = [];
     info[0] = this.id;
-    info[1] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
-    info[2] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
-    info[3] = Math.floor(this.body.angularVelocity * 100) / 100;
-    info[4] = Math.floor(this.body.angle * 100) / 100;
-    info[5] = this.actionsUsed;
-    info[6] = Math.floor(this.hp * 100) / 100;
+
+    // в firstInfo это this.type
+    info[1] = 0;
+
+    info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
+    info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
+    info[4] = Math.floor(this.body.angularVelocity * 100) / 100;
+    info[5] = Math.floor(this.body.angle * 100) / 100;
+    info[6] = this.actionsUsed;
+    info[7] = Math.floor(this.hp * 100) / 100;
     return info;
 };
 

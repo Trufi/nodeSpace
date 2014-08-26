@@ -19,8 +19,8 @@ define(
             });
         };
 
-        player.action = function(name) {
-            this.actions[name].check();
+        player.action = function(now, name) {
+            this.actions[name].check(now);
         };
 
         player.sendActionToServer = function() {

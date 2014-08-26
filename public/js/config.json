@@ -3,7 +3,10 @@
     "socketHost2": "http://192.168.0.4",
     "gameHtmlWrapId": "gamewrap",
     "pathToAssets": "/img/",
-    "actionsCooldown": 50,
+    "serverSendStateInterval": 50,
+    "actions": {
+        "cooldown": 50
+    },
     "buttonFontFamily": "Arial",
     "buttonFontWeight": "normal",
     "interface": {

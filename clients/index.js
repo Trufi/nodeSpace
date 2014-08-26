@@ -57,7 +57,8 @@ clients.initialize = function(socket) {
             var timeout = setTimeout(function() {
                 callback(new Error('User load timeout'));
             }, config.waitingUsersLoad);
-            socket.once('clientOnLoad', function() {
+
+            socket.once(1, function() {
                 clearTimeout(timeout);
                 log.silly('Client onload');
                 callback(null, null);

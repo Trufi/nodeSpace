@@ -31,7 +31,7 @@ define(
             debug.pingOn();
         };
 
-        state.update = function() {
+        state.update = function(now) {
             if (key.pressed.WHEELDOWN) {
                 game.camera.zoomOut();
             } else if (key.pressed.WHEELUP) {
@@ -39,21 +39,21 @@ define(
             }
 
             if (key.down.W) {
-                player.action('thrust');
+                player.action(now, 1);
             } else if (key.down.S) {
-                player.action('reverse');
+                player.action(now, 2);
             }
 
             if (key.down.A) {
-                player.action('left');
+                player.action(now, 3);
             } else if (key.down.D) {
-                player.action('right');
+                player.action(now, 4);
             } else if (!key.down.CTRL) {
                 // TODO: торможение
             }
 
             if (key.down.SPACE) {
-                player.action('fire');
+                player.action(now, 5);
             }
 
             this.scrArrow.update();
