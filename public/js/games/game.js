@@ -14,6 +14,7 @@ define(
         var player = require('modules/player');
         var body = require('body/index');
         var ping = require('modules/ping');
+        var background = require('modules/background');
 
         var game = {};
 
@@ -95,81 +96,6 @@ define(
             body.removeFromGame();
         };
 
-        game.createBackground = function(texture) {
-            this.background = [];
-
-            var scale = this.camera.scale;
-            this.background[0] = new PIXI.TilingSprite(assets.texture.bg_0, render.resolution[0] / scale, render.resolution[1] / scale);
-            this.background[0].position.x = 0;
-            this.background[0].position.y = 0;
-            this.background[0].tilePosition.x = 0;
-            this.background[0].tilePosition.y = 0;
-            //this.background[0].scale = new PIXI.Point(scale, scale);
-            this.layers[0].addChild(this.background[0]);
-
-            this.background[1] = new PIXI.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
-            this.background[1].position.x = 0;
-            this.background[1].position.y = 0;
-            this.background[1].tilePosition.x = 0;
-            this.background[1].tilePosition.y = 0;
-            //this.background[1].scale = new PIXI.Point(scale, scale);
-            this.layers[0].addChild(this.background[1]);
-
-            this.background[2] = new PIXI.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
-            this.background[2].position.x = 0;
-            this.background[2].position.y = 0;
-            this.background[2].tilePosition.x = 0;
-            this.background[2].tilePosition.y = 0;
-            this.background[2].scale = new PIXI.Point(scale, scale);
-            this.layers[0].addChild(this.background[2]);
-
-            this.background[3] = new PIXI.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
-            this.background[3].position.x = 0;
-            this.background[3].position.y = 0;
-            this.background[3].tilePosition.x = 0;
-            this.background[3].tilePosition.y = 0;
-            this.background[3].scale = new PIXI.Point(scale, scale);
-            this.layers[0].addChild(this.background[3]);
-        };
-
-        game.updateBackground = function() {
-            var bgSc = 0.05;
-            var scale = 1 + bgSc * (this.camera.scale - 1);
-            this.background[0].width = render.resolution[0] / scale;
-            this.background[0].height = render.resolution[1] / scale;
-            this.background[0].scale = new PIXI.Point(scale, scale);
-            this.background[0].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2  - this.camera.position[0] * bgSc;
-            this.background[0].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2  - this.camera.position[1] * bgSc;
-
-            bgSc = 0.1;
-            scale = 1 + bgSc * (this.camera.scale - 1);
-            this.background[1].width = render.resolution[0] / scale;
-            this.background[1].height = render.resolution[1] / scale;
-            this.background[1].scale = new PIXI.Point(scale, scale);
-            this.background[1].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2 - this.camera.position[0] * bgSc;
-            this.background[1].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2 - this.camera.position[1] * bgSc;
-
-            bgSc = 0.2;
-            scale = 1 + bgSc * (this.camera.scale - 1);
-            this.background[2].width = render.resolution[0] / scale;
-            this.background[2].height = render.resolution[1] / scale;
-            this.background[2].scale = new PIXI.Point(scale, scale);
-            this.background[2].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2  - this.camera.position[0] * bgSc;
-            this.background[2].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2  - this.camera.position[1] * bgSc;
-
-            scale = this.camera.scale;
-            if (scale > 0.47) {
-                this.background[3].width = render.resolution[0] / scale;
-                this.background[3].height = render.resolution[1] / scale;
-                this.background[3].scale = new PIXI.Point(scale, scale);
-                this.background[3].tilePosition.x = render.resolution[0] * (1 / scale - 1) / 2 - this.camera.position[0];
-                this.background[3].tilePosition.y = render.resolution[1] * (1 / scale - 1) / 2 - this.camera.position[1];
-                this.background[3].visible = true;
-            } else {
-                this.background[3].visible = false;
-            }
-        };
-
         game.load = function(options, callback) {
             this.lastGameStepTime = Date.now();
 
@@ -241,7 +167,7 @@ define(
 
         game.updateFromDataServer = function(now) {
             var _this = this,
-                arrData, arrDataLen, lastData;
+                arrData, arrDataLen, lastData, dt;
 
             if (this.dataFromServer.length > 0) {
                 // данные по времени пришедшие с сервера добавим в очередь
@@ -267,6 +193,12 @@ define(
                 });
 
                 lastData = arrData[arrDataLen - 1];
+
+                dt = (lastData[0] + this.ping - this.lastGameStepTime) / 1000;
+                if (dt > 0) {
+                    this.world.step((lastData[0] + this.ping - this.lastGameStepTime) / 1000);
+                }
+
                 _(lastData[1][0]).forEach(function (el) {
                     if (_this.bodies[el[0]] !== undefined) {
                         _this.bodies[el[0]].update(lastData[0], el);
@@ -278,6 +210,9 @@ define(
         };
 
         game.worldStep = function(now) {
+            // world step до времени последней информации с сервера
+            // синхронизируем с посленей информацией
+            // делаем степ до конца
             this.updateFromDataServer(now);
 
             if (now !== this.lastGameStepTime) {
@@ -308,7 +243,7 @@ define(
             camera.set(this.camera);
 
             // create background
-            this.createBackground(assets.texture.background);
+            background.create(this);
 
             // создаем объекты в космосе
             _(options.game.bodies).forEach(function(el) {
@@ -342,7 +277,7 @@ define(
                 el.updateSprite(now);
             });
 
-            this.updateBackground();
+            background.update();
 
             this.state.update(now);
 

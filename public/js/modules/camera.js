@@ -116,6 +116,10 @@ define(
             return enableCamera.scale;
         };
 
+        camera.position = function() {
+            return enableCamera.position;
+        };
+
         return camera;
     }
 );
