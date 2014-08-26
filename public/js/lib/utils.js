@@ -15,6 +15,10 @@ define(
             });
         };
 
+        utils.resetAngle = function(angle) {
+            return angle - Math.PI * 2 * Math.floor(angle / (Math.PI * 2));
+        };
+
         return utils;
     }
 );

@@ -11,7 +11,8 @@ require.config({
         games: '../games',
         main: '../main',
         actions: '../actions',
-        interface: '../interface'
+        interface: '../interface',
+        weapons: '../weapons'
     }
 });
 

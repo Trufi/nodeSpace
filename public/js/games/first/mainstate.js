@@ -56,6 +56,7 @@ define(
                 player.action(now, 5);
             }
 
+            player.user.ship.weaponsGoto(game.stage.getMousePosition());
             this.scrArrow.update();
             interface.bodyInfo.update();
             debug.update();

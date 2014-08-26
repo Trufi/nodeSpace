@@ -120,6 +120,14 @@ define(
             return enableCamera.position;
         };
 
+        camera.width = function() {
+            return enableCamera.width
+        };
+
+        camera.height = function() {
+            return enableCamera.height
+        };
+
         return camera;
     }
 );
