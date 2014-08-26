@@ -180,13 +180,15 @@ define(
             var _this = this;
 
             request.onUpdateGameState(function(data) {
+                data[0] += ping.dt();
                 _this.dataFromServer.push(data);
             });
         };
 
         // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
-        game.updateImportant = function(now, data) {
-            var _this = this;
+        game.updateImportant = function(data) {
+            var _this = this,
+                now = data[0] + this.ping;
             // actions data
             _(data[1][0]).forEach(function(el) {
                 if (_this.bodies[el[0]] !== undefined) {
@@ -257,7 +259,7 @@ define(
             if (arrDataLen > 0) {
                 this.updateData = this.updateData.slice(arrDataLen);
                 _.forEach(arrData, function (data) {
-                    _this.updateImportant(now, data);
+                    _this.updateImportant(data);
                 });
 
                 lastData = arrData[arrDataLen - 1];

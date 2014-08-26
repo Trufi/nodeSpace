@@ -90,8 +90,8 @@ Ship.prototype.fire = function() {
 };
 
 Ship.prototype.damage = function(addDamage) {
-    addDamage = addDamage || 1;
-    var damage = addDamage * Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 1000;
+    addDamage = addDamage || 0;
+    var damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
     this.hp = this.hp - damage;
 };
 

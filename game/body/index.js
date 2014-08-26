@@ -38,13 +38,13 @@ exports.create = function(options) {
 
 exports.collide = function(a, b) {
     if (a instanceof Bullet) {
-        b.damage(a.addDamage);
+        b.damage(a.addDamage());
     } else {
         b.damage();
     }
 
     if (b instanceof Bullet) {
-        a.damage(b.addDamage);
+        a.damage(b.addDamage());
     } else {
         a.damage();
     }

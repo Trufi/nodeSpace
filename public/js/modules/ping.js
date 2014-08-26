@@ -1,5 +1,6 @@
 define(
     function(require) {
+        var _ = require('lodash');
         var request = require('modules/request');
 
         var ping = {};
@@ -10,13 +11,34 @@ define(
         var sendTime = Date.now();
 
         function approxPing(time) {
-            value = (value + time) / 2;
+            value = Math.round((value + time) / 2);
+        }
+
+        var lastDiffs = [];
+        var diffWithServer = 0;
+        function approxDiffWithServerTime(clientTime, serverTime, dt) {
+            var sum = 0,
+                length = lastDiffs.length,
+                currentDiff = clientTime + dt / 2 - serverTime,
+                diff;
+
+            _(lastDiffs).forEach(function(el) {
+                sum += el;
+            });
+            diff = Math.round((sum + currentDiff) / (length + 1));
+            lastDiffs.push(currentDiff);
+
+            lastDiffs = lastDiffs.slice(-10);
+            diffWithServer = diff;
         }
 
         function checkPing() {
             sendTime = Date.now();
-            request.ping(function() {
-                approxPing(Date.now() - sendTime);
+            request.ping(function(serverTime) {
+                var now = Date.now();
+
+                approxPing(now - sendTime);
+                approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
                 setTimeout(checkPing, pingTimeInterval);
             });
         }
@@ -27,7 +49,11 @@ define(
         };
 
         ping.get = function() {
-            return Math.floor(value);
+            return value;
+        };
+
+        ping.dt = function() {
+            return diffWithServer;
         };
 
         return ping;

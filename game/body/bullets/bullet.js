@@ -7,7 +7,7 @@ var Bullet = function Bullet(options) {
     Bullet.super_.apply(this, arguments);
 
     this.timeLive = 5000;
-    this.addDamage = 500;
+    this.damageValue = 5;
     this.reflectAngle = 0.8;
     this.timeCreate;
 };
@@ -43,14 +43,20 @@ Bullet.prototype.update = function(now) {
     }
 };
 
-Bullet.prototype.damage = function() {
+Bullet.prototype.damage = function() {};
+
+Bullet.prototype.addDamage = function() {
     var v2 = [this.body.velocity[0], this.body.velocity[1]],
         v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
-        a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1]))));
+        a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
+        damage = 0;
 
     if (a > this.reflectAngle) {
         this.destroy();
+        damage = this.damageValue;
     }
+
+    return damage;
 };
 
 Bullet.prototype.getFirstInfo = function() {

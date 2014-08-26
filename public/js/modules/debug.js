@@ -8,7 +8,8 @@ define(
 
         var debug = {};
 
-        var pingText;
+        var pingText,
+            dtText;
 
         debug.pingOn = function() {
             pingText = new PIXI.Text(ping.get() + 'ms', {
@@ -18,6 +19,14 @@ define(
             pingText.position.x = 10;
             pingText.position.y = 10;
             game.layers[4].addChild(pingText);
+
+            dtText = new PIXI.Text(ping.get() + 'ms', {
+                font: 'normal 18px Arial',
+                fill: '#fff'
+            });
+            dtText.position.x = 10;
+            dtText.position.y = 40;
+            game.layers[4].addChild(dtText);
         };
 
         debug.pingOff = function() {
@@ -28,6 +37,9 @@ define(
         debug.update = function() {
             if (pingText !== undefined) {
                 pingText.setText(ping.get() + 'ms');
+            }
+            if (dtText !== undefined) {
+                dtText.setText('dt: ' + ping.dt());
             }
         };
 

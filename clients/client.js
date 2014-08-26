@@ -80,7 +80,7 @@ Client.prototype.socketOn = function() {
             });
         })
         .on(7, function() {
-            _this.socket.emit(8);
+            _this.socket.emit(8, Date.now());
         });
 };
 
