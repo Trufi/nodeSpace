@@ -2,9 +2,9 @@
 // Не класс!
 define(
     function(require) {
-        var p2 = require('p2');
         var PIXI = require('pixi');
         var _ = require('lodash');
+        var p2 = require('p2');
         var camera = require('modules/camera');
         var render = require('modules/render');
         var assets = require('modules/assets');
@@ -15,6 +15,7 @@ define(
         var body = require('body/index');
         var ping = require('modules/ping');
         var background = require('modules/background');
+        var step = require('modules/step');
 
         var game = {};
 
@@ -196,7 +197,8 @@ define(
 
                 dt = (lastData[0] + this.ping - this.lastGameStepTime) / 1000;
                 if (dt > 0) {
-                    this.world.step((lastData[0] + this.ping - this.lastGameStepTime) / 1000);
+                    this.world.step(dt);
+                    step.go(dt);
                 }
 
                 _(lastData[1][0]).forEach(function (el) {
@@ -210,13 +212,16 @@ define(
         };
 
         game.worldStep = function(now) {
+            var dt;
             // world step до времени последней информации с сервера
             // синхронизируем с посленей информацией
             // делаем степ до конца
             this.updateFromDataServer(now);
 
-            if (now !== this.lastGameStepTime) {
-                this.world.step((now - this.lastGameStepTime) / 1000);
+            dt = (now - this.lastGameStepTime) / 1000;
+            if (dt !== 0) {
+                this.world.step(dt);
+                step.go(dt);
             }
         };
 

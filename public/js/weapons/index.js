@@ -1,34 +1,29 @@
 define(
     function(require) {
         var PIXI = require('pixi');
-        var p2 = require('p2');
-        var util = require('utils');
+        var _ = require('lodash');
         var assets = require('modules/assets');
         var render = require('modules/render');
+        var camera = require('modules/camera');
 
         var weapons = {};
         var idCounter = 1;
-        //weapons.list = {};
+
+        function resetAngle(angle) {
+            var sign = angle > 0 ? 1 : -1;
+            return sign * ((Math.abs(angle) + Math.PI) % (Math.PI * 2) - Math.PI);
+        }
 
         var Weapon = function Weapon(options) {
             this.id = options.id;
 
-            this.angularSpeed = options.angularSpeed || 5;
-            //this.toAngle = options.angle || 0;
-            this.relativePosition = options.relativePosition || [0, 0];
+            this.parent = options.parent;
+            this.angularVelocity = options.angularVelocity || 5;
+            this.toAngle = options.angle || 0;
+            this.position = options.position || [0, 0];
 
             this.radius = 200;
-
-            this.body = new p2.Body({
-                mass: 1,
-                position: [0, 0],
-                velocity: [0, 0],
-                damping: 0,
-                angularDamping: 0,
-                angle: options.angle || 0.5,
-                angularVelocity: 0
-            });
-            this.body.addShape(new p2.Circle(0));
+            this.angle = 0;
 
             this.sprite = new PIXI.Sprite(assets.texture.debug);
             this.sprite.width = 10;
@@ -39,31 +34,51 @@ define(
             this.sprite.position.y = -100;
         };
 
-        Weapon.prototype.gotoAngle = function(angle, parentAngle) {
-            var toAngle = util.resetAngle(angle - this.body.angle);
-            if (toAngle <= Math.PI) {
-                this.body.angularVelocity = this.angularSpeed;
+        Weapon.prototype.step = function(dt) {
+            var dAngle = this.angularVelocity * dt,
+                angleNeed = resetAngle(this.angle - this.toAngle),
+                sign = angleNeed > 0 ? 1 : -1;
+
+            angleNeed = Math.abs(angleNeed);
+
+            if (angleNeed < dAngle) {
+                this.angle = this.toAngle;
             } else {
-                this.body.angularVelocity = -this.angularSpeed;
+                if (angleNeed < Math.PI * 2 - angleNeed) {
+                    this.angle = this.angle - sign * dAngle;
+                } else {
+                    this.angle = this.angle + sign * dAngle;
+                }
+            }
+        };
+
+        Weapon.prototype.updateSprite = function() {
+            var angle = this.angle,
+                angleNeed = Math.abs(resetAngle(angle - this.toAngle));
+
+            if (angleNeed < Math.PI / 16) {
+                angle = this.toAngle;
             }
 
-            if (toAngle < Math.PI / 10) {
-                this.body.angularVelocity = 0;
-                this.body.angle = angle;
-            }
+            this.sprite.position.x = this.radius * Math.cos(angle + this.parent.body.angle) + render.resolution[0] / 2;
+            this.sprite.position.y = this.radius * Math.sin(angle + this.parent.body.angle) + render.resolution[1] / 2;
+        };
 
-            this.sprite.position.x = this.radius * Math.cos(this.body.angle + parentAngle) + render.resolution[0] / 2;
-            this.sprite.position.y = this.radius * Math.sin(this.body.angle + parentAngle) + render.resolution[1] / 2;
+        Weapon.prototype.goto = function(point) {
+            var pointPos = [point.x - render.resolution[0] / 2, point.y - render.resolution[1] / 2],
+                parentAngle = this.parent.body.angle,
+                weaponPos = [this.position[0] * Math.cos(parentAngle) * camera.scale(), this.position[1] * Math.sin(parentAngle) * camera.scale()];
+
+            this.toAngle = Math.atan2((pointPos[1] - weaponPos[1]), (pointPos[0] - weaponPos[0])) - parentAngle;
+
+            this.updateSprite();
         };
 
         weapons.create = function(options) {
-            var weapon;
-
             options = options || {};
             options.id = idCounter++;
 
-            weapon = new Weapon(options);
-            return weapon;
+            return new Weapon(options);
         };
 
         return weapons;

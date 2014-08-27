@@ -10,8 +10,7 @@ define(
         var camera = require('modules/camera');
         var mask = require('../mask');
         var weapons = require('weapons/index');
-        var render = require('modules/render');
-        var util = require('utils');
+        var step = require('modules/step');
 
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
@@ -26,37 +25,21 @@ define(
         utils.inherits(Ship, Body);
 
         Ship.prototype.applyWeapons = function() {
-            var weapon = weapons.create({
-                relativePosition: [-10, 5]
+            this.weapons[0] = weapons.create({
+                position: [-10, 0],
+                parent: this
             });
 
-            this.weapons[0] = weapon;
-
-           /* weapon = weapons.create({
-                relativePosition: [10, 5]
+            this.weapons[1] = weapons.create({
+                position: [10, 0],
+                parent: this
             });
-
-            this.weapons[1] = weapon;*/
         };
 
         Ship.prototype.weaponsGoto = function(point) {
-            var pointPos,
-                bodyAngle = util.resetAngle(this.body.angle);
-
-            if (point.x !== 0) {
-                pointPos = [point.x - render.resolution[0] / 2, point.y - render.resolution[1] / 2];
-
-                _(this.weapons).forEach(function (el) {
-                    var weaponPos,
-                        angle;
-
-                    weaponPos = [el.relativePosition[0] * Math.cos(bodyAngle), el.relativePosition[1] * Math.sin(bodyAngle)];
-                    angle = Math.atan2((pointPos[1] - weaponPos[1]), (pointPos[0] - weaponPos[0])) - bodyAngle;
-
-                    angle = util.resetAngle(angle);
-                    el.gotoAngle(angle, bodyAngle);
-                });
-            }
+            _(this.weapons).forEach(function (el) {
+                el.goto(point);
+            });
         };
 
         Ship.prototype.applyShape = function() {
@@ -130,7 +113,7 @@ define(
             game.world.addBody(this.body);
 
             _(this.weapons).forEach(function(el) {
-                game.world.addBody(el.body);
+                step.addWeapon(el);
                 game.layers[4].addChild(el.sprite);
             });
 

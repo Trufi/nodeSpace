@@ -2,7 +2,7 @@ define(
     function() {
         var utils = {};
 
-        // взято из node.js
+        // взято из node.js (ECMAScript5)
         utils.inherits = function(ctor, superCtor) {
             ctor.super_ = superCtor;
             ctor.prototype = Object.create(superCtor.prototype, {
@@ -13,10 +13,6 @@ define(
                     configurable: true
                 }
             });
-        };
-
-        utils.resetAngle = function(angle) {
-            return angle - Math.PI * 2 * Math.floor(angle / (Math.PI * 2));
         };
 
         return utils;
