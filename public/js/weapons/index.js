@@ -1,3 +1,5 @@
+
+var DEBUG;
 define(
     function(require) {
         var PIXI = require('pixi');
@@ -63,15 +65,23 @@ define(
             this.sprite.position.x = this.radius * Math.cos(angle + this.parent.body.angle) + render.resolution[0] / 2;
             this.sprite.position.y = this.radius * Math.sin(angle + this.parent.body.angle) + render.resolution[1] / 2;
         };
-
         Weapon.prototype.goto = function(point) {
             var pointPos = [point.x - render.resolution[0] / 2, point.y - render.resolution[1] / 2],
                 parentAngle = this.parent.body.angle,
-                weaponPos = [this.position[0] * Math.cos(parentAngle) * camera.scale(), this.position[1] * Math.sin(parentAngle) * camera.scale()];
+                weaponPos = [
+                    this.position[0] * Math.cos(parentAngle) - this.position[1] * Math.sin(parentAngle),
+                    this.position[0] * Math.sin(parentAngle) + this.position[1] * Math.cos(parentAngle)
+                ];
+
+            weaponPos = [weaponPos[0] * camera.scale(), weaponPos[1] * camera.scale()];
 
             this.toAngle = Math.atan2((pointPos[1] - weaponPos[1]), (pointPos[0] - weaponPos[0])) - parentAngle;
 
             this.updateSprite();
+        };
+
+        Weapon.prototype.getAngle = function() {
+            return this.angle;
         };
 
         weapons.create = function(options) {
