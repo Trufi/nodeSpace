@@ -39,7 +39,7 @@ define(
                 pingText.setText(ping.get() + 'ms');
             }
             if (dtText !== undefined) {
-                dtText.setText('dt: ' + ping.dt());
+                dtText.setText('dt: ' + (Math.floor(ping.dt() * 1000) / 1000));
             }
         };
 

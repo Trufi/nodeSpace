@@ -14,22 +14,12 @@ define(
             value = Math.round((value + time) / 2);
         }
 
-        var lastDiffs = [];
-        var diffWithServer = 0;
+        var lastDiffs = 0;
+        var numderOfLastDiffs = 0;
         function approxDiffWithServerTime(clientTime, serverTime, dt) {
-            var sum = 0,
-                length = lastDiffs.length,
-                currentDiff = clientTime + dt / 2 - serverTime,
-                diff;
-
-            _(lastDiffs).forEach(function(el) {
-                sum += el;
-            });
-            diff = Math.round((sum + currentDiff) / (length + 1));
-            lastDiffs.push(currentDiff);
-
-            lastDiffs = lastDiffs.slice(-10);
-            diffWithServer = diff;
+            var currentDiff = clientTime + dt / 2 - serverTime;
+            lastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
+            numderOfLastDiffs += 1;
         }
 
         function checkPing() {
@@ -53,7 +43,7 @@ define(
         };
 
         ping.dt = function() {
-            return diffWithServer;
+            return lastDiffs;
         };
 
         return ping;
