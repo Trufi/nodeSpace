@@ -53,7 +53,7 @@ define(
                 // TODO: торможение
             }
 
-            if (key.down.SPACE) {
+            if (key.down.MOUSELEFT) {
                 player.action(now, 5);
             }
 

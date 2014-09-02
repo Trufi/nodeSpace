@@ -37,7 +37,8 @@ define(
             46: 'DELETE',
             35: 'END',
             36: 'HOME',
-            9: 'TAB'
+            9: 'TAB',
+            'MOUSELEFT': 'MOUSELEFT'
         };
 
         // кнопки которые блокируют действия браузера
@@ -101,6 +102,14 @@ define(
             } else {
                 keyPressed['WHEELDOWN'] = true;
             }
+        });
+
+        window.addEventListener('mousedown', function(ev) {
+            keyDown.MOUSELEFT = true;
+        });
+
+        window.addEventListener('mouseup', function(ev) {
+            keyDown.MOUSELEFT = false;
         });
 
         key.pressed = keyPressed;
