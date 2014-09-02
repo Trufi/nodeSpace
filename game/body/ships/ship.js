@@ -123,16 +123,18 @@ Ship.prototype.damage = function(bodyB) {
     if (bodyB instanceof Bullet) {
         if (bodyB.parent.id !== this.id) {
             addDamage = bodyB.addDamage();
+            damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
             bodyB.checkForDestroyAfterCollide();
         } else {
-            addDamage = 0;
+            damage = 0;
         }
     } else {
         addDamage = bodyB.addDamage();
+        damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
         bodyB.checkForDestroyAfterCollide();
     }
 
-    damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
+
     this.hp = this.hp - damage;
 };
 
