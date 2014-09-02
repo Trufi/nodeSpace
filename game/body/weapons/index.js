@@ -26,7 +26,7 @@ Weapon.prototype.checkAngle = function(now, angle) {
     if (dAngle <= mbAngle) {
         return true;
     } else {
-        log.warn('dAngle > mbAngle, %s > %s', dAngle, mbAngle);
+        log.warn('dAngle > mbAngle, %s > %s, bodyName: %s, bodyId: %s', dAngle, mbAngle, this.parent.name, this.parent.id);
         return false;
     }
 };
