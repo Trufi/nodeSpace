@@ -31,6 +31,7 @@ define(
             this.shape = new p2.Circle(1);
             this.shape.collisionGroup = mask.BULLET;
             this.shape.collisionMask = mask.BODY | mask.SHIP;
+            this.shape.sensor = true;
             this.body.addShape(this.shape);
         };
 

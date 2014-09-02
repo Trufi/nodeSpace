@@ -8,9 +8,9 @@ var Action = function Action(options) {
 
 Action.prototype._run = function() {};
 
-Action.prototype.use = function(now) {
+Action.prototype.use = function(now, options) {
     if (now - this.lastTimeUsed > this.cooldown) {
-        this._run();
+        this._run(options);
         this.lastTimeUsed = now;
     } else {
         return false;

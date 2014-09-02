@@ -29,23 +29,24 @@ exports.create = function(options) {
             newBody = new Rectangle(options);
     }
 
-    newBody.applyActions();
     newBody.createBody(options);
     newBody.applyShape();
+    newBody.applyActions();
 
     return newBody;
 };
 
 exports.collide = function(a, b) {
+    b.damage(a);
+    a.damage(b);
+};
+
+exports.beginContact = function(a, b) {
     if (a instanceof Bullet) {
-        b.damage(a.addDamage());
-    } else {
-        b.damage();
+        b.damage(a);
     }
 
     if (b instanceof Bullet) {
-        a.damage(b.addDamage());
-    } else {
-        a.damage();
+        a.damage(b);
     }
 };

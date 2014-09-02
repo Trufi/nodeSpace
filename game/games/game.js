@@ -39,7 +39,7 @@ var Game = function Game() {
         applyDamping: this.applyDamping
     });
 
-    this.world.on('impact', this.impactEvent);
+    this.impactEvents();
 };
 
 Game._idCounter = 0;
@@ -264,8 +264,15 @@ Game.prototype.close = function() {
     // TODO: доделать
 };
 
-Game.prototype.impactEvent = function(ev) {
-    body.collide(ev.bodyA._gameBody, ev.bodyB._gameBody);
+Game.prototype.impactEvents = function() {
+    this.world.on('impact', function(ev) {
+        body.collide(ev.bodyA._gameBody, ev.bodyB._gameBody);
+    });
+
+    this.world.on('beginContact', function(ev) {
+        body.beginContact(ev.bodyA._gameBody, ev.bodyB._gameBody);
+    });
 };
+
 
 module.exports = Game;

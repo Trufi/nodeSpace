@@ -96,6 +96,14 @@ Body.prototype.destroy = function() {
     this.body.removeShape();
 };
 
-Body.prototype.damage = function() {};
+Body.prototype.damage = function(bodyB) {
+    bodyB.checkForDestroyAfterCollide();
+};
+
+Body.prototype.addDamage = function() {
+    return 0;
+};
+
+Body.prototype.checkForDestroyAfterCollide = function() {};
 
 module.exports = Body;

@@ -8,9 +8,16 @@ define(
 
             this.cooldown = 50;
             this.ship = options.body;
+            this.weapons = options.weapons;
         };
 
         utils.inherits(Fire, Action);
+
+        Fire.prototype.getInfo = function() {
+            return _.map(this.weapons, function(el) {
+                return Math.floor(el.getAngle() * 100) / 100;
+            });
+        };
 
         return Fire;
     }

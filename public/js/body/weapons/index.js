@@ -1,5 +1,3 @@
-
-var DEBUG;
 define(
     function(require) {
         var PIXI = require('pixi');
@@ -20,20 +18,12 @@ define(
             this.id = options.id;
 
             this.parent = options.parent;
-            this.angularVelocity = options.angularVelocity || 5;
+            this.angularVelocity = 5;
             this.toAngle = options.angle || 0;
             this.position = options.position || [0, 0];
 
             this.radius = 200;
             this.angle = 0;
-
-            this.sprite = new PIXI.Sprite(assets.texture.debug);
-            this.sprite.width = 10;
-            this.sprite.height = 10;
-            this.sprite.anchor.x = 0.5;
-            this.sprite.anchor.y = 0.5;
-            this.sprite.position.x = -100;
-            this.sprite.position.y = -100;
         };
 
         Weapon.prototype.step = function(dt) {
@@ -54,7 +44,17 @@ define(
             }
         };
 
-        Weapon.prototype.updateSprite = function() {
+        Weapon.prototype.createAim = function() {
+            this.spriteAim = new PIXI.Sprite(assets.texture.aimRed);
+            this.spriteAim.width = 20;
+            this.spriteAim.height = 20;
+            this.spriteAim.anchor.x = 0.5;
+            this.spriteAim.anchor.y = 0.5;
+            this.spriteAim.position.x = -100;
+            this.spriteAim.position.y = -100;
+        };
+
+        Weapon.prototype.updateAim = function() {
             var angle = this.angle,
                 angleNeed = Math.abs(resetAngle(angle - this.toAngle));
 
@@ -62,9 +62,10 @@ define(
                 angle = this.toAngle;
             }
 
-            this.sprite.position.x = this.radius * Math.cos(angle + this.parent.body.angle) + render.resolution[0] / 2;
-            this.sprite.position.y = this.radius * Math.sin(angle + this.parent.body.angle) + render.resolution[1] / 2;
+            this.spriteAim.position.x = this.radius * Math.cos(angle + this.parent.body.angle) + render.resolution[0] / 2;
+            this.spriteAim.position.y = this.radius * Math.sin(angle + this.parent.body.angle) + render.resolution[1] / 2;
         };
+
         Weapon.prototype.goto = function(point) {
             var pointPos = [point.x - render.resolution[0] / 2, point.y - render.resolution[1] / 2],
                 parentAngle = this.parent.body.angle,
@@ -77,7 +78,7 @@ define(
 
             this.toAngle = Math.atan2((pointPos[1] - weaponPos[1]), (pointPos[0] - weaponPos[0])) - parentAngle;
 
-            this.updateSprite();
+            this.updateAim();
         };
 
         Weapon.prototype.getAngle = function() {

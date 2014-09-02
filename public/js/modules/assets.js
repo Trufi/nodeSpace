@@ -22,6 +22,9 @@ define(
             loadObj.texture.bg_2 = 'bg_2.png';
             loadObj.texture.bg_3 = 'bg_3.png';
 
+            loadObj.texture.aimRed = 'aim_red.png';
+            loadObj.texture.aimBlue = 'aim_blue.png';
+
             // загрузка текстур
             _(loadObj.texture).forEach(function(el) {
                 loadArray.push(config.pathToAssets + el);

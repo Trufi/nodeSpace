@@ -23,7 +23,7 @@ var Client = function(options) {
     this.actions = {};
 
     // здесь хранятся действия до следующего шага игры
-    this.actionsDone = [];
+    this.actionsDone = {};
 };
 
 Client.prototype.applyData = function(data) {
@@ -75,8 +75,8 @@ Client.prototype.socketOn = function() {
         .removeAllListeners(5)
         .removeAllListeners(7)
         .on(5, function(data) {
-            _(data).forEach(function (el) {
-                _this.actionsDone.push(el);
+            _(data).forEach(function (el, i) {
+                _this.actionsDone[i] = el;
             });
         })
         .on(7, function() {
@@ -87,16 +87,16 @@ Client.prototype.socketOn = function() {
 Client.prototype.updateActions = function(now) {
     var _this = this;
 
-    _(this.actionsDone).forEach(function(el) {
-        _this.action(now, el);
+    _(this.actionsDone).forEach(function(el, i) {
+        _this.action(now, i, el);
     });
 
-    this.actionsDone = [];
+    this.actionsDone = {};
 };
 
-Client.prototype.action = function(now, name) {
+Client.prototype.action = function(now, name, options) {
     if (this.actions[name] !== undefined) {
-        this.actions[name].use(now);
+        this.actions[name].use(now, options);
     }
 };
 

@@ -9,20 +9,32 @@ define(
         var assets = require('modules/assets');
         var camera = require('modules/camera');
         var mask = require('../mask');
-        var weapons = require('weapons/index');
+        var weapons = require('../weapons/index');
         var step = require('modules/step');
+        var action = require('actions/index');
 
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
 
             this.forceThrust = options.forceThrust || 10000;
             this.forceSide = options.forceSide || 500;
-            this.actionsArray = [1, 2, 3, 4, 5];
 
-            this.weapons = {};
+            this.weapons = [];
         };
 
         utils.inherits(Ship, Body);
+
+        Ship.prototype.applyActions = function() {
+            var _this = this,
+                actionsArray = [1, 2, 3, 4];
+
+            _(actionsArray).forEach(function(el) {
+                _this.actions[el] = action.create({body: _this, name: el});
+            });
+
+            // добавляем действие для конкретного оружия
+            this.actions[5] = action.create({body: this, name: 5, weapons: this.weapons});
+        };
 
         Ship.prototype.applyWeapons = function() {
             this.weapons[0] = weapons.create({
@@ -34,6 +46,13 @@ define(
                 position: [10, 0],
                 parent: this
             });
+        };
+
+        Ship.prototype.weaponsAimActivate = function() {
+            this.weapons[0].createAim();
+            this.game.layers[4].addChild(this.weapons[0].spriteAim);
+            this.weapons[1].createAim();
+            this.game.layers[4].addChild(this.weapons[1].spriteAim);
         };
 
         Ship.prototype.weaponsGoto = function(point) {
@@ -57,7 +76,6 @@ define(
             this.sprite.anchor.y = 0.5;
 
             this.spriteSize = 60;
-
 
             // спрайт для thrust
             this.spriteThrust = new PIXI.Sprite(assets.texture.thrust);
@@ -114,10 +132,11 @@ define(
 
             _(this.weapons).forEach(function(el) {
                 step.addWeapon(el);
-                game.layers[4].addChild(el.sprite);
             });
 
             game.layers[2].addChild(this.sprite);
+
+            this.game = game;
         };
 
         return Ship;

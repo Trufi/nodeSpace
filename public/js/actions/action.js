@@ -34,6 +34,10 @@ define(
             return (now - this.lastTimeUsed) < this.durationAnimation;
         };
 
+        Action.prototype.getInfo = function() {
+            return 0;
+        };
+
         return Action;
     }
 );

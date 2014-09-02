@@ -24,17 +24,19 @@ define(
         };
 
         player.sendActionToServer = function() {
-            var actions = [];
+            var actions = {},
+                notNull = false;
 
             _(player.actions).forEach(function(el, i) {
                 if (el.checked) {
-                    actions.push(i);
+                    actions[i] = el.getInfo();
 
                     el.reset();
+                    notNull = true;
                 }
             });
 
-            if (actions.length > 0) {
+            if (notNull) {
                 request.sendToServer(actions);
             }
         };

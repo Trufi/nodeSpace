@@ -29,6 +29,7 @@ define(
             });
 
             debug.pingOn();
+            player.user.ship.weaponsAimActivate();
         };
 
         state.update = function(now) {

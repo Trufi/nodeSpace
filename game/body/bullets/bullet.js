@@ -6,6 +6,7 @@ var mask = require('../mask');
 var Bullet = function Bullet(options) {
     Bullet.super_.apply(this, arguments);
 
+    this.parent = options.parent;
     this.timeLive = 5000;
     this.damageValue = 5;
     this.reflectAngle = 0.8;
@@ -34,6 +35,7 @@ Bullet.prototype.applyShape = function() {
     this.shape = new p2.Circle(1);
     this.shape.collisionGroup = mask.BULLET;
     this.shape.collisionMask = mask.BODY | mask.SHIP;
+    this.shape.sensor = true;
     this.body.addShape(this.shape);
 };
 
@@ -43,9 +45,7 @@ Bullet.prototype.update = function(now) {
     }
 };
 
-Bullet.prototype.damage = function() {};
-
-Bullet.prototype.addDamage = function() {
+Bullet.prototype.addDamage = function() {/*
     var v2 = [this.body.velocity[0], this.body.velocity[1]],
         v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
         a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
@@ -54,9 +54,22 @@ Bullet.prototype.addDamage = function() {
     if (a > this.reflectAngle) {
         this.destroy();
         damage = this.damageValue;
-    }
+    }*/
 
-    return damage;
+    return this.damageValue;
+};
+
+Bullet.prototype.checkForDestroyAfterCollide = function() {/*
+    var v2 = [this.body.velocity[0], this.body.velocity[1]],
+    v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
+    a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
+    damage = 0;
+
+    if (a > this.reflectAngle) {
+    this.destroy();
+    damage = this.damageValue;
+    }*/
+    this.destroy();
 };
 
 Bullet.prototype.getFirstInfo = function() {

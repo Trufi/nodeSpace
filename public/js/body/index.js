@@ -30,10 +30,11 @@ define(
                     newBody = new Rectangle(options);
             }
 
-            newBody.applyActions();
             newBody.createBody(options);
             newBody.applyShape();
             newBody.createSprite();
+            newBody.applyActions();
+
             newBody.updateSprite();
 
             return newBody;

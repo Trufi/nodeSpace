@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var utils = require('util');
 var Action = require('./action');
 
@@ -7,13 +8,21 @@ var Fire = function Fire(options) {
     this.type = 5;
     this.cooldown = 50;
     this.ship = options.body;
+    this.weapons = options.weapons;
 };
 
 utils.inherits(Fire, Action);
 
-Fire.prototype._run = function() {
+Fire.prototype._run = function(options) {
+    var _this = this;
+
     this.ship.actionsUsed.push(this.type);
-    this.ship.fire();
+
+    _(options).forEach(function(angle, i) {
+        if (_this.weapons[i] !== undefined) {
+            _this.weapons[i].fire(angle);
+        }
+    });
 };
 
 module.exports = Fire;
