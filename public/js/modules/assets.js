@@ -25,6 +25,8 @@ define(
             loadObj.texture.aimRed = 'aim_red.png';
             loadObj.texture.aimBlue = 'aim_blue.png';
 
+            loadObj.texture.bulletGreen = 'bullet_green.gif';
+
             // загрузка текстур
             _(loadObj.texture).forEach(function(el) {
                 loadArray.push(config.pathToAssets + el);

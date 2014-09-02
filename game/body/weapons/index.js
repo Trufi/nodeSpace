@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var body = require('../index');
+var log = require('modules/log')(module);
 
 var weapons = {};
 var idCounter = 1;
@@ -14,24 +15,43 @@ var Weapon = function Weapon(options) {
     this.position = options.position || [0, 0];
     this.angularVelocity = 5;
     this.lastAngle = 0;
-    this.bulletVelocity = 500;
+    this.lastTimeFire = 0;
+    this.bulletVelocity = 700;
 };
 
-Weapon.prototype.fire = function(angle) {
-    var worldPoint = [];
-    this.parent.body.toWorldFrame(worldPoint, this.position);
+Weapon.prototype.checkAngle = function(now, angle) {
+    var mbAngle = (this.angularVelocity + 1) * (now - this.lastTimeFire) / 1000,
+        dAngle = Math.abs(resetAngle(angle - this.lastAngle));
 
-    this.parent.game.addBody(
-        body.create({
-            type: 1000,
-            position: [worldPoint[0], worldPoint[1]],
-            velocity: [
-                    this.bulletVelocity * Math.cos(angle + this.parent.body.angle) + this.parent.body.velocity[0],
-                    this.bulletVelocity * Math.sin(angle + this.parent.body.angle) + this.parent.body.velocity[1]
-            ],
-            parent: this.parent
-        })
-    );
+    if (dAngle <= mbAngle) {
+        return true;
+    } else {
+        log.warn('dAngle > mbAngle, %s > %s', dAngle, mbAngle);
+        return false;
+    }
+};
+
+Weapon.prototype.fire = function(now, angle) {
+    var worldPoint = [];
+
+    if (this.checkAngle(now, angle)) {
+        this.parent.body.toWorldFrame(worldPoint, this.position);
+
+        this.parent.game.addBody(
+            body.create({
+                type: 1000,
+                position: [worldPoint[0], worldPoint[1]],
+                velocity: [
+                        this.bulletVelocity * Math.cos(angle + this.parent.body.angle) + this.parent.body.velocity[0],
+                        this.bulletVelocity * Math.sin(angle + this.parent.body.angle) + this.parent.body.velocity[1]
+                ],
+                parent: this.parent
+            })
+        );
+
+        this.lastTimeFire = now;
+        this.lastAngle = angle;
+    }
 };
 
 weapons.create = function(options) {
