@@ -18,7 +18,6 @@ var server = app.listen(config.port, config.host, function () {
 });
 
 socket.initialize(server);
-
 //var clientConnect = require('modules/clientconnect');
 
 var routes = require('routes/index');

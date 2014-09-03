@@ -13,9 +13,16 @@ define(
 
             loadObj.texture.screenArrow = 'screenarrow.png';
             loadObj.texture.debug = 'debug.png';
-            loadObj.texture.cameraDebug = 'camera_debug.png';
-            loadObj.texture.cameraDebugGreen = 'camera_debug_green.png';
-            loadObj.texture.cameraDebugYellow = 'camera_debug_yellow.png';
+
+            if (window.JS_ENV === 'production') {
+                loadObj.texture.cameraDebug = 'debug.png';
+                loadObj.texture.cameraDebugGreen = 'debug.png';
+                loadObj.texture.cameraDebugYellow = 'debug.png';
+            } else {
+                loadObj.texture.cameraDebug = 'camera_debug.png';
+                loadObj.texture.cameraDebugGreen = 'camera_debug_green.png';
+                loadObj.texture.cameraDebugYellow = 'camera_debug_yellow.png';
+            }
 
             loadObj.texture.bg_0 = 'bg_0.png';
             loadObj.texture.bg_1 = 'bg_1.png';
@@ -23,7 +30,7 @@ define(
             loadObj.texture.bg_3 = 'bg_3.png';
 
             loadObj.texture.aimRed = 'aim_red.png';
-            loadObj.texture.aimBlue = 'aim_blue.png';
+            //loadObj.texture.aimBlue = 'aim_blue.png';
 
             loadObj.texture.bulletGreen = 'bullet_green.gif';
 

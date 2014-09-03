@@ -2,7 +2,6 @@ define(
     function(require) {
         var p2 = require('p2');
         var PIXI = require('pixi');
-        var shapes = require('json!./shapes.json');
         var utils = require('utils');
         var Body = require('./body');
         var assets = require('modules/assets');

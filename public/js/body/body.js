@@ -3,7 +3,6 @@ define(
         var p2 = require('p2');
         var PIXI = require('pixi');
         var _ = require('lodash');
-        var shapes = require('json!./shapes.json');
         var camera = require('modules/camera');
         var assets = require('modules/assets');
         var action = require('actions/index');

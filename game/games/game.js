@@ -21,8 +21,6 @@ var Game = function Game() {
 
     this.assets = {
         texture: {
-            background: 'bg2.png',
-            backroundTest: 'bg.jpeg',
             asteroid: 'asteroid.png',
             rectangle: 'rect.png',
             ship: 'ship2.png',
