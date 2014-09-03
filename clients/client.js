@@ -50,6 +50,8 @@ Client.prototype.createShip = function(data) {
     _(this.ship.actions).forEach(function(el, i) {
         _this.actions[i] = el;
     });
+
+    this.ship.client = this;
 };
 
 Client.prototype.activateGame = function() {

@@ -24,6 +24,15 @@ define(
                 case 5:
                     newAction = new Fire(options);
                     break;
+                case 6:
+                    newAction = new Move(options);
+                    break;
+                case 7:
+                    newAction = new Move(options);
+                    break;
+                case 8:
+                    newAction = new Move(options);
+                    break;
             }
 
             return newAction;

@@ -12,11 +12,10 @@ var Bullet = require('../bullets/bullet');
 var Ship = function Ship(options) {
     Ship.super_.apply(this, arguments);
 
-    this.forceThrust = options.forceThrust || 10000;
-    this.forceSide = options.forceSide || 500;
-
+    this.forceThrust = options.forceThrust || 50000;
+    this.forceSide = options.forceSide || 15000;
+    this.client;
     this.hp = 100;
-    this.actionsArray = [1, 2, 3, 4, 5];
 
     this.weapons = [];
 };
@@ -25,7 +24,7 @@ utils.inherits(Ship, Body);
 
 Ship.prototype.applyActions = function() {
     var _this = this,
-        actionsArray = [1, 2, 3, 4];
+        actionsArray = [1, 2, 3, 4, 6, 7, 8];
 
     _(actionsArray).forEach(function(el) {
         _this.actions[el] = action.create({body: _this, name: el});
@@ -35,7 +34,7 @@ Ship.prototype.applyActions = function() {
     this.actions[5] = action.create({body: this, name: 5, weapons: this.weapons});
 };
 
-Ship.prototype.applyWeapons = function () {
+Ship.prototype.applyWeapons = function() {
     this.weapons[0] = weapons.create({
         position: [-10, 0],
         parent: this
@@ -57,7 +56,7 @@ Ship.prototype.applyShape = function () {
 };
 
 // газ
-Ship.prototype.thrust = function () {
+Ship.prototype.thrust = function() {
     var worldPoint = [],
         force = [this.forceThrust * Math.cos(this.body.angle), this.forceThrust * Math.sin(this.body.angle)];
 
@@ -65,7 +64,7 @@ Ship.prototype.thrust = function () {
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.reverse = function () {
+Ship.prototype.reverse = function() {
     var worldPoint = [],
         force = [-this.forceSide * Math.cos(this.body.angle), -this.forceSide * Math.sin(this.body.angle)];
 
@@ -73,32 +72,70 @@ Ship.prototype.reverse = function () {
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.left = function () {
+Ship.prototype.left = function() {
     var worldPoint = [],
         force;
 
     // первый двигатель
     this.body.toWorldFrame(worldPoint, [-10, 10]);
-    force = [-this.forceThrust * Math.sin(this.body.angle), this.forceThrust * Math.cos(this.body.angle)];
+    force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
     this.body.applyForce(force, worldPoint);
     // второй двигатель
     this.body.toWorldFrame(worldPoint, [10, -10]);
-    force = [this.forceThrust * Math.sin(this.body.angle), -this.forceThrust * Math.cos(this.body.angle)];
+    force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
     this.body.applyForce(force, worldPoint);
 };
 
-Ship.prototype.right = function () {
+Ship.prototype.right = function() {
     var worldPoint = [],
         force;
 
     // первый двигатель
     this.body.toWorldFrame(worldPoint, [10, 10]);
-    force = [-this.forceThrust * Math.sin(this.body.angle), this.forceThrust * Math.cos(this.body.angle)];
+    force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
     this.body.applyForce(force, worldPoint);
     // второй двигатель
     this.body.toWorldFrame(worldPoint, [-10, -10]);
-    force = [this.forceThrust * Math.sin(this.body.angle), -this.forceThrust * Math.cos(this.body.angle)];
+    force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
     this.body.applyForce(force, worldPoint);
+};
+
+Ship.prototype.strafeLeft = function() {
+    var worldPoint = [],
+        force;
+
+    // первый двигатель
+    this.body.toWorldFrame(worldPoint, [10, 10]);
+    force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
+    this.body.applyForce(force, worldPoint);
+    // второй двигатель
+    this.body.toWorldFrame(worldPoint, [-10, 10]);
+    this.body.applyForce(force, worldPoint);
+};
+
+Ship.prototype.strafeRight = function() {
+    var worldPoint = [],
+        force;
+
+    // первый двигатель
+    this.body.toWorldFrame(worldPoint, [10, -10]);
+    force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
+    this.body.applyForce(force, worldPoint);
+    // второй двигатель
+    this.body.toWorldFrame(worldPoint, [-10, -10]);
+    this.body.applyForce(force, worldPoint);
+};
+
+Ship.prototype.angularBrake = function(now) {
+    var eps = 0.15;
+
+    if (Math.abs(this.body.angularVelocity) < eps) {
+        this.body.angularVelocity = 0;
+    } else if (this.body.angularVelocity > 0) {
+        this.client.action(now, 3);
+    } else {
+        this.client.action(now, 4);
+    }
 };
 
 Ship.prototype.damage = function(bodyB) {

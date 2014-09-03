@@ -1,7 +1,7 @@
 var utils = require('util');
 var Action = require('./action');
 
-var typeToMoveName = ['thrust', 'reverse', 'left', 'right'];
+var typeToMoveName = ['thrust', 'reverse', 'left', 'right', null, 'strafeLeft', 'strafeRight', 'angularBrake'];
 
 var Move = function Move(options) {
     Move.super_.apply(this, arguments);
@@ -13,9 +13,9 @@ var Move = function Move(options) {
 
 utils.inherits(Move, Action);
 
-Move.prototype._run = function() {
+Move.prototype._run = function(now) {
     this.ship.actionsUsed.push(this.type);
-    this.ship[this.moveName]();
+    this.ship[this.moveName](now);
 };
 
 module.exports = Move;

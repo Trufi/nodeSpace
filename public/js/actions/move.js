@@ -3,7 +3,7 @@ define(
         var utils = require('utils');
         var Action = require('./action');
 
-        var typeToMoveName = ['thrust', 'reverse', 'left', 'right'];
+        var typeToMoveName = ['thrust', 'reverse', 'left', 'right', null, 'strafeLeft', 'strafeRight', 'angularBrake'];
 
         var Move = function Move(options) {
             Move.super_.apply(this, arguments);
@@ -15,11 +15,6 @@ define(
         };
 
         utils.inherits(Move, Action);
-
-        /*Move.prototype._run = function() {
-            this.ship[this.moveName]();
-        };*/
-
 
         return Move;
     }

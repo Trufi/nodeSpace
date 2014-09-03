@@ -16,9 +16,6 @@ define(
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
 
-            this.forceThrust = options.forceThrust || 10000;
-            this.forceSide = options.forceSide || 500;
-
             this.weapons = [];
         };
 
@@ -26,7 +23,7 @@ define(
 
         Ship.prototype.applyActions = function() {
             var _this = this,
-                actionsArray = [1, 2, 3, 4];
+                actionsArray = [1, 2, 3, 4, 6, 7, 8];
 
             _(actionsArray).forEach(function(el) {
                 _this.actions[el] = action.create({body: _this, name: el});
@@ -85,6 +82,16 @@ define(
             this.spriteThrust.position.y = 0;
             this.sprite.addChild(this.spriteThrust);
 
+            // спрайт для reverse
+            this.spriteReverse = new PIXI.Sprite(assets.texture.thrust);
+            this.spriteReverse.anchor.x = 0;
+            this.spriteReverse.anchor.y = 0.5;
+            this.spriteReverse.position.x = 21;
+            this.spriteReverse.position.y = 0;
+            this.spriteReverse.height = 30;
+            this.spriteReverse.width = 20;
+            this.sprite.addChild(this.spriteReverse);
+
             // боковые спрайты
             this.spriteSide = [];
 
@@ -112,6 +119,7 @@ define(
 
             // проверям actions
             this.spriteThrust.visible = this.actions[1].isAnimate(now);
+            this.spriteReverse.visible = this.actions[2].isAnimate(now);
 
             this.spriteSide[0].visible = false;
             this.spriteSide[1].visible = false;
@@ -124,6 +132,12 @@ define(
             } else if (this.actions[4].isAnimate(now)) {
                 this.spriteSide[1].visible = true;
                 this.spriteSide[2].visible = true;
+            } else if (this.actions[6].isAnimate(now)) {
+                this.spriteSide[2].visible = true;
+                this.spriteSide[3].visible = true;
+            } else if (this.actions[7].isAnimate(now)) {
+                this.spriteSide[0].visible = true;
+                this.spriteSide[1].visible = true;
             }
         };
 

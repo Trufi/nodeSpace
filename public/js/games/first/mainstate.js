@@ -49,8 +49,12 @@ define(
                 player.action(now, 3);
             } else if (key.down.D) {
                 player.action(now, 4);
+            } else if (key.down.Q) {
+                player.action(now, 6);
+            } else if (key.down.E) {
+                player.action(now, 7);
             } else if (!key.down.CTRL) {
-                // TODO: торможение
+                player.action(now, 8);
             }
 
             if (key.down.MOUSELEFT) {
