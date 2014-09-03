@@ -105,11 +105,36 @@ define(
         });
 
         window.addEventListener('mousedown', function(ev) {
-            keyDown.MOUSELEFT = true;
+            switch (ev.which) {
+                case 1:
+                    keyDown.MOUSELEFT = true;
+                    break;
+                case 2:
+                    keyDown.MOUSEMID = true;
+                    break;
+                case 3:
+                    keyDown.MOUSERIGHT = true;
+                    break;
+            }
         });
 
         window.addEventListener('mouseup', function(ev) {
-            keyDown.MOUSELEFT = false;
+            switch (ev.which) {
+                case 1:
+                    keyDown.MOUSELEFT = false;
+                    break;
+                case 2:
+                    keyDown.MOUSEMID = false;
+                    break;
+                case 3:
+                    keyDown.MOUSERIGHT = false;
+                    break;
+            }
+        });
+
+        window.addEventListener('contextmenu', function(ev) {
+            ev.preventDefault();
+            return false;
         });
 
         key.pressed = keyPressed;

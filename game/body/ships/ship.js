@@ -101,36 +101,18 @@ Ship.prototype.right = function () {
     this.body.applyForce(force, worldPoint);
 };
 
-/*Ship.prototype.fire = function() {
-    var worldPoint = [];
-    this.body.toWorldFrame(worldPoint, [50, 0]);
-
-    this.game.addBody(
-        body.create({
-            type: 1000,
-            position: [worldPoint[0], worldPoint[1]],
-            velocity: [
-                this.bulletVelocity * Math.cos(this.body.angle) + this.body.velocity[0],
-                this.bulletVelocity * Math.sin(this.body.angle) + this.body.velocity[1]
-            ]
-        })
-    );
-};*/
-
 Ship.prototype.damage = function(bodyB) {
-    var addDamage, damage;
+    var damage;
 
     if (bodyB instanceof Bullet) {
         if (bodyB.parent.id !== this.id) {
-            addDamage = bodyB.addDamage();
-            damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
+            damage = bodyB.addDamage();
             bodyB.checkForDestroyAfterCollide();
         } else {
             damage = 0;
         }
     } else {
-        addDamage = bodyB.addDamage();
-        damage = addDamage + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
+        damage = bodyB.addDamage() + Math.sqrt(this.body.vlambda[0] * this.body.vlambda[0] + this.body.vlambda[1] * this.body.vlambda[1]) * this.body.mass / 500;
         bodyB.checkForDestroyAfterCollide();
     }
 
