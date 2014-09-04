@@ -14,7 +14,6 @@
     },
     "mongo": {
         "url": "mongodb://127.0.0.1:27017/nodeSpace",
-        "urlHeroku": "mongodb://trufi:1trufimongopass@kahana.mongohq.com:10083/nodeSpace",
         "urlDev": "mongodb://127.0.0.1:27017/nodeSpace"
     },
     "sendStateInterval": 25,
