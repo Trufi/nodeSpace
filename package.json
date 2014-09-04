@@ -2,8 +2,16 @@
     "name": "nodeSpace",
     "version": "0.0.1",
     "private": true,
+    "author": {
+        "name": "Mstislav Zhivodkov",
+        "email": "stevemyz@gmail.com"
+    },
     "scripts": {
-        "start": "node ./bin/www"
+        "start": "node ./app.js"
+    },
+    "engines": {
+        "node": "~0.10.29",
+        "npm": "~1.4.14"
     },
     "dependencies": {
         "express": "~4.0.0",
