@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var log = require('modules/log')(module);
-var sessionStore = require('mongo/sessionStore');
+var sessionStore = require('mongo/sessionstore');
 var common = require('./common');
 var mongo = require('mongo');
 var crypto = require('crypto');

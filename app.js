@@ -7,7 +7,7 @@ var session = require('express-session');
 var log = require('modules/log')(module);
 var config = require('config');
 var socket = require('socket');
-var sessionStore = require('mongo/sessionStore');
+var sessionStore = require('mongo/sessionstore');
 
 log.info('App start in ' + (process.env.NODE_ENV || 'production') + ' mode');
 

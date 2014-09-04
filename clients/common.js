@@ -1,5 +1,5 @@
 var config = require('config');
-var sessionStore = require('mongo/sessionStore');
+var sessionStore = require('mongo/sessionstore');
 var cookieParser = require('cookie-parser')(config.session.secret);
 var mongo = require('mongo');
 
