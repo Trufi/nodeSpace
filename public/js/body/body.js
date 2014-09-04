@@ -6,6 +6,7 @@ define(
         var camera = require('modules/camera');
         var assets = require('modules/assets');
         var action = require('actions/index');
+        var render = require('modules/render');
 
         // Класс простейшего тела
         var Body = function Body(options) {
@@ -52,13 +53,13 @@ define(
 
         Body.prototype.addToGame = function(game) {
             game.world.addBody(this.body);
-            game.layers[2].addChild(this.sprite);
+            render.layers[2].addChild(this.sprite);
             this.game = game;
         };
 
         Body.prototype.removeFromGame = function() {
             this.game.world.removeBody(this.body);
-            this.game.layers[2].removeChild(this.sprite);
+            render.layers[2].removeChild(this.sprite);
             this.game = undefined;
         };
 

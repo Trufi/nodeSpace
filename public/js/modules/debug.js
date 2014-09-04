@@ -2,7 +2,7 @@ define(
     function(require) {
         var _ = require('lodash');
         var PIXI = require('pixi');
-        var game = require('games/game');
+        var render = require('modules/render');
         var request = require('modules/request');
         var ping = require('modules/ping');
 
@@ -18,7 +18,7 @@ define(
             });
             pingText.position.x = 10;
             pingText.position.y = 10;
-            game.layers[4].addChild(pingText);
+            render.layers[4].addChild(pingText);
 
             dtText = new PIXI.Text(ping.get() + 'ms', {
                 font: 'normal 18px Arial',
@@ -26,11 +26,11 @@ define(
             });
             dtText.position.x = 10;
             dtText.position.y = 40;
-            game.layers[4].addChild(dtText);
+            render.layers[4].addChild(dtText);
         };
 
         debug.pingOff = function() {
-            game.layers[4].removeChild(pingText);
+            render.layers[4].removeChild(pingText);
             pingText = undefined;
         };
 

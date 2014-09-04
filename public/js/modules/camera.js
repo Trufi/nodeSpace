@@ -38,6 +38,16 @@ define(
             }
         };
 
+        Camera.prototype.getVelocity = function() {
+            var velocity = [0, 0];
+
+            if (this.target !== undefined && this.target.body !== undefined) {
+                velocity = [this.target.body.velocity[0], this.target.body.velocity[1]];
+            }
+
+            return velocity;
+        };
+
         Camera.prototype.followToPoint = function() {
             return [this.target[0], this.target[1]];
         };
@@ -126,6 +136,10 @@ define(
 
         camera.height = function() {
             return enableCamera.height
+        };
+
+        camera.getVelocity = function() {
+            return enableCamera.getVelocity();
         };
 
         return camera;

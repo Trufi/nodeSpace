@@ -12,6 +12,7 @@ define(
         var weapons = require('../weapons/index');
         var step = require('modules/step');
         var action = require('actions/index');
+        var render = require('modules/render');
 
         var Ship = function Ship(options) {
             Ship.super_.apply(this, arguments);
@@ -47,9 +48,9 @@ define(
 
         Ship.prototype.weaponsAimActivate = function() {
             this.weapons[0].createAim();
-            this.game.layers[4].addChild(this.weapons[0].spriteAim);
+            render.layers[4].addChild(this.weapons[0].spriteAim);
             this.weapons[1].createAim();
-            this.game.layers[4].addChild(this.weapons[1].spriteAim);
+            render.layers[4].addChild(this.weapons[1].spriteAim);
         };
 
         Ship.prototype.weaponsGoto = function(point) {
@@ -148,7 +149,7 @@ define(
                 step.addWeapon(el);
             });
 
-            game.layers[2].addChild(this.sprite);
+            render.layers[2].addChild(this.sprite);
 
             this.game = game;
         };

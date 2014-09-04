@@ -57,11 +57,16 @@ define(
             this.displayObject.mouseout = _.bind(this._mouseout, this);
 
             if (typeof options.click === 'function') {
-                this.click = options.click;
+                this.clickCallback = options.click;
             } else {
-                this.click = function() {};
+                this.clickCallback = function() {};
             }
-            this.displayObject.click = this.click;
+            this.displayObject.click = _.bind(this.click, this);
+            this.displayObject.mousedown = this._mousedown;
+        };
+
+        Button.prototype.click = function() {
+            this.clickCallback();
         };
 
         Button.prototype._createBackground = function() {
@@ -96,6 +101,10 @@ define(
             this.spriteText.position.x = (this.width - this.spriteText.width) / 2;
             this.spriteText.position.y = (this.height - this.spriteText.height) / 2;
             this.displayObject.addChild(this.spriteText);
+        };
+
+        Button.prototype._mousedown = function(ev) {
+            ev.originalEvent.stopPropagation();
         };
 
         Button.prototype._mouseover = function() {

@@ -16,14 +16,14 @@ define(
             layers[0].position.y = 0;
             layers[0].tilePosition.x = 0;
             layers[0].tilePosition.y = 0;
-            game.layers[0].addChild(layers[0]);
+            render.layers[0].addChild(layers[0]);
 
             layers[1] = new PIXI.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
             layers[1].position.x = 0;
             layers[1].position.y = 0;
             layers[1].tilePosition.x = 0;
             layers[1].tilePosition.y = 0;
-            game.layers[0].addChild(layers[1]);
+            render.layers[0].addChild(layers[1]);
 
             layers[2] = new PIXI.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
             layers[2].position.x = 0;
@@ -31,7 +31,7 @@ define(
             layers[2].tilePosition.x = 0;
             layers[2].tilePosition.y = 0;
             layers[2].scale = new PIXI.Point(scale, scale);
-            game.layers[0].addChild(layers[2]);
+            render.layers[0].addChild(layers[2]);
 
             layers[3] = new PIXI.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
             layers[3].position.x = 0;
@@ -39,7 +39,7 @@ define(
             layers[3].tilePosition.x = 0;
             layers[3].tilePosition.y = 0;
             layers[3].scale = new PIXI.Point(scale, scale);
-            game.layers[0].addChild(layers[3]);
+            render.layers[0].addChild(layers[3]);
         };
 
         bg.update = function() {

@@ -40,6 +40,7 @@ define(
             this.sprite = new PIXI.Sprite(assets.texture.bulletGreen);
             this.sprite.anchor.x = 0.5;
             this.sprite.anchor.y = 0.5;
+            this.sprite.rotation = Math.atan2(this.body.velocity[1], this.body.velocity[0]);
         };
 
         Bullet.prototype.update = function(data) {
@@ -52,7 +53,6 @@ define(
         Bullet.prototype.updateSprite = function() {
             this.sprite.position.x = camera.x(this.body.position[0]);
             this.sprite.position.y = camera.y(this.body.position[1]);
-            this.sprite.rotation = Math.atan2(this.body.velocity[1], this.body.velocity[0]);
             this.sprite.scale = new PIXI.Point(camera.scale(), camera.scale());
         };
 

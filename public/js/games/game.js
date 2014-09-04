@@ -25,9 +25,6 @@ define(
         game.bodies = {};
         // все подключенные юзеры
         game.users = {};
-        // stage из pixi.js
-        game.stage;
-        game.layers = [];
 
         game.camera;
 
@@ -49,8 +46,6 @@ define(
         game.isEnable = true;
 
         game.loop = function() {
-            if (!this.isEnable) return;
-
             var _this = this;
             var now = Date.now();
 
@@ -59,13 +54,14 @@ define(
             }
 
             // шаг мира p2.js
+
             this.worldStep(now);
 
             // производим различные действия для нового шага
             this.update(now);
 
             // отрисовываем сцену
-            render.draw(this.stage);
+            render.draw();
 
             this.lastGameStepTime = now;
 
@@ -197,7 +193,9 @@ define(
 
                 dt = (lastData[0] + this.ping - this.lastGameStepTime) / 1000;
                 if (dt > 0) {
-                    this.world.step(dt);
+                    if (this.isEnable) {
+                        this.world.step(dt);
+                    }
                     step.go(dt);
                 }
 
@@ -220,7 +218,9 @@ define(
 
             dt = (now - this.lastGameStepTime) / 1000;
             if (dt !== 0) {
-                this.world.step(dt);
+                if (this.isEnable) {
+                    this.world.step(dt);
+                }
                 step.go(dt);
             }
         };
@@ -236,12 +236,6 @@ define(
                 gravity: options.game.world.gravity,
                 applyDamping: options.game.world.applyDamping
             });
-
-            this.stage = new PIXI.Stage(0x000000);
-            for (i = 0; i < 5; i++) {
-                this.layers[i] = new PIXI.DisplayObjectContainer();
-                this.stage.addChild(this.layers[i]);
-            }
 
             // create camera
             this.camera = camera.create(render.resolution[0], render.resolution[1]);
@@ -267,6 +261,7 @@ define(
             });
 
             request.onGameClose(_.bind(this.close, this));
+            this.disconnectEnable();
 
             this.state.start({changeStatusData: options});
 
@@ -305,6 +300,18 @@ define(
 
         game.close = function() {
             this.isEnable = false;
+        };
+
+        game.disconnectEnable = function() {
+            var _this = this;
+
+            request.disconnect(function() {
+                _this.isEnable = false;
+            });
+
+            request.reconnect(function() {
+                _this.isEnable = true;
+            });
         };
 
         return game;

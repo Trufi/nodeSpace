@@ -1,13 +1,14 @@
 define(
     function(require) {
         var _ = require('lodash');
-        var PIXI = require('pixi');
         var game = require('games/game');
         var key = require('modules/key');
         var player = require('modules/player');
+        var mainMenu = require('interface/frames/mainmenu');
         var ScreenArrow = require('interface/screenArrow');
         var interface = require('interface/index');
         var debug = require('modules/debug');
+        var render = require('modules/render');
 
         var state = {};
 
@@ -30,6 +31,9 @@ define(
 
             debug.pingOn();
             player.user.ship.weaponsAimActivate();
+
+            // добавим гланое меню
+            mainMenu.create();
         };
 
         state.update = function(now) {
@@ -53,7 +57,7 @@ define(
                 player.action(now, 6);
             } else if (key.down.E) {
                 player.action(now, 7);
-            } else if (!key.down.CTRL) {
+            } else if (!key.down.CTRL && player.user.ship.body.angularVelocity !== 0) {
                 player.action(now, 8);
             }
 
@@ -61,7 +65,11 @@ define(
                 player.action(now, 5);
             }
 
-            player.user.ship.weaponsGoto(game.stage.getMousePosition());
+            if (key.pressed.ESC) {
+                mainMenu.toggle();
+            }
+
+            player.user.ship.weaponsGoto(render.stage.getMousePosition());
             this.scrArrow.update();
             interface.bodyInfo.update();
             debug.update();

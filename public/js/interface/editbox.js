@@ -75,6 +75,7 @@ define(
             this.displayObject.click = _.bind(this._click, this);
             this.displayObject.mouseover = _.bind(this._mouseover, this);
             this.displayObject.mouseout = _.bind(this._mouseout, this);
+            this.displayObject.mousedown = this._mousedown;
         };
 
         Editbox.prototype._createBackground = function() {
@@ -292,6 +293,10 @@ define(
             this.cursor.visible = false;
             editbox._active = undefined;
             key.disableWriteText();
+        };
+
+        Editbox.prototype._mousedown = function(ev) {
+            ev.originalEvent.stopPropagation();
         };
 
         Editbox.prototype._click = function() {

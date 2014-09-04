@@ -5,8 +5,14 @@ define(
 
         var render = {};
 
+        // stage из pixi.js
+        render.stage;
+        // уровни в stage
+        render.layers = [];
+
         render.create = function(options) {
-            var gameWrap = document.getElementById(config.gameHtmlWrapId);
+            var gameWrap = document.getElementById(config.gameHtmlWrapId),
+                i;
 
             options = options || {};
 
@@ -16,20 +22,19 @@ define(
             this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1]);
             this.render.view.style.display = 'block';
 
-
             document.getElementById('gamepreloader').style.display = 'none';
             gameWrap.style.display = 'block';
             gameWrap.appendChild(this.render.view);
 
-            /*window.addEventListener('resize', function(ev){
-                _this.resolution = [window.innerWidth, window.innerHeight];
-                _this.render.width = _this.resolution[0];
-                _this.render.height = _this.resolution[1];
-            });*/
+            this.stage = new PIXI.Stage(0x000000);
+            for (i = 0; i < 5; i++) {
+                this.layers[i] = new PIXI.DisplayObjectContainer();
+                this.stage.addChild(this.layers[i]);
+            }
         };
 
-        render.draw = function(stage) {
-            this.render.render(stage);
+        render.draw = function() {
+            this.render.render(this.stage);
         };
 
         return render;

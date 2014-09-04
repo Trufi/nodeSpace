@@ -1,5 +1,5 @@
 define(
-    function(require) {
+    function() {
         var key = {};
 
         /*var keyCodes = {
@@ -38,7 +38,10 @@ define(
             35: 'END',
             36: 'HOME',
             9: 'TAB',
-            'MOUSELEFT': 'MOUSELEFT'
+            27: 'ESC',
+            'MOUSELEFT': 'MOUSELEFT',
+            'MOUSEMID': 'MOUSEMID',
+            'MOUSERIGHT': 'MOUSERIGHT'
         };
 
         // кнопки которые блокируют действия браузера
@@ -51,7 +54,6 @@ define(
         var writeTextCallback;
         // кнопки которые будут передаваться в writeTextCallback при событии keydown
         var keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
-
 
         window.addEventListener('keydown', function(ev) {
             var keyCode = ev.keyCode || ev.which,

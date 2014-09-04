@@ -4,7 +4,7 @@ define(
         var PIXI = require('pixi');
         var camera = require('modules/camera');
         var config = require('json!config');
-        var game = require('games/game');
+        var render = require('modules/render');
         var assets = require('modules/assets');
 
         var bodyInfo = {};
@@ -21,7 +21,7 @@ define(
             this.padding = 30;
 
             this.displayObject = new PIXI.DisplayObjectContainer();
-            game.layers[4].addChild(this.displayObject);
+            render.layers[4].addChild(this.displayObject);
             this.spriteName;
             this.spriteHp;
 

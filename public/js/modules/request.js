@@ -1,6 +1,8 @@
 define(
     function(require) {
-        var io = require('socketio');
+        var io = require('socketio'),
+            config = require('json!config'),
+            disconnectFrame = require('interface/frames/disconnect');
 
         var request = {};
 
@@ -9,16 +11,31 @@ define(
             reconnectionDelayMax: 1000
         });
 
+        var disconnectTime = 0,
+            disconnectCallback = function() {},
+            reconnectCallback = function() {};
+
         socket
             .on('disconnect', function() {
-                console.log('disconnect');
+                disconnectTime = Date.now();
+                disconnectFrame.show(config.socket.reconnectWait);
+                disconnectCallback();
             })
             .on('reconnect_failed', function() {
                 console.log('reconnect_failed');
             })
             .on('reconnect', function() {
-                console.log('reconnect');
+                disconnectFrame.hide();
+                reconnectCallback();
             });
+
+        request.disconnect = function(callback) {
+            disconnectCallback = callback;
+        };
+
+        request.reconnect = function(callback) {
+            reconnectCallback = callback;
+        };
 
         request.gameInit = function(callback) {
             socket.once(2, function (data) {

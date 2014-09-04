@@ -22,5 +22,8 @@
         "nameNotValid": "Name length must be greater than 3",
         "nameBusy": "Name already busy",
         "serverError": "Server error"
+    },
+    "socket": {
+        "reconnectWait": 60000
     }
 }
