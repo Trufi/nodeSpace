@@ -8,7 +8,9 @@ db.db = undefined;
 db.users = undefined;
 db.usersCount = 0;
 
-mongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.db, function(err, _db) {
+var mongoUrl = process.env.NODE_ENV === 'development' ? config.mongo.urlDev : config.mongo.url;
+
+mongoClient.connect(mongoUrl, function(err, _db) {
     if (err) throw err;
 
     db.db = _db;

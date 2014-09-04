@@ -13,9 +13,9 @@
         }
     },
     "mongo": {
-        "db": "nodeSpace",
-        "host": "127.0.0.1",
-        "port": 27017
+        "url": "mongodb://127.0.0.1:27017/nodeSpace",
+        "urlHeroku": "mongodb://trufi:1trufimongopass@kahana.mongohq.com:10083/nodeSpace",
+        "urlDev": "mongodb://127.0.0.1:27017/nodeSpace"
     },
     "sendStateInterval": 25,
     "actions": {

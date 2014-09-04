@@ -1,11 +1,10 @@
 define(
     function(require) {
-        var config = require('json!config');
         var io = require('socketio');
 
         var request = {};
 
-        var socket = io.connect(config.socketHost, {
+        var socket = io.connect(location.origin, {
             reconnectionDelay: 1000,
             reconnectionDelayMax: 1000
         });

@@ -2,4 +2,6 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var config = require('config');
 
-module.exports = new MongoStore(config.mongo);
+var mongoUrl = process.env.NODE_ENV === 'development' ? config.mongo.urlDev : config.mongo.url;
+
+module.exports = new MongoStore({url: mongoUrl});

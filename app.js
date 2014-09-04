@@ -9,16 +9,17 @@ var config = require('config');
 var socket = require('socket');
 var sessionStore = require('mongo/sessionStore');
 
+log.info('App start in ' + (process.env.NODE_ENV || 'production') + ' mode');
+
 require('mongo');
 
 var app = express();
 
-var server = app.listen(config.port, config.host, function () {
+var server = app.listen(process.env.port || config.port, config.host, function () {
     log.info('server listen on %s port and %s host ', config.port, config.host);
 });
 
 socket.initialize(server);
-//var clientConnect = require('modules/clientconnect');
 
 var routes = require('routes/index');
 // var users = require('./routes/users');

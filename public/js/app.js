@@ -1,6 +1,7 @@
 window.JS_ENV = window.JS_ENV || 'production';
 
 if (window.JS_ENV === 'development') {
+    console.log('Development mode enable');
     require.config({
         baseUrl: 'js/lib',
         paths: {
