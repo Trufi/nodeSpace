@@ -10,9 +10,10 @@ var socket = require('./socket');
 log.info('App start in ' + (process.env.NODE_ENV || 'production') + ' mode');
 
 var app = express();
+var port = process.env.PORT || process.env.port || config.port;
 
-var server = app.listen(process.env.port || config.port, config.host, function () {
-    log.info('server listen on %s port and %s host ', config.port, config.host);
+var server = app.listen(port, function () {
+    log.info('server listen on %s port ', port);
 });
 
 socket.initialize(server);
