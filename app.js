@@ -3,15 +3,11 @@ var path = require('path');
 var favicon = require('static-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
-var log = require('modules/log')(module);
-var config = require('config');
-var socket = require('socket');
-var sessionStore = require('mongo/sessionstore');
+var log = require('./modules/log')(module);
+var config = require('./config');
+var socket = require('./socket');
 
 log.info('App start in ' + (process.env.NODE_ENV || 'production') + ' mode');
-
-require('mongo');
 
 var app = express();
 
@@ -21,12 +17,12 @@ var server = app.listen(process.env.port || config.port, config.host, function (
 
 socket.initialize(server);
 
-var routes = require('routes/index');
+var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 
 // Init game
-require('game');
+require('./game');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,15 +33,6 @@ app.use(favicon());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-
-app.use(session({
-    secret: config.session.secret,
-    key: config.session.key,
-    cookie: config.session.cookie,
-    resave: true,
-    saveUninitialized: true,
-    store: sessionStore
-}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -82,12 +69,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-
-/*var util = require('util');
-setInterval(function() {
-    console.log(util.inspect(process.memoryUsage()));
-}, 1000);*/
 
 module.exports = app;

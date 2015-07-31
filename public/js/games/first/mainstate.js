@@ -5,7 +5,7 @@ define(
         var key = require('modules/key');
         var player = require('modules/player');
         var mainMenu = require('interface/frames/mainmenu');
-        var ScreenArrow = require('interface/screenArrow');
+        var ScreenArrow = require('interface/screenarrow');
         var interface = require('interface/index');
         var debug = require('modules/debug');
         var render = require('modules/render');

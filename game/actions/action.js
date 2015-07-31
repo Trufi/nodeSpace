@@ -1,4 +1,4 @@
-var config = require('config');
+var config = require('../../config');
 
 var Action = function Action(options) {
     this.cooldown = options.cooldown || config.actions.cooldown;

@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var body = require('../index');
-var log = require('modules/log')(module);
+var log = require('../../../modules/log')(module);
 
 var weapons = {};
 var idCounter = 1;

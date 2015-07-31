@@ -1,7 +1,7 @@
 var socketio = require('socket.io');
-var config = require('config');
-var log = require('modules/log')(module);
-var clients = require('clients');
+var config = require('../config');
+var log = require('../modules/log')(module);
+var clients = require('../clients');
 
 var io;
 

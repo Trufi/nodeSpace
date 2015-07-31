@@ -42,7 +42,7 @@ define(
             });
             state.firstMenu.addChild(buttonQuickStart);
 
-            buttonLogIn = interface.button.create({
+            /*buttonLogIn = interface.button.create({
                 text: 'Log in',
                 color: 'red',
                 click: function() {
@@ -62,7 +62,7 @@ define(
                 },
                 position: [-150, 35]
             });
-            state.firstMenu.addChild(buttonSignUp);
+            state.firstMenu.addChild(buttonSignUp);*/
         }
 
         function createLoginMenu() {
@@ -361,9 +361,9 @@ define(
             game.camera.followTo(game.bodies[this.followBodyNumber]);
 
             createFirstMenu();
-            createLoginMenu();
-            createRegMenu();
-            choiceNameMenu();
+            //createLoginMenu();
+            //createRegMenu();
+            //choiceNameMenu();
 
             this.lastTimeChangeCamera = Date.now();
 
@@ -396,8 +396,8 @@ define(
 
         state.close = function() {
             this.firstMenu.hide();
-            this.loginMenu.hide();
-            this.regMenu.hide();
+            /*this.loginMenu.hide();
+            this.regMenu.hide();*/
         };
 
         state.next = function() {

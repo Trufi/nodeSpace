@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var game = require('game');
+var game = require('../game');
 
 /* GET home page. */
 if (process.env.NODE_ENV !== 'development') {

@@ -1,6 +1,6 @@
 {
-    "host": "192.168.0.4",
-    "port": 8888,
+    "host": "localhost",
+    "port": 8883,
     "session": {
         "secret": "veryUnknownInfo",
         "key": "sid",
@@ -10,10 +10,6 @@
             "httpOnly": true,
             "secure": false
         }
-    },
-    "mongo": {
-        "url": "mongodb://127.0.0.1:27017/nodeSpace",
-        "urlDev": "mongodb://127.0.0.1:27017/nodeSpace"
     },
     "sendStateInterval": 25,
     "actions": {

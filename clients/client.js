@@ -1,11 +1,11 @@
 var _ = require('lodash');
-var game = require('game');
-var body = require('game/body');
-var action = require('game/actions');
-var mongo = require('mongo');
-var ObjectID = require('mongodb').ObjectID;
-var log = require('modules/log')(module);
-var config = require('config');
+var game = require('../game');
+var body = require('../game/body');
+var action = require('../game/actions');
+var log = require('../modules/log')(module);
+var config = require('../config');
+
+var usersCount = 0;
 
 // В клиенте содержится сокет, игрок клиента, сессия и информация о ней
 var Client = function(options) {
@@ -28,7 +28,7 @@ var Client = function(options) {
 
 Client.prototype.applyData = function(data) {
     this.gameType = data.gameType || 0;
-    this.name = data.name || (config.users.anonName + ++mongo.usersCount);
+    this.name = data.name || (config.users.anonName + ++usersCount);
     this.dbId = data._id;
 
     this.createShip(data);
@@ -99,32 +99,6 @@ Client.prototype.updateActions = function(now) {
 Client.prototype.action = function(now, name, options) {
     if (this.actions[name] !== undefined) {
         this.actions[name].use(now, options);
-    }
-};
-
-Client.prototype.getDateForDb = function() {
-    var date = {};
-    date.name = this.name;
-    date.shipType = this.ship.type;
-    date.position = [this.ship.body.position[0], this.ship.body.position[1]];
-    date.velocity = [this.ship.body.velocity[0], this.ship.body.velocity[1]];
-    date.angularVelocity = this.ship.body.angularVelocity;
-    date.angle = this.ship.body.angle;
-    return date;
-};
-
-Client.prototype.save = function() {
-    var _this = this;
-
-    if (this.dbId === undefined) {
-        mongo.users.insert(this.getDateForDb(), function(err, doc) {
-            if (err) return log.error(err);
-            _this.dbId = doc._id;
-        });
-    } else {
-        mongo.users.update({_id: new ObjectID(this.dbId)}, {$set: this.getDateForDb()}, function(err) {
-            if (err) return log.error(err);
-        });
     }
 };
 

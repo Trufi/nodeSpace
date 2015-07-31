@@ -1,8 +1,8 @@
 var p2 = require('p2');
 var _ = require('lodash');
 
-var body = require('game/body');
-var config = require('config');
+var body = require('../body');
+var config = require('../../config');
 
 var Game = function Game() {
     this.id = ++Game._idCounter;
