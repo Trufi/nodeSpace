@@ -1,20 +1,20 @@
-var socketio = require('socket.io');
+import socketio from 'socket.io';
 
-var log = require('../modules/log')(module);
-var clients = require('../clients');
+import log from '../modules/log';
+import * as clients from '../clients';
 
-var io;
+let currentIo;
 
-exports.initialize = function(server) {
-    io = socketio.listen(server, {log: true});
+export function initialize(server) {
+    currentIo = socketio.listen(server, {log: true});
     log.info('socket.io initialized');
 
-    io.sockets.on('connection', socket => {
+    currentIo.sockets.on('connection', socket => {
         log.silly('New socket connection');
         clients.initialize(socket);
     });
-};
+}
 
-exports.io = function() {
-    return io;
-};
+export function io() {
+    return currentIo;
+}

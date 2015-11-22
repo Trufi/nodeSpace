@@ -4,8 +4,10 @@ var _ = require('lodash');
 var body = require('../body');
 var config = require('../../config');
 
+var idCounter = 0;
+
 var Game = function Game() {
-    this.id = ++Game._idCounter;
+    this.id = ++idCounter;
 
     this.timeStep = 1 / 60;
 
@@ -39,8 +41,6 @@ var Game = function Game() {
 
     this.impactEvents();
 };
-
-Game._idCounter = 0;
 
 Game.prototype.start = function() {
     var _this = this;

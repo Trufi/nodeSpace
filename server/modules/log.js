@@ -1,19 +1,12 @@
-var winston = require('winston');
-var config = require('../config');
+import winston from 'winston';
+import path from 'path';
+import config from '../config';
 
-function createLogger(path) {
-    var transports = [
-        new winston.transports.Console({
-            //timestamp: true,
-            colorize: true,
-            level: 'silly',
-            label: path.replace(config['pathToProject'], '')
-        })
-    ];
+const transports = [
+    new winston.transports.Console({
+        colorize: true,
+        level: 'silly'
+    })
+];
 
-    return new winston.Logger({transports: transports});
-}
-
-module.exports = function(module) {
-    return createLogger(module.filename);
-};
+export default new winston.Logger({transports: transports});

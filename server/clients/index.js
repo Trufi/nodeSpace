@@ -1,51 +1,76 @@
-var Client = require('./client');
-var log = require('../modules/log')(module);
-var async = require('async');
-var config = require('../config');
+import async from 'async';
 
-var clients = {};
+import log from '../modules/log';
+import config from '../config';
+import Client from './client';
 
-clients._idCounter = 0;
-clients.list = {};
+let idCounter = 0;
 
-require('./authorization')(clients);
+export let list = {};
 
-clients.initialize = function(socket) {
-    var client;
+export function initialize(socket) {
+    const client = new Client({
+        id: ++idCounter,
+        socket: socket
+    });
 
-    async.parallel([
-        function(callback) {
-            client = new Client({id: ++clients._idCounter, socket: socket});
-            clients.list[client.id] = client;
-            log.silly('Create new client with id: %s', client.id);
-            callback(null, null);
-        },
-        function(callback) {
-            var timeout = setTimeout(function() {
-                callback(new Error('User load timeout'));
-            }, config.waitingUsersLoad);
+    list[client.id] = client;
 
-            socket.once(1, function() {
-                clearTimeout(timeout);
-                log.silly('Client onload');
-                callback(null, null);
-            });
+    log.silly(`Create new client with id: ${client.id}`);
+
+    const timeout = setTimeout(() => {
+        log.error('User load timeout');
+
+        if (client) {
+            client.destroy();
         }
-    ], function(err) {
-        if (err) {
-            log.error(err.message);
+    }, config.waitingUsersLoad);
 
-            if (client !== undefined) {
-                client.destroy();
-            }
+    socket.once(1, function() {
+        clearTimeout(timeout);
 
-            return;
-        }
+        log.silly('Client onload');
 
         client.activateGame();
 
-        clients.enableSocketAuth(client);
+        enableSocketAuth(client);
     });
-};
+}
 
-module.exports = clients;
+function enableSocketAuth(client) {
+    client.socket
+        .once('quickStart', function() {
+            quickStart(client);
+        });
+}
+
+function disableSocketAuth(client) {
+    client.socket
+        .removeAllListeners('quickStart');
+}
+
+function initNewPlayer(client, options = {}) {
+    const game = client.game;
+
+    let gameData = game.getDateForNewPlayer();
+
+    if (options.name !== undefined) {
+        gameData.name = options.name;
+    }
+    if (options._id !== undefined) {
+        gameData._id = options._id;
+    }
+
+    client.applyData(gameData);
+
+    game.removeSpectator(client);
+    game.addPlayer(client);
+
+    client.send(6, client.getFirstState());
+}
+
+function quickStart(client) {
+    initNewPlayer(client);
+    log.silly(`User quickstart, id: ${client.id}, name: ${client.name}`);
+    disableSocketAuth(client);
+}
