@@ -1,4 +1,3 @@
-import util from 'util';
 import p2 from 'p2';
 
 import Body from './Body';

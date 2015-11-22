@@ -7,7 +7,7 @@
     "email": "stevemyz@gmail.com"
   },
   "scripts": {
-    "postinstall": "mkdir dist",
+    "postinstall": "mkdir -p dist",
     "start": "npm run build && npm run server",
     "server": "node server",
     "build": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",

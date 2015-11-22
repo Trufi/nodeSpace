@@ -1,7 +1,4 @@
 import winston from 'winston';
-import path from 'path';
-
-import config from '../config';
 
 const transports = [
     new winston.transports.Console({

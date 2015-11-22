@@ -1,5 +1,3 @@
-import async from 'async';
-
 import log from '../modules/log';
 import config from '../config';
 import Client from './Client';

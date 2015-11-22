@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import p2 from 'p2';
 
 import * as actions from '../actions';
