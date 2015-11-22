@@ -1,7 +1,6 @@
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+
 var log = require('./modules/log')(module);
 var config = require('./config');
 var socket = require('./socket');
@@ -17,20 +16,14 @@ var server = app.listen(port, () => {
 
 socket.initialize(server);
 
-var routes = require('./routes/index');
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Init game
-require('./game');
+var game = require('./game');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, '../public')));
+app.get('/shutdown', game.closeAll);
 
 // error handlers
 app.use((error, req, res, next) => {
     res.send(error);
 });
-
-module.exports = app;

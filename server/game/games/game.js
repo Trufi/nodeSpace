@@ -272,5 +272,4 @@ Game.prototype.impactEvents = function() {
     });
 };
 
-
 module.exports = Game;

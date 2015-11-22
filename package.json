@@ -1,25 +1,16 @@
 {
     "name": "nodeSpace",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "private": true,
     "author": {
         "name": "Mstislav Zhivodkov",
         "email": "stevemyz@gmail.com"
     },
     "scripts": {
-        "start": "node ./app.js"
-    },
-    "engines": {
-        "node": "~0.10.29",
-        "npm": "~1.4.14"
+        "start": "node server"
     },
     "dependencies": {
         "express": "~4.0.0",
-        "static-favicon": "~1.0.0",
-        "morgan": "~1.0.0",
-        "cookie-parser": "~1.0.1",
-        "body-parser": "~1.0.0",
-        "debug": "~0.7.4",
         "socket.io": "~1.0.6",
         "p2": "~0.5.0",
         "lodash": "~2.4.1",
