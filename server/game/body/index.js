@@ -5,10 +5,9 @@ import Bullet from './bullets/Bullet';
 
 let idCounter = 1;
 
-export function create(options) {
+export function create(options = {}) {
     let newBody;
 
-    options = options || {};
     options.type = options.type || 2;
     options.id = idCounter++;
 

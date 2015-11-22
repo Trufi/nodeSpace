@@ -1,85 +1,85 @@
-import util from 'util';
 import p2 from 'p2';
 
 import Body from '../Body';
 import mask from '../mask';
 
-export default function Bullet(options) {
-    Bullet.super_.apply(this, arguments);
+export default class Bullet extends Body {
+    constructor(options) {
+        super(options);
 
-    this.parent = options.parent;
-    this.timeLive = 5000;
-    this.damageValue = 5;
-    this.reflectAngle = 0.8;
-    this.timeCreate;
-}
+        this.parent = options.parent;
+        this.timeLive = 5000;
+        this.damageValue = 5;
+        this.reflectAngle = 0.8;
+        this.timeCreate;
+    }
 
-util.inherits(Bullet, Body);
 
-Bullet.prototype.createBody = function(options) {
-    this.body = new p2.Body({
-        mass: 0.01,
-        position: options.position || [0, 0],
-        velocity: options.velocity || [0, 0],
-        damping: 0,
-        angularVelocity: 0,
-        angularDamping: 0,
-        angle: 0
-    });
+    createBody(options) {
+        this.body = new p2.Body({
+            mass: 0.01,
+            position: options.position || [0, 0],
+            velocity: options.velocity || [0, 0],
+            damping: 0,
+            angularVelocity: 0,
+            angularDamping: 0,
+            angle: 0
+        });
 
-    this.timeCreate = Date.now();
+        this.timeCreate = Date.now();
 
-    this.body._gameBody = this;
-};
+        this.body._gameBody = this;
+    }
 
-Bullet.prototype.applyShape = function() {
-    this.shape = new p2.Circle(1);
-    this.shape.collisionGroup = mask.BULLET;
-    this.shape.collisionMask = mask.BODY | mask.SHIP;
-    this.shape.sensor = true;
-    this.body.addShape(this.shape);
-};
+    applyShape() {
+        this.shape = new p2.Circle(1);
+        this.shape.collisionGroup = mask.BULLET;
+        this.shape.collisionMask = mask.BODY | mask.SHIP;
+        this.shape.sensor = true;
+        this.body.addShape(this.shape);
+    }
 
-Bullet.prototype.update = function(now) {
-    if (now - this.timeCreate > this.timeLive) {
+    update(now) {
+        if (now - this.timeCreate > this.timeLive) {
+            this.destroy();
+        }
+    }
+
+    addDamage() {/*
+     var v2 = [this.body.velocity[0], this.body.velocity[1]],
+     v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
+     a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
+     damage = 0;
+
+     if (a > this.reflectAngle) {
+     this.destroy();
+     damage = this.damageValue;
+     }*/
+
+        return this.damageValue;
+    }
+
+    checkForDestroyAfterCollide() {/*
+     var v2 = [this.body.velocity[0], this.body.velocity[1]],
+     v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
+     a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
+     damage = 0;
+
+     if (a > this.reflectAngle) {
+     this.destroy();
+     damage = this.damageValue;
+     }*/
         this.destroy();
     }
-};
 
-Bullet.prototype.addDamage = function() {/*
-    var v2 = [this.body.velocity[0], this.body.velocity[1]],
-        v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
-        a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
-        damage = 0;
+    getFirstInfo() {
+        var info = [];
+        info[0] = this.id;
+        info[1] = this.type;
+        info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
+        info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
+        return info;
+    }
 
-    if (a > this.reflectAngle) {
-        this.destroy();
-        damage = this.damageValue;
-    }*/
-
-    return this.damageValue;
-};
-
-Bullet.prototype.checkForDestroyAfterCollide = function() {/*
-    var v2 = [this.body.velocity[0], this.body.velocity[1]],
-    v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
-    a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
-    damage = 0;
-
-    if (a > this.reflectAngle) {
-    this.destroy();
-    damage = this.damageValue;
-    }*/
-    this.destroy();
-};
-
-Bullet.prototype.getFirstInfo = function() {
-    var info = [];
-    info[0] = this.id;
-    info[1] = this.type;
-    info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
-    info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
-    return info;
-};
-
-Bullet.prototype.getInfo = function() {};
+    getInfo() {}
+}

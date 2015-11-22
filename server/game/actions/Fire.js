@@ -1,27 +1,24 @@
-import util from 'util';
 import _ from 'lodash';
 
 import Action from './Action';
 
-export default function Fire(options) {
-    Fire.super_.apply(this, arguments);
+export default class Fire extends Action {
+    constructor(options) {
+        super(options);
 
-    this.type = 5;
-    this.cooldown = 100;
-    this.ship = options.body;
-    this.weapons = options.weapons;
-};
+        this.type = 5;
+        this.cooldown = 100;
+        this.ship = options.body;
+        this.weapons = options.weapons;
+    }
 
-util.inherits(Fire, Action);
+    _run(now, options) {
+        this.ship.actionsUsed.push(this.type);
 
-Fire.prototype._run = function(now, options) {
-    var _this = this;
-
-    this.ship.actionsUsed.push(this.type);
-
-    _.forEach(options, function(angle, i) {
-        if (_this.weapons[i] !== undefined) {
-            _this.weapons[i].fire(now, angle);
-        }
-    });
-};
+        _.forEach(options, (angle, i) => {
+            if (this.weapons[i] !== undefined) {
+                this.weapons[i].fire(now, angle);
+            }
+        });
+    }
+}
