@@ -10,7 +10,7 @@
     "server": "node server",
     "build": "browserify client/js/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
     "dev": "watchify client/js/index.js -o dist/bundle.js -dv",
-    "lint": "eslint client"
+    "lint": "eslint client server"
   },
   "dependencies": {
     "express": "^4.13.3",

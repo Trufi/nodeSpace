@@ -1,7 +1,6 @@
 var socketio = require('socket.io');
 
 var log = require('../modules/log')(module);
-var config = require('../config');
 var clients = require('../clients');
 
 var io;

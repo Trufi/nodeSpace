@@ -1,6 +1,4 @@
-var _ = require('lodash');
 var log = require('../modules/log')(module);
-var config = require('../config');
 
 module.exports = function (clients) {
     clients.enableSocketAuth = function(client) {

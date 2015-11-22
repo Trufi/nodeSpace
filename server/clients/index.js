@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var Client = require('./client');
 var log = require('../modules/log')(module);
 var async = require('async');

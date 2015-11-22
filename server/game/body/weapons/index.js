@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var body = require('../index');
 var log = require('../../../modules/log')(module);
 
@@ -42,8 +41,8 @@ Weapon.prototype.fire = function(now, angle) {
                 type: 1000,
                 position: [worldPoint[0], worldPoint[1]],
                 velocity: [
-                        this.bulletVelocity * Math.cos(angle + this.parent.body.angle) + this.parent.body.velocity[0],
-                        this.bulletVelocity * Math.sin(angle + this.parent.body.angle) + this.parent.body.velocity[1]
+                    this.bulletVelocity * Math.cos(angle + this.parent.body.angle) + this.parent.body.velocity[0],
+                    this.bulletVelocity * Math.sin(angle + this.parent.body.angle) + this.parent.body.velocity[1]
                 ],
                 parent: this.parent
             })

@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var Game = require('../game');
 var body = require('../../body');
 

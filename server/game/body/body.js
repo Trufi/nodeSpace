@@ -1,8 +1,6 @@
 var p2 = require('p2');
-var shapes = require('./shapes');
 var _ = require('lodash');
 var action = require('../actions/index');
-var config = require('../../config');
 
 // Класс простейшего тела
 var Body = function Body(options) {

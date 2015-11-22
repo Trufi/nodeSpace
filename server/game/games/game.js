@@ -95,9 +95,7 @@ Game.prototype.sendState = function(now) {
             gameState[3] = 0;
         }
 
-        //setTimeout(function() {
-            user.send(3, gameState);
-        //}, Math.floor(Math.random() * 500));
+        user.send(3, gameState);
     }
 
     if (now - this.sendStateLastTime > this.sendStateInterval) {

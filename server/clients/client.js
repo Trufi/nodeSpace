@@ -1,7 +1,6 @@
 var _ = require('lodash');
 var game = require('../game');
 var body = require('../game/body');
-var action = require('../game/actions');
 var log = require('../modules/log')(module);
 var config = require('../config');
 

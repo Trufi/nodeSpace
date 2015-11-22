@@ -1,6 +1,5 @@
 var p2 = require('p2');
 var utils = require('util');
-var shapes = require('./shapes');
 var Body = require('./body');
 var mask = require('./mask');
 
