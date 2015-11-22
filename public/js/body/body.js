@@ -43,7 +43,7 @@ Body.prototype.applyShape = function() {};
 Body.prototype.applyActions = function() {
     var _this = this;
 
-    _(this.actionsArray).forEach(function(el) {
+    _.forEach(this.actionsArray, function(el) {
         _this.actions[el] = action.create({body: _this, name: el});
     });
 };
@@ -82,7 +82,7 @@ Body.prototype.update = function(now, data) {
 Body.prototype.updateActions = function(now, data) {
     var _this = this;
 
-    _(data[6]).forEach(function(el) {
+    _.forEach(data[6], function(el) {
         _this.action(now, el);
     });
 };

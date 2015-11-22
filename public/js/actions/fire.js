@@ -1,4 +1,6 @@
 var util = require('util');
+var _ = require('lodash');
+
 var Action = require('./action');
 
 var Fire = function Fire(options) {

@@ -113,7 +113,7 @@ game.updateImportant = function(data) {
     var _this = this,
         now = data[0] + this.ping;
     // actions data
-    _(data[1][0]).forEach(function(el) {
+    _.forEach(data[1][0], function(el) {
         if (_this.bodies[el[0]] !== undefined) {
             _this.bodies[el[0]].updateActions(now, el);
         }
@@ -121,14 +121,14 @@ game.updateImportant = function(data) {
     // new data
     if (data[2]) {
         if (data[2][0] !== 0) {
-            _(data[2][0]).forEach(function (el) {
+            _.forEach(data[2][0], function (el) {
                 if (_this.bodies[el[0]] === undefined) {
                     _this.addBody(body.create(el));
                 }
             });
         }
         if (data[2][1] !== 0) {
-            _(data[2][1]).forEach(function (el) {
+            _.forEach(data[2][1], function (el) {
                 var user;
 
                 if (_this.users[el[0]] === undefined) {
@@ -149,7 +149,7 @@ game.updateImportant = function(data) {
     // remove data
     if (data[3]) {
         if (data[3][0] !== 0) {
-            _(data[3][0]).forEach(function (el) {
+            _.forEach(data[3][0], function (el) {
                 if (_this.bodies[el] !== undefined) {
                     _this.bodies[el].destroy();
                 } else {
@@ -175,7 +175,7 @@ game.updateFromDataServer = function(now) {
     this.updateData = _.sortBy(this.updateData, 0);
     // формируем массив данных для обновления
     arrData = [];
-    _(this.updateData).forEach(function(el, i) {
+    _.forEach(this.updateData, function(el, i) {
         if (el[0] < now - _this.ping) {
             arrData.push(el);
             //console.log(now - _this.ping - el[0]);
@@ -199,7 +199,7 @@ game.updateFromDataServer = function(now) {
             step.go(dt);
         }
 
-        _(lastData[1][0]).forEach(function (el) {
+        _.forEach(lastData[1][0], function (el) {
             if (_this.bodies[el[0]] !== undefined) {
                 _this.bodies[el[0]].update(lastData[0], el);
             }
@@ -245,12 +245,12 @@ game.start = function(options) {
     background.create(this);
 
     // создаем объекты в космосе
-    _(options.game.bodies).forEach(function(el) {
+    _.forEach(options.game.bodies, function(el) {
         _this.addBody(body.create(el));
     });
 
     // создаем и сохраняем юзеров
-    _(options.game.users).forEach(function(el) {
+    _.forEach(options.game.users, function(el) {
         var user = new User(el);
         _this.addUser(user);
 
@@ -273,7 +273,7 @@ game.update = function(now) {
     this.ping = ping.get() / 2;
     this.camera.update();
 
-    _(game.bodies).forEach(function(el) {
+    _.forEach(game.bodies, function(el) {
         el.updateSprite(now);
     });
 

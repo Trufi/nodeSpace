@@ -12,7 +12,7 @@ player.setUser = function(user) {
 
     this.user = user;
 
-    _(this.user.actions).forEach(function(el, i) {
+    _.forEach(this.user.actions, function(el, i) {
         _this.actions[i] = el;
     });
 };
@@ -25,7 +25,7 @@ player.sendActionToServer = function() {
     var actions = {},
         notNull = false;
 
-    _(player.actions).forEach(function(el, i) {
+    _.forEach(player.actions, function(el, i) {
         if (el.checked) {
             actions[i] = el.getInfo();
 

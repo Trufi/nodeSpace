@@ -94,4 +94,4 @@ weapons.create = function(options) {
     return new Weapon(options);
 };
 
-module.exports = Weapon;
+module.exports = weapons;

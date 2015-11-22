@@ -70,7 +70,7 @@ bodyInfo.create = function(options) {
 };
 
 bodyInfo.update = function() {
-    _(bodyInfo.list).forEach(function(el) {
+    _.forEach(bodyInfo.list, function(el) {
         el.update();
     });
 };

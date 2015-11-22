@@ -3,7 +3,7 @@ var _ = require('lodash');
 var step = {};
 
 step.go = function(dt) {
-    _(weaponsList).forEach(function(el) {
+    _.forEach(weaponsList, function(el) {
         el.step(dt);
     });
 };

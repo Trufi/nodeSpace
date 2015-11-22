@@ -24,7 +24,7 @@ state.start = function(options) {
         target: game.bodies[1]
     });
 
-    _(game.users).forEach(function(el) {
+    _.forEach(game.users, function(el) {
         interface.bodyInfo.create({
             body: el.ship
         });
@@ -85,7 +85,7 @@ state.close = function() {
 };
 
 state.newData = function(data) {
-    _(data[1]).forEach(function(el) {
+    _.forEach(data[1], function(el) {
         interface.bodyInfo.create({
             body: game.users[el[0]].ship
         });

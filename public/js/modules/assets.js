@@ -1,4 +1,5 @@
 var PIXI = require('pixi.js');
+var _ = require('lodash');
 
 var config = require('../config');
 
@@ -34,14 +35,14 @@ assets.load = function (loadObj, callback) {
     loadObj.texture.bulletGreen = 'bullet_green.gif';
 
     // загрузка текстур
-    _(loadObj.texture).forEach(function(el) {
+    _.forEach(loadObj.texture, function(el) {
         loadArray.push(config.pathToAssets + el);
     });
 
     loader = new PIXI.AssetLoader(loadArray);
 
     loader.onComplete = function() {
-        _(loadObj.texture).forEach(function(el, i) {
+        _.forEach(loadObj.texture, function(el, i) {
             assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
         });
 
