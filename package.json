@@ -10,8 +10,8 @@
     "postinstall": "mkdir dist",
     "start": "npm run build && npm run server",
     "server": "node server",
-    "build": "browserify client/js/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
-    "dev": "watchify client/js/index.js -o dist/bundle.js -dv",
+    "build": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
+    "dev": "watchify client/index.js -o dist/bundle.js -dv",
     "lint": "eslint client server"
   },
   "engines": {

@@ -16,6 +16,7 @@ socket.initialize(server);
 
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../assets')));
 
 // Init game
 const game = require('./game');
