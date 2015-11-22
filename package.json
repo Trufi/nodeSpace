@@ -7,10 +7,14 @@
     "email": "stevemyz@gmail.com"
   },
   "scripts": {
+    "start": "npm run build && npm run server",
     "server": "node server",
     "build": "browserify client/js/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
     "dev": "watchify client/js/index.js -o dist/bundle.js -dv",
     "lint": "eslint client server"
+  },
+  "engines": {
+    "node": "4.2.1"
   },
   "dependencies": {
     "express": "^4.13.3",
