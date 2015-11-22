@@ -65,10 +65,8 @@ window.addEventListener('keydown', function(ev) {
         keyStr = codesToKey[keyCode];
         keyPressed[keyStr] = true;
         keyDown[keyStr] = true;
-    } else {
-        if (keyForTextEdit.indexOf(keyCode) !== -1) {
-            writeTextCallback(codesToKey[keyCode]);
-        }
+    } else if (keyForTextEdit.indexOf(keyCode) !== -1) {
+        writeTextCallback(codesToKey[keyCode]);
     }
 });
 

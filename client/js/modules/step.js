@@ -2,13 +2,13 @@ var _ = require('lodash');
 
 var step = {};
 
+var weaponsList = {};
+
 step.go = function(dt) {
     _.forEach(weaponsList, function(el) {
         el.step(dt);
     });
 };
-
-var weaponsList = {};
 
 step.addWeapon = function(weapon) {
     weaponsList[weapon.id] = weapon;

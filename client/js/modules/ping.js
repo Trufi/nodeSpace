@@ -1,5 +1,3 @@
-var _ = require('lodash');
-
 var request = require('../modules/request');
 
 var ping = {};

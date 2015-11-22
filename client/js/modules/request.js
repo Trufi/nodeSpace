@@ -9,13 +9,11 @@ var socket = io.connect(location.origin, {
     reconnectionDelayMax: 1000
 });
 
-var disconnectTime = 0,
-    disconnectCallback = function() {},
-    reconnectCallback = function() {};
+var disconnectCallback = function() {};
+var reconnectCallback = function() {};
 
 socket
     .on('disconnect', function() {
-        disconnectTime = Date.now();
         disconnectFrame.show(config.socket.reconnectWait);
         disconnectCallback();
     })

@@ -3,7 +3,6 @@ var PIXI = require('pixi.js');
 var p2 = require('p2');
 
 var camera = require('../modules/camera');
-var assets = require('../modules/assets');
 var render = require('../modules/render');
 var action = require('../actions/index');
 

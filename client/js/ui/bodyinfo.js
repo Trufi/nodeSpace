@@ -1,9 +1,7 @@
 var PIXI = require('pixi.js');
 var _ = require('lodash');
 
-var camera = require('../modules/camera');
 var render = require('../modules/render');
-var assets = require('../modules/assets');
 var config = require('../config');
 
 var bodyInfo = {};

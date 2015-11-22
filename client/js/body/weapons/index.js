@@ -1,5 +1,4 @@
 var PIXI = require('pixi.js');
-var _ = require('lodash');
 
 var assets = require('../../modules/assets');
 var render = require('../../modules/render');
@@ -34,12 +33,10 @@ Weapon.prototype.step = function(dt) {
 
     if (angleNeed < dAngle) {
         this.angle = this.toAngle;
+    } else if (angleNeed < Math.PI * 2 - angleNeed) {
+        this.angle = this.angle - sign * dAngle;
     } else {
-        if (angleNeed < Math.PI * 2 - angleNeed) {
-            this.angle = this.angle - sign * dAngle;
-        } else {
-            this.angle = this.angle + sign * dAngle;
-        }
+        this.angle = this.angle + sign * dAngle;
     }
 };
 
@@ -56,16 +53,19 @@ Weapon.prototype.updateAim = function() {
         angleNeed = Math.abs(resetAngle(angle - this.toAngle)),
         parentAngle = this.parent.body.angle,
         weaponPos = [
-                this.position[0] * Math.cos(parentAngle) - this.position[1] * Math.sin(parentAngle),
-                this.position[0] * Math.sin(parentAngle) + this.position[1] * Math.cos(parentAngle)
+            this.position[0] * Math.cos(parentAngle) - this.position[1] * Math.sin(parentAngle),
+            this.position[0] * Math.sin(parentAngle) + this.position[1] * Math.cos(parentAngle)
         ];
 
     if (angleNeed < Math.PI / 16) {
         angle = this.toAngle;
     }
 
-    this.spriteAim.position.x = weaponPos[0] * camera.scale() + this.radius * Math.cos(angle + parentAngle) + render.resolution[0] / 2;
-    this.spriteAim.position.y = weaponPos[1] * camera.scale() + this.radius * Math.sin(angle + parentAngle) + render.resolution[1] / 2;
+    this.spriteAim.position.x = weaponPos[0] * camera.scale() +
+        this.radius * Math.cos(angle + parentAngle) + render.resolution[0] / 2;
+
+    this.spriteAim.position.y = weaponPos[1] * camera.scale() +
+        this.radius * Math.sin(angle + parentAngle) + render.resolution[1] / 2;
 };
 
 Weapon.prototype.goto = function(point) {

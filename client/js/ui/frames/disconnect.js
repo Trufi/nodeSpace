@@ -4,6 +4,19 @@ var disconnect = {};
 
 var frame, text, timeText, interval, timeLeft, timeStart;
 
+var _show = function(val) {
+    timeLeft = val;
+    timeStart = Date.now();
+
+    frame.show();
+    timeText.setText(Math.ceil(timeLeft / 1000));
+
+    interval = setInterval(function() {
+        var val = Math.max(Math.ceil((timeLeft - (Date.now() - timeStart)) / 1000), 0);
+        timeText.setText(val);
+    }, 1000);
+};
+
 disconnect.show = function(val) {
     frame = ui.frame.create({
         anchor: 'CENTER',
@@ -34,25 +47,12 @@ disconnect.show = function(val) {
     _show(val);
 };
 
-var _show = function(val) {
-    timeLeft = val;
-    timeStart = Date.now();
-
-    frame.show();
-    timeText.setText(Math.ceil(timeLeft / 1000));
-
-    interval = setInterval(function() {
-        var val = Math.max(Math.ceil((timeLeft - (Date.now() - timeStart)) / 1000), 0);
-        timeText.setText(val);
-    }, 1000);
-};
-
 disconnect.hide = function() {
     frame.hide();
     clearInterval(interval);
 };
 
-disconnect.setTime = function(val){
+disconnect.setTime = function(val) {
     timeText.setText(val);
 };
 

@@ -1,7 +1,6 @@
 var PIXI = require('pixi.js');
 var _ = require('lodash');
 
-var position = require('./position');
 var key = require('../modules/key');
 var config = require('../config');
 
@@ -157,12 +156,10 @@ Editbox.prototype.updateCursor = function() {
 
     if (this.cursorPosition === 0) {
         this.cursor.position.x = this.paddingLeft;
+    } else if (_this.isTextOverWidth) {
+        _this.cursor.position.x = _this.width - _this.paddingLeft;
     } else {
-        if (_this.isTextOverWidth) {
-            _this.cursor.position.x = _this.width - _this.paddingLeft;
-        } else {
-            _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
-        }
+        _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
     }
 
     // запускаем интервал мигания курсора

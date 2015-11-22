@@ -1,7 +1,3 @@
-// Родитель для всех типов игр
-// Не класс!
-
-var PIXI = require('pixi.js');
 var _ = require('lodash');
 var p2 = require('p2');
 
@@ -227,7 +223,6 @@ game.worldStep = function(now) {
 
 game.start = function(options) {
     var _this = this;
-    var i;
 
     ping.on();
     this.serverSendStateInterval = options.game.sendStateInterval;

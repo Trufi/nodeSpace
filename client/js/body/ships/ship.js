@@ -10,7 +10,6 @@ var step = require('../../modules/step');
 
 var action = require('../../actions/index');
 var weapons = require('../weapons/index');
-var config = require('../../config');
 var mask = require('../mask');
 var Body = require('../body');
 

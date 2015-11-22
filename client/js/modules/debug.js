@@ -1,7 +1,5 @@
-var _ = require('lodash');
 var PIXI = require('pixi.js');
 
-var request = require('../modules/request');
 var render = require('../modules/render');
 var ping = require('../modules/ping');
 

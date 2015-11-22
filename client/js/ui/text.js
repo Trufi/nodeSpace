@@ -1,5 +1,4 @@
 var PIXI = require('pixi.js');
-var _ = require('lodash');
 
 var config = require('../config');
 

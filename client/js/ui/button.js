@@ -1,7 +1,6 @@
 var PIXI = require('pixi.js');
 var _ = require('lodash');
 
-var position = require('./position');
 var config = require('../config');
 
 var button = {};
