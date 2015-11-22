@@ -4,7 +4,7 @@ var _ = require('lodash');
 var request = require('../../modules/request');
 var valid = require('../../modules/valid');
 var key = require('../../modules/key');
-var interface = require('../../interface/index');
+var ui = require('../../ui/index');
 var game = require('../../games/game');
 var nextStage = require('./mainstate');
 var config = require('../../config');
@@ -27,11 +27,11 @@ function createFirstMenu() {
         buttonLogIn,
         buttonSignUp;
 
-    state.firstMenu = interface.frame.create({
+    state.firstMenu = ui.frame.create({
         anchor: 'CENTER'
     });
 
-    buttonQuickStart = interface.button.create({
+    buttonQuickStart = ui.button.create({
         text: 'Quick start',
         click: function() {
             request.quickStart();
@@ -41,7 +41,7 @@ function createFirstMenu() {
     });
     state.firstMenu.addChild(buttonQuickStart);
 
-    /*buttonLogIn = interface.button.create({
+    /*buttonLogIn = ui.button.create({
         text: 'Log in',
         color: 'red',
         click: function() {
@@ -52,7 +52,7 @@ function createFirstMenu() {
     });
     state.firstMenu.addChild(buttonLogIn);
 
-    buttonSignUp = interface.button.create({
+    buttonSignUp = ui.button.create({
         text: 'Sign up',
         color: 'orange',
         click: function() {
@@ -67,7 +67,7 @@ function createFirstMenu() {
 function createLoginMenu() {
     var login, pass, ok;
 
-    state.loginMenu = interface.frame.create({
+    state.loginMenu = ui.frame.create({
         anchor: 'CENTER',
         visible: false,
         onShow: function() {
@@ -75,13 +75,13 @@ function createLoginMenu() {
         }
     });
 
-    state.loginMenu.addChild(interface.text.create({
+    state.loginMenu.addChild(ui.text.create({
         text: 'Log in',
         position: [0, -120],
         anchor: [0.5, 1]
     }));
 
-    login = interface.editbox.create({
+    login = ui.editbox.create({
         position: [-150, -115],
         onNext: function() {
             pass.active();
@@ -90,14 +90,14 @@ function createLoginMenu() {
     state.loginMenu.addChild(login);
 
     login.addChild(
-        interface.text.create({
+        ui.text.create({
             text: 'E-mail',
             position: [-5, 25],
             anchor: [1, 0.5]
         })
     );
 
-    pass = interface.editbox.create({
+    pass = ui.editbox.create({
         color: 'red',
         position: [-150, -55],
         type: 'pass',
@@ -108,14 +108,14 @@ function createLoginMenu() {
     state.loginMenu.addChild(pass);
 
     pass.addChild(
-        interface.text.create({
+        ui.text.create({
             text: 'Password',
             position: [-5, 25],
             anchor: [1, 0.5]
         })
     );
 
-    ok = interface.button.create({
+    ok = ui.button.create({
         color: 'orange',
         text: 'Ok',
         position: [-150, 5],
@@ -147,7 +147,7 @@ function createLoginMenu() {
     });
     state.loginMenu.addChild(ok);
 
-    state.loginMenu.addChild(interface.button.create({
+    state.loginMenu.addChild(ui.button.create({
         color: 'green',
         text: 'Back',
         position: [-150, 65],
@@ -157,7 +157,7 @@ function createLoginMenu() {
         }
     }));
 
-    error = interface.text.create({
+    error = ui.text.create({
         text: '',
         color: 'ff0000',
         position: [160, 30],
@@ -170,7 +170,7 @@ function createLoginMenu() {
 function createRegMenu() {
     var login, pass, confirmPass, ok, error;
 
-    state.regMenu = interface.frame.create({
+    state.regMenu = ui.frame.create({
         anchor: 'CENTER',
         visible: false,
         onShow: function() {
@@ -178,13 +178,13 @@ function createRegMenu() {
         }
     });
 
-    state.regMenu.addChild(interface.text.create({
+    state.regMenu.addChild(ui.text.create({
         text: 'Sign up',
         position: [0, -150],
         anchor: [0.5, 1]
     }));
 
-    login = interface.editbox.create({
+    login = ui.editbox.create({
         position: [-150, -145],
         onNext: function() {
             pass.active();
@@ -193,14 +193,14 @@ function createRegMenu() {
     state.regMenu.addChild(login);
 
     login.addChild(
-        interface.text.create({
+        ui.text.create({
             text: 'E-mail',
             position: [-5, 25],
             anchor: [1, 0.5]
         })
     );
 
-    pass = interface.editbox.create({
+    pass = ui.editbox.create({
         color: 'red',
         position: [-150, -85],
         type: 'pass',
@@ -211,14 +211,14 @@ function createRegMenu() {
     state.regMenu.addChild(pass);
 
     pass.addChild(
-        interface.text.create({
+        ui.text.create({
             text: 'Password',
             position: [-5, 25],
             anchor: [1, 0.5]
         })
     );
 
-    confirmPass = interface.editbox.create({
+    confirmPass = ui.editbox.create({
         color: 'red',
         position: [-150, -25],
         type: 'pass',
@@ -229,14 +229,14 @@ function createRegMenu() {
     state.regMenu.addChild(confirmPass);
 
     confirmPass.addChild(
-        interface.text.create({
+        ui.text.create({
             text: 'Confirm password',
             position: [-5, 25],
             anchor: [1, 0.5]
         })
     );
 
-    ok = interface.button.create({
+    ok = ui.button.create({
         color: 'orange',
         text: 'Ok',
         position: [-150, 35],
@@ -276,7 +276,7 @@ function createRegMenu() {
     });
     state.regMenu.addChild(ok);
 
-    state.regMenu.addChild(interface.button.create({
+    state.regMenu.addChild(ui.button.create({
         color: 'green',
         text: 'Back',
         position: [-150, 95],
@@ -286,7 +286,7 @@ function createRegMenu() {
         }
     }));
 
-    error = interface.text.create({
+    error = ui.text.create({
         text: '',
         color: 'ff0000',
         position: [160, 60],
@@ -299,7 +299,7 @@ function createRegMenu() {
 function choiceNameMenu() {
     var name, error, ok;
 
-    state.choiceMenu = interface.frame.create({
+    state.choiceMenu = ui.frame.create({
         anchor: 'CENTER',
         visible: false,
         onShow: function() {
@@ -307,13 +307,13 @@ function choiceNameMenu() {
         }
     });
 
-    state.choiceMenu.addChild(interface.text.create({
+    state.choiceMenu.addChild(ui.text.create({
         text: 'Enter your name',
         position: [0, -60],
         anchor: [0.5, 1]
     }));
 
-    name = interface.editbox.create({
+    name = ui.editbox.create({
         position: [-150, -55],
         onNext: function() {
             ok.click();
@@ -321,7 +321,7 @@ function choiceNameMenu() {
     });
     state.choiceMenu.addChild(name);
 
-    ok = interface.button.create({
+    ok = ui.button.create({
         color: 'orange',
         text: 'Ok',
         position: [-150, 5],
@@ -345,7 +345,7 @@ function choiceNameMenu() {
     });
     state.choiceMenu.addChild(ok);
 
-    error = interface.text.create({
+    error = ui.text.create({
         text: '',
         color: 'ff0000',
         position: [160, 30],

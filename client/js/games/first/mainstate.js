@@ -5,9 +5,9 @@ var render = require('../../modules/render');
 var debug = require('../../modules/debug');
 var key = require('../../modules/key');
 
-var mainMenu = require('../../interface/frames/mainmenu');
-var ScreenArrow = require('../../interface/screenarrow');
-var interface = require('../../interface/index');
+var mainMenu = require('../../ui/frames/mainmenu');
+var ScreenArrow = require('../../ui/screenarrow');
+var ui = require('../../ui/index');
 
 var game = require('../game');
 
@@ -25,7 +25,7 @@ state.start = function(options) {
     });
 
     _.forEach(game.users, function(el) {
-        interface.bodyInfo.create({
+        ui.bodyInfo.create({
             body: el.ship
         });
     });
@@ -72,7 +72,7 @@ state.update = function(now) {
 
     player.user.ship.weaponsGoto(render.stage.getMousePosition());
     this.scrArrow.update();
-    interface.bodyInfo.update();
+    ui.bodyInfo.update();
     debug.update();
 };
 
@@ -86,7 +86,7 @@ state.close = function() {
 
 state.newData = function(data) {
     _.forEach(data[1], function(el) {
-        interface.bodyInfo.create({
+        ui.bodyInfo.create({
             body: game.users[el[0]].ship
         });
     });

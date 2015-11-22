@@ -1,6 +1,6 @@
 var io = require('socket.io-client');
 var config = require('../config');
-var disconnectFrame = require('../interface/frames/disconnect');
+var disconnectFrame = require('../ui/frames/disconnect');
 
 var request = {};
 

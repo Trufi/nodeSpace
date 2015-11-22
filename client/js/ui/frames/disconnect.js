@@ -1,11 +1,11 @@
-var interface = require('../index');
+var ui = require('../index');
 
 var disconnect = {};
 
 var frame, text, timeText, interval, timeLeft, timeStart;
 
 disconnect.show = function(val) {
-    frame = interface.frame.create({
+    frame = ui.frame.create({
         anchor: 'CENTER',
         color: 'red',
         position: [-200, -50],
@@ -14,7 +14,7 @@ disconnect.show = function(val) {
         opacity: 0.9
     });
 
-    text = interface.text.create({
+    text = ui.text.create({
         text: 'Disconnect...',
         position: [200, 30],
         anchor: [0.5, 0.5]
@@ -22,7 +22,7 @@ disconnect.show = function(val) {
 
     frame.addChild(text);
 
-    timeText = interface.text.create({
+    timeText = ui.text.create({
         text: '',
         position: [200, 65],
         anchor: [0.5, 0.5]

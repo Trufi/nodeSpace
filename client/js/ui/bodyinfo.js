@@ -31,7 +31,7 @@ var BodyInfo = function(options) {
 
 BodyInfo.prototype.createName = function() {
     this.spriteName = new PIXI.Text(this.body.name, {
-        font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
+        font: config.ui.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.ui.bodyInfo.fontFamily,
         fill: '#' + this.colorName,
         strokeThickness: 1
     });
@@ -41,7 +41,7 @@ BodyInfo.prototype.createName = function() {
 
 BodyInfo.prototype.createHp = function() {
     this.spriteHp = new PIXI.Text(Math.floor(this.body.hp), {
-        font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
+        font: config.ui.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.ui.bodyInfo.fontFamily,
         align: 'center',
         fill: '#' + this.colorHp,
         strokeThickness: 1

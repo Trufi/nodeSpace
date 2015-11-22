@@ -3,7 +3,7 @@ var game = require('./games/game');
 var render = require('./modules/render');
 var enterstate = require('./games/first/enter');
 var mainstate = require('./games/first/mainstate');
-var position = require('./interface/position');
+var position = require('./ui/position');
 
 window.JS_ENV = window.JS_ENV || 'production';
 console.log('Development mode enable');

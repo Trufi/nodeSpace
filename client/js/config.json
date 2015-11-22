@@ -7,7 +7,7 @@
     },
     "buttonFontFamily": "Arial",
     "buttonFontWeight": "normal",
-    "interface": {
+    "ui": {
         "bodyInfo": {
             "fontWeight": "normal",
             "fontFamily": "Arial"

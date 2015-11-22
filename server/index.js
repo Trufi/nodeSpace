@@ -16,7 +16,7 @@ var server = app.listen(port, () => {
 
 socket.initialize(server);
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../client')));
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Init game

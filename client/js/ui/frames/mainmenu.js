@@ -1,4 +1,4 @@
-var interface = require('../index');
+var ui = require('../index');
 
 var mainMenu = {};
 
@@ -7,7 +7,7 @@ var frame,
     buttonExit;
 
 mainMenu.create = function() {
-    frame = interface.frame.create({
+    frame = ui.frame.create({
         anchor: 'CENTER',
         width: 330,
         height: 140,
@@ -16,7 +16,7 @@ mainMenu.create = function() {
         visible: false
     });
 
-    buttonResume = interface.button.create({
+    buttonResume = ui.button.create({
         text: 'Return to game',
         position: [15, 15],
         color: 'orange',
@@ -27,7 +27,7 @@ mainMenu.create = function() {
 
     frame.addChild(buttonResume);
 
-    buttonExit = interface.button.create({
+    buttonExit = ui.button.create({
         text: 'Exit',
         position: [15, 75],
         color: 'green',
