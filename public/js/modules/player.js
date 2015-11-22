@@ -1,46 +1,42 @@
-define(
-    function(require) {
-        var _ = require('lodash');
-        var request = require('modules/request');
-        //var action = require('actions/index');
+var _ = require('lodash');
 
-        var player = {};
+var request = require('../modules/request');
 
-        player.user;
-        player.actions = {};
+var player = {};
 
-        player.setUser = function(user) {
-            var _this = this;
+player.user;
+player.actions = {};
 
-            this.user = user;
+player.setUser = function(user) {
+    var _this = this;
 
-            _(this.user.actions).forEach(function(el, i) {
-                _this.actions[i] = el;
-            });
-        };
+    this.user = user;
 
-        player.action = function(now, name) {
-            this.actions[name].check(now);
-        };
+    _(this.user.actions).forEach(function(el, i) {
+        _this.actions[i] = el;
+    });
+};
 
-        player.sendActionToServer = function() {
-            var actions = {},
-                notNull = false;
+player.action = function(now, name) {
+    this.actions[name].check(now);
+};
 
-            _(player.actions).forEach(function(el, i) {
-                if (el.checked) {
-                    actions[i] = el.getInfo();
+player.sendActionToServer = function() {
+    var actions = {},
+        notNull = false;
 
-                    el.reset();
-                    notNull = true;
-                }
-            });
+    _(player.actions).forEach(function(el, i) {
+        if (el.checked) {
+            actions[i] = el.getInfo();
 
-            if (notNull) {
-                request.sendToServer(actions);
-            }
-        };
+            el.reset();
+            notNull = true;
+        }
+    });
 
-        return player;
+    if (notNull) {
+        request.sendToServer(actions);
     }
-);
+};
+
+module.exports = player;

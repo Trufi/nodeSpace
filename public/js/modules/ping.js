@@ -1,51 +1,48 @@
-define(
-    function(require) {
-        var _ = require('lodash');
-        var request = require('modules/request');
+var _ = require('lodash');
 
-        var ping = {};
+var request = require('../modules/request');
 
-        var pingTimeInterval = 1000;
+var ping = {};
 
-        var value = 0;
-        var sendTime = Date.now();
+var pingTimeInterval = 1000;
 
-        function approxPing(time) {
-            value = Math.round((value + time) / 2);
-        }
+var value = 0;
+var sendTime = Date.now();
 
-        var lastDiffs = 0;
-        var numderOfLastDiffs = 0;
-        function approxDiffWithServerTime(clientTime, serverTime, dt) {
-            var currentDiff = clientTime + dt / 2 - serverTime;
-            lastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
-            numderOfLastDiffs += 1;
-        }
+function approxPing(time) {
+    value = Math.round((value + time) / 2);
+}
 
-        function checkPing() {
-            sendTime = Date.now();
-            request.ping(function(serverTime) {
-                var now = Date.now();
+var lastDiffs = 0;
+var numderOfLastDiffs = 0;
+function approxDiffWithServerTime(clientTime, serverTime, dt) {
+    var currentDiff = clientTime + dt / 2 - serverTime;
+    lastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
+    numderOfLastDiffs += 1;
+}
 
-                approxPing(now - sendTime);
-                approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
-                setTimeout(checkPing, pingTimeInterval);
-            });
-        }
+function checkPing() {
+    sendTime = Date.now();
+    request.ping(function(serverTime) {
+        var now = Date.now();
+
+        approxPing(now - sendTime);
+        approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
+        setTimeout(checkPing, pingTimeInterval);
+    });
+}
 
 
-        ping.on = function() {
-            checkPing();
-        };
+ping.on = function() {
+    checkPing();
+};
 
-        ping.get = function() {
-            return value;
-        };
+ping.get = function() {
+    return value;
+};
 
-        ping.dt = function() {
-            return lastDiffs;
-        };
+ping.dt = function() {
+    return lastDiffs;
+};
 
-        return ping;
-    }
-);
+module.exports = ping;

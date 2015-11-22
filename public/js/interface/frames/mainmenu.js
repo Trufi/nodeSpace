@@ -1,58 +1,54 @@
-define(
-    function(require) {
-        var interface = require('interface/index');
+var interface = require('../index');
 
-        var mainMenu = {};
+var mainMenu = {};
 
-        var frame,
-            buttonResume,
-            buttonExit;
+var frame,
+    buttonResume,
+    buttonExit;
 
-        mainMenu.create = function() {
-            frame = interface.frame.create({
-                anchor: 'CENTER',
-                width: 330,
-                height: 140,
-                position: [-160, -70],
-                color: 'blue',
-                visible: false
-            });
+mainMenu.create = function() {
+    frame = interface.frame.create({
+        anchor: 'CENTER',
+        width: 330,
+        height: 140,
+        position: [-160, -70],
+        color: 'blue',
+        visible: false
+    });
 
-            buttonResume = interface.button.create({
-                text: 'Return to game',
-                position: [15, 15],
-                color: 'orange',
-                click: function() {
-                    mainMenu.hide();
-                }
-            });
+    buttonResume = interface.button.create({
+        text: 'Return to game',
+        position: [15, 15],
+        color: 'orange',
+        click: function() {
+            mainMenu.hide();
+        }
+    });
 
-            frame.addChild(buttonResume);
+    frame.addChild(buttonResume);
 
-            buttonExit = interface.button.create({
-                text: 'Exit',
-                position: [15, 75],
-                color: 'green',
-                click: function() {
-                    mainMenu.hide();
-                }
-            });
+    buttonExit = interface.button.create({
+        text: 'Exit',
+        position: [15, 75],
+        color: 'green',
+        click: function() {
+            mainMenu.hide();
+        }
+    });
 
-            frame.addChild(buttonExit);
-        };
+    frame.addChild(buttonExit);
+};
 
-        mainMenu.show = function() {
-            frame.show();
-        };
+mainMenu.show = function() {
+    frame.show();
+};
 
-        mainMenu.hide = function() {
-            frame.hide();
-        };
+mainMenu.hide = function() {
+    frame.hide();
+};
 
-        mainMenu.toggle = function() {
-            frame.toggle();
-        };
+mainMenu.toggle = function() {
+    frame.toggle();
+};
 
-        return mainMenu;
-    }
-);
+module.exports = mainMenu;

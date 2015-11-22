@@ -1,81 +1,78 @@
-define(
-    function(require) {
-        var _ = require('lodash');
-        var PIXI = require('pixi');
-        var camera = require('modules/camera');
-        var config = require('json!config');
-        var render = require('modules/render');
-        var assets = require('modules/assets');
+var PIXI = require('pixi.js');
+var _ = require('lodash');
 
-        var bodyInfo = {};
-        bodyInfo.list = {};
-        var idCounter = 0;
+var camera = require('../modules/camera');
+var render = require('../modules/render');
+var assets = require('../modules/assets');
+var config = require('../config');
 
-        var BodyInfo = function(options) {
-            this.id = ++idCounter;
-            this.body = options.body;
+var bodyInfo = {};
+bodyInfo.list = {};
+var idCounter = 0;
 
-            this.colorName = options.colorName || 'fff';
-            this.colorHp = options.colorHp || 'fff';
-            this.fontSize = options.fontSize || 16;
-            this.padding = 30;
+var BodyInfo = function(options) {
+    this.id = ++idCounter;
+    this.body = options.body;
 
-            this.displayObject = new PIXI.DisplayObjectContainer();
-            render.layers[4].addChild(this.displayObject);
-            this.spriteName;
-            this.spriteHp;
+    this.colorName = options.colorName || 'fff';
+    this.colorHp = options.colorHp || 'fff';
+    this.fontSize = options.fontSize || 16;
+    this.padding = 30;
 
-            this.createName();
-            this.createHp();
-            this.update();
-        };
+    this.displayObject = new PIXI.DisplayObjectContainer();
+    render.layers[4].addChild(this.displayObject);
+    this.spriteName;
+    this.spriteHp;
 
-        BodyInfo.prototype.createName = function() {
-            this.spriteName = new PIXI.Text(this.body.name, {
-                font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
-                fill: '#' + this.colorName,
-                strokeThickness: 1
-            });
-            this.spriteName.anchor.x = 1;
-            this.displayObject.addChild(this.spriteName);
-        };
+    this.createName();
+    this.createHp();
+    this.update();
+};
 
-        BodyInfo.prototype.createHp = function() {
-            this.spriteHp = new PIXI.Text(Math.floor(this.body.hp), {
-                font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
-                align: 'center',
-                fill: '#' + this.colorHp,
-                strokeThickness: 1
-            });
-            this.spriteHp.anchor.x = 0;
-            this.displayObject.addChild(this.spriteHp);
-        };
+BodyInfo.prototype.createName = function() {
+    this.spriteName = new PIXI.Text(this.body.name, {
+        font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
+        fill: '#' + this.colorName,
+        strokeThickness: 1
+    });
+    this.spriteName.anchor.x = 1;
+    this.displayObject.addChild(this.spriteName);
+};
 
-        BodyInfo.prototype.update = function() {
-            this.displayObject.position.x = this.body.sprite.position.x;
-            this.displayObject.position.y = this.body.sprite.position.y;
+BodyInfo.prototype.createHp = function() {
+    this.spriteHp = new PIXI.Text(Math.floor(this.body.hp), {
+        font: config.interface.bodyInfo.fontWeight + ' ' + this.fontSize + 'px ' + config.interface.bodyInfo.fontFamily,
+        align: 'center',
+        fill: '#' + this.colorHp,
+        strokeThickness: 1
+    });
+    this.spriteHp.anchor.x = 0;
+    this.displayObject.addChild(this.spriteHp);
+};
 
-            this.spriteHp.setText(Math.floor(this.body.hp));
-            this.spriteHp.position.x = 5;
-            this.spriteHp.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
+BodyInfo.prototype.update = function() {
+    this.displayObject.position.x = this.body.sprite.position.x;
+    this.displayObject.position.y = this.body.sprite.position.y;
+
+    this.spriteHp.setText(Math.floor(this.body.hp));
+    this.spriteHp.position.x = 5;
+    this.spriteHp.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
 
 
-            this.spriteName.position.x = -5;
-            this.spriteName.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
-        };
+    this.spriteName.position.x = -5;
+    this.spriteName.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
+};
 
-        bodyInfo.create = function(options) {
-            var bi = new BodyInfo(options);
-            bodyInfo.list[bi.id] = bi;
-            return bi;
-        };
+bodyInfo.create = function(options) {
+    var bi = new BodyInfo(options);
+    bodyInfo.list[bi.id] = bi;
+    return bi;
+};
 
-        bodyInfo.update = function() {
-            _(bodyInfo.list).forEach(function(el) {
-                el.update();
-            });
-        };
+bodyInfo.update = function() {
+    _(bodyInfo.list).forEach(function(el) {
+        el.update();
+    });
+};
 
-        return bodyInfo;
-    }
-);
+module.exports = bodyInfo;

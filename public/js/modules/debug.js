@@ -1,48 +1,45 @@
-define(
-    function(require) {
-        var _ = require('lodash');
-        var PIXI = require('pixi');
-        var render = require('modules/render');
-        var request = require('modules/request');
-        var ping = require('modules/ping');
+var _ = require('lodash');
+var PIXI = require('pixi.js');
 
-        var debug = {};
+var request = require('../modules/request');
+var render = require('../modules/render');
+var ping = require('../modules/ping');
 
-        var pingText,
-            dtText;
+var debug = {};
 
-        debug.pingOn = function() {
-            pingText = new PIXI.Text(ping.get() + 'ms', {
-                font: 'normal 18px Arial',
-                fill: '#fff'
-            });
-            pingText.position.x = 10;
-            pingText.position.y = 10;
-            render.layers[4].addChild(pingText);
+var pingText,
+    dtText;
 
-            dtText = new PIXI.Text(ping.get() + 'ms', {
-                font: 'normal 18px Arial',
-                fill: '#fff'
-            });
-            dtText.position.x = 10;
-            dtText.position.y = 40;
-            render.layers[4].addChild(dtText);
-        };
+debug.pingOn = function() {
+    pingText = new PIXI.Text(ping.get() + 'ms', {
+        font: 'normal 18px Arial',
+        fill: '#fff'
+    });
+    pingText.position.x = 10;
+    pingText.position.y = 10;
+    render.layers[4].addChild(pingText);
 
-        debug.pingOff = function() {
-            render.layers[4].removeChild(pingText);
-            pingText = undefined;
-        };
+    dtText = new PIXI.Text(ping.get() + 'ms', {
+        font: 'normal 18px Arial',
+        fill: '#fff'
+    });
+    dtText.position.x = 10;
+    dtText.position.y = 40;
+    render.layers[4].addChild(dtText);
+};
 
-        debug.update = function() {
-            if (pingText !== undefined) {
-                pingText.setText(ping.get() + 'ms');
-            }
-            if (dtText !== undefined) {
-                dtText.setText('dt: ' + (Math.floor(ping.dt() * 1000) / 1000));
-            }
-        };
+debug.pingOff = function() {
+    render.layers[4].removeChild(pingText);
+    pingText = undefined;
+};
 
-        return debug;
+debug.update = function() {
+    if (pingText !== undefined) {
+        pingText.setText(ping.get() + 'ms');
     }
-);
+    if (dtText !== undefined) {
+        dtText.setText('dt: ' + (Math.floor(ping.dt() * 1000) / 1000));
+    }
+};
+
+module.exports = debug;

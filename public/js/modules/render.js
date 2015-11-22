@@ -1,42 +1,39 @@
-define(
-    function(require) {
-        var PIXI = require('pixi');
-        var config = require('json!config');
+var PIXI = require('pixi.js');
 
-        var render = {};
+var config = require('../config');
 
-        // stage из pixi.js
-        render.stage;
-        // уровни в stage
-        render.layers = [];
+var render = {};
 
-        render.create = function(options) {
-            var gameWrap = document.getElementById(config.gameHtmlWrapId),
-                i;
+// stage из pixi.js
+render.stage;
+// уровни в stage
+render.layers = [];
 
-            options = options || {};
+render.create = function(options) {
+    var gameWrap = document.getElementById(config.gameHtmlWrapId),
+        i;
 
-            // разрешение рендера
-            this.resolution = options.resolution || [window.innerWidth, window.innerHeight];
+    options = options || {};
 
-            this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1]);
-            this.render.view.style.display = 'block';
+    // разрешение рендера
+    this.resolution = options.resolution || [window.innerWidth, window.innerHeight];
 
-            document.getElementById('gamepreloader').style.display = 'none';
-            gameWrap.style.display = 'block';
-            gameWrap.appendChild(this.render.view);
+    this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1]);
+    this.render.view.style.display = 'block';
 
-            this.stage = new PIXI.Stage(0x000000);
-            for (i = 0; i < 5; i++) {
-                this.layers[i] = new PIXI.DisplayObjectContainer();
-                this.stage.addChild(this.layers[i]);
-            }
-        };
+    document.getElementById('gamepreloader').style.display = 'none';
+    gameWrap.style.display = 'block';
+    gameWrap.appendChild(this.render.view);
 
-        render.draw = function() {
-            this.render.render(this.stage);
-        };
-
-        return render;
+    this.stage = new PIXI.Stage(0x000000);
+    for (i = 0; i < 5; i++) {
+        this.layers[i] = new PIXI.DisplayObjectContainer();
+        this.stage.addChild(this.layers[i]);
     }
-);
+};
+
+render.draw = function() {
+    this.render.render(this.stage);
+};
+
+module.exports = render;

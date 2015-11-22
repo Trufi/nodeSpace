@@ -1,21 +1,17 @@
-define(
-    function(require) {
-        var User = function User(options) {
-            this.id = options[0];
-            this.ship;
-            this.actions = {};
-        };
+var User = function User(options) {
+    this.id = options[0];
+    this.ship;
+    this.actions = {};
+};
 
-        User.prototype.setShip = function(body) {
-            var _this = this;
+User.prototype.setShip = function(body) {
+    var _this = this;
 
-            this.ship = body;
+    this.ship = body;
 
-            _(this.ship.actions).forEach(function(el, i) {
-                _this.actions[i] = el;
-            });
-        };
+    _(this.ship.actions).forEach(function(el, i) {
+        _this.actions[i] = el;
+    });
+};
 
-        return User;
-    }
-);
+module.exports = User;
