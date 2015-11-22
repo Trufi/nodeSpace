@@ -1,15 +1,16 @@
-var p2 = require('p2');
-var utils = require('util');
-var Body = require('./body');
-var mask = require('./mask');
+import util from 'util';
+import p2 from 'p2';
 
-var Asteroid = function Asteroid(options) {
+import Body from './Body';
+import mask from './mask';
+
+export default function Asteroid(options) {
     Asteroid.super_.apply(this, arguments);
 
     this.name = 'Asteroid';
-};
+}
 
-utils.inherits(Asteroid, Body);
+util.inherits(Asteroid, Body);
 
 Asteroid.prototype.createBody = function(options) {
     this.body = new p2.Body({
@@ -31,5 +32,3 @@ Asteroid.prototype.applyShape = function() {
     this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
     this.body.addShape(this.shape);
 };
-
-module.exports = Asteroid;

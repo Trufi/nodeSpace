@@ -1,12 +1,12 @@
-var p2 = require('p2');
-var _ = require('lodash');
+import _ from 'lodash';
+import p2 from 'p2';
 
-var body = require('../body');
-var config = require('../../config');
+import config from '../../config';
+import * as body from '../body';
 
-var idCounter = 0;
+let idCounter = 0;
 
-var Game = function Game() {
+export default function Game() {
     this.id = ++idCounter;
 
     this.timeStep = 1 / 60;
@@ -40,7 +40,7 @@ var Game = function Game() {
     });
 
     this.impactEvents();
-};
+}
 
 Game.prototype.start = function() {
     var _this = this;
@@ -269,5 +269,3 @@ Game.prototype.impactEvents = function() {
         body.beginContact(ev.bodyA._gameBody, ev.bodyB._gameBody);
     });
 };
-
-module.exports = Game;

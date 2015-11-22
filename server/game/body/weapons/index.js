@@ -1,22 +1,22 @@
-var body = require('../index');
-var log = require('../../../modules/log')(module);
+import * as body from '../index';
 
-var weapons = {};
-var idCounter = 1;
+import log from '../../../modules/log';
+
+let idCounter = 1;
 
 function resetAngle(angle) {
     var sign = angle > 0 ? 1 : -1;
     return sign * ((Math.abs(angle) + Math.PI) % (Math.PI * 2) - Math.PI);
 }
 
-var Weapon = function Weapon(options) {
+function Weapon(options) {
     this.parent = options.parent;
     this.position = options.position || [0, 0];
     this.angularVelocity = 5;
     this.lastAngle = 0;
     this.lastTimeFire = 0;
     this.bulletVelocity = 700;
-};
+}
 
 Weapon.prototype.checkAngle = function(now, angle) {
     var mbAngle = (this.angularVelocity + 1) * (now - this.lastTimeFire) / 1000,
@@ -53,11 +53,9 @@ Weapon.prototype.fire = function(now, angle) {
     }
 };
 
-weapons.create = function(options) {
+export function create(options) {
     options = options || {};
     options.id = idCounter++;
 
     return new Weapon(options);
-};
-
-module.exports = weapons;
+}

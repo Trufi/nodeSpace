@@ -7,6 +7,7 @@ let currentIo;
 
 export function initialize(server) {
     currentIo = socketio.listen(server, {log: true});
+
     log.info('socket.io initialized');
 
     currentIo.sockets.on('connection', socket => {

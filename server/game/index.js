@@ -1,7 +1,7 @@
-var first = require('./games/first');
-var log = require('../modules/log')(module);
+import log from '../modules/log';
+import first from './games/first';
 
-var game = {};
+let game = {};
 
 game.list = {
     0: first
@@ -22,4 +22,4 @@ game.closeAll = function(req, res) {
     res.send('All games shutdown!');
 };
 
-module.exports = game;
+export {game as default};

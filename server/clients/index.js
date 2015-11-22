@@ -2,7 +2,7 @@ import async from 'async';
 
 import log from '../modules/log';
 import config from '../config';
-import Client from './client';
+import Client from './Client';
 
 let idCounter = 0;
 

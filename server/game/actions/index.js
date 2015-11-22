@@ -1,7 +1,7 @@
-var Move = require('./move');
-var Fire = require('./fire');
+import Move from './Move';
+import Fire from './Fire';
 
-exports.create = function(options) {
+export function create(options) {
     var newAction;
 
     switch (options.name) {
@@ -32,4 +32,4 @@ exports.create = function(options) {
     }
 
     return newAction;
-};
+}

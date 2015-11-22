@@ -1,13 +1,14 @@
-var utils = require('util');
-var p2 = require('p2');
-var _ = require('lodash');
-var Body = require('../body');
-var mask = require('../mask');
-var action = require('../../actions/index');
-var weapons = require('../weapons');
-var Bullet = require('../bullets/bullet');
+import util from 'util';
+import _ from 'lodash';
+import p2 from 'p2';
 
-var Ship = function Ship(options) {
+import * as actions from '../../actions';
+import * as weapons from '../weapons';
+import Bullet from '../bullets/Bullet';
+import Body from '../Body';
+import mask from '../mask';
+
+export default function Ship(options) {
     Ship.super_.apply(this, arguments);
 
     this.forceThrust = options.forceThrust || 50000;
@@ -16,20 +17,20 @@ var Ship = function Ship(options) {
     this.hp = 100;
 
     this.weapons = [];
-};
+}
 
-utils.inherits(Ship, Body);
+util.inherits(Ship, Body);
 
 Ship.prototype.applyActions = function() {
     var _this = this,
         actionsArray = [1, 2, 3, 4, 6, 7, 8];
 
     _.forEach(actionsArray, function(el) {
-        _this.actions[el] = action.create({body: _this, name: el});
+        _this.actions[el] = actions.create({body: _this, name: el});
     });
 
     // добавляем действие для конкретного оружия
-    this.actions[5] = action.create({body: this, name: 5, weapons: this.weapons});
+    this.actions[5] = actions.create({body: this, name: 5, weapons: this.weapons});
 };
 
 Ship.prototype.applyWeapons = function() {

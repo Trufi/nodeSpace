@@ -1,9 +1,10 @@
-var p2 = require('p2');
-var _ = require('lodash');
-var action = require('../actions/index');
+import _ from 'lodash';
+import p2 from 'p2';
+
+import * as actions from '../actions';
 
 // Класс простейшего тела
-var Body = function Body(options) {
+export default function Body(options) {
     this.id = options.id;
     this.type = options.type;
     this.body;
@@ -41,7 +42,7 @@ Body.prototype.applyActions = function() {
     var _this = this;
 
     _.forEach(this.actionsArray, function(el) {
-        _this.actions[el] = action.create({body: _this, name: el});
+        _this.actions[el] = actions.create({body: _this, name: el});
     });
 };
 
@@ -103,5 +104,3 @@ Body.prototype.addDamage = function() {
 };
 
 Body.prototype.checkForDestroyAfterCollide = function() {};
-
-module.exports = Body;

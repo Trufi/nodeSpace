@@ -1,8 +1,9 @@
-var _ = require('lodash');
-var utils = require('util');
-var Action = require('./action');
+import util from 'util';
+import _ from 'lodash';
 
-var Fire = function Fire(options) {
+import Action from './Action';
+
+export default function Fire(options) {
     Fire.super_.apply(this, arguments);
 
     this.type = 5;
@@ -11,7 +12,7 @@ var Fire = function Fire(options) {
     this.weapons = options.weapons;
 };
 
-utils.inherits(Fire, Action);
+util.inherits(Fire, Action);
 
 Fire.prototype._run = function(now, options) {
     var _this = this;
@@ -24,5 +25,3 @@ Fire.prototype._run = function(now, options) {
         }
     });
 };
-
-module.exports = Fire;

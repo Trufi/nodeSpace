@@ -1,12 +1,12 @@
-var Asteroid = require('./asteroid');
-var Rectangle = require('./rectangle');
-var Ship = require('./ships/ship');
-var Bullet = require('./bullets/bullet');
+import Asteroid from './Asteroid';
+import Rectangle from './Rectangle';
+import Ship from './ships/Ship';
+import Bullet from './bullets/Bullet';
 
-var idCounter = 1;
+let idCounter = 1;
 
-exports.create = function(options) {
-    var newBody;
+export function create(options) {
+    let newBody;
 
     options = options || {};
     options.type = options.type || 2;
@@ -34,14 +34,14 @@ exports.create = function(options) {
     newBody.applyActions();
 
     return newBody;
-};
+}
 
-exports.collide = function(a, b) {
+export function collide(a, b) {
     b.damage(a);
     a.damage(b);
-};
+}
 
-exports.beginContact = function(a, b) {
+export function beginContact(a, b) {
     if (a instanceof Bullet) {
         b.damage(a);
     }
@@ -49,4 +49,4 @@ exports.beginContact = function(a, b) {
     if (b instanceof Bullet) {
         a.damage(b);
     }
-};
+}

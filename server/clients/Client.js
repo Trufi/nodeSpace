@@ -1,13 +1,14 @@
-var _ = require('lodash');
-var game = require('../game');
-var body = require('../game/body');
-var log = require('../modules/log')(module);
-var config = require('../config');
+import _ from 'lodash';
+
+import log from '../modules/log';
+import game from '../game';
+import * as body from '../game/body';
+import config from '../config';
 
 var usersCount = 0;
 
 // В клиенте содержится сокет, игрок клиента, сессия и информация о ней
-var Client = function(options) {
+export default function Client(options) {
     this.id = options.id;
 
     this.session;
@@ -138,5 +139,3 @@ Client.prototype.send = function(name, data) {
 Client.prototype.destroy = function() {
     // TODO: destroy client
 };
-
-module.exports = Client;

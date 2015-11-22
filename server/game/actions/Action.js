@@ -1,6 +1,6 @@
-var config = require('../../config');
+import config from '../../config';
 
-var Action = function Action(options) {
+export default function Action(options) {
     this.cooldown = options.cooldown || config.actions.cooldown;
     this.lastTimeUsed = 0;
     this.type = 0;
@@ -16,5 +16,3 @@ Action.prototype.use = function(now, options) {
         return false;
     }
 };
-
-module.exports = Action;

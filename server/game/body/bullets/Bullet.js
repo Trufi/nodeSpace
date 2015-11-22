@@ -1,9 +1,10 @@
-var p2 = require('p2');
-var utils = require('util');
-var Body = require('../body');
-var mask = require('../mask');
+import util from 'util';
+import p2 from 'p2';
 
-var Bullet = function Bullet(options) {
+import Body from '../Body';
+import mask from '../mask';
+
+export default function Bullet(options) {
     Bullet.super_.apply(this, arguments);
 
     this.parent = options.parent;
@@ -11,9 +12,9 @@ var Bullet = function Bullet(options) {
     this.damageValue = 5;
     this.reflectAngle = 0.8;
     this.timeCreate;
-};
+}
 
-utils.inherits(Bullet, Body);
+util.inherits(Bullet, Body);
 
 Bullet.prototype.createBody = function(options) {
     this.body = new p2.Body({
@@ -82,5 +83,3 @@ Bullet.prototype.getFirstInfo = function() {
 };
 
 Bullet.prototype.getInfo = function() {};
-
-module.exports = Bullet;

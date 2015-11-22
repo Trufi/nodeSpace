@@ -1,12 +1,12 @@
-var Game = require('../game');
-var body = require('../../body');
+import * as body from '../../body';
+import Game from '../Game';
 
 // инициализация единственной пока что игры
-var game = new Game();
+let game = new Game();
 game.start();
 
 // добавим астероид в игру
-var asteroid = body.create({
+let asteroid = body.create({
     type: 1,
     position: [0, 0],
     velocity: [0, 0],
@@ -30,4 +30,4 @@ game.addBody(body.create({
     mass: 5
 }));
 
-module.exports = game;
+export {game as default};
