@@ -18,7 +18,7 @@ Fire.prototype._run = function(now, options) {
 
     this.ship.actionsUsed.push(this.type);
 
-    _(options).forEach(function(angle, i) {
+    _.forEach(options, function(angle, i) {
         if (_this.weapons[i] !== undefined) {
             _this.weapons[i].fire(now, angle);
         }

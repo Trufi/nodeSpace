@@ -42,7 +42,7 @@ Body.prototype.applyShape = function() {
 Body.prototype.applyActions = function() {
     var _this = this;
 
-    _(this.actionsArray).forEach(function(el) {
+    _.forEach(this.actionsArray, function(el) {
         _this.actions[el] = action.create({body: _this, name: el});
     });
 };

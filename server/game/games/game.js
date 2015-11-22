@@ -50,11 +50,11 @@ Game.prototype.start = function() {
     this.interval = setInterval(function() {
         var now = Date.now();
 
-        _(_this.users).forEach(function(el) {
+        _.forEach(_this.users, function(el) {
             el.updateActions(now);
         });
 
-        _(_this.bodies).forEach(function(el) {
+        _.forEach(_this.bodies, function(el) {
             el.update(now);
         });
 
@@ -106,8 +106,8 @@ Game.prototype.sendState = function(now) {
         hasNew = this.newBodies.length > 0 || this.newUsers.length > 0;
         hasRemove = this.removeBodies.length > 0;
 
-        _(this.users).forEach(send);
-        _(this.spectators).forEach(send);
+        _.forEach(this.users, send);
+        _.forEach(this.spectators, send);
 
         if (hasNew) {
             this.newBodies = [];
@@ -127,7 +127,7 @@ Game.prototype.getGameState = function(user) {
     var state = [];
 
     state[0] = [];
-    _(this.bodies).forEach(function(el) {
+    _.forEach(this.bodies, function(el) {
         var info = el.getInfo();
         if (info !== undefined) {
             state[0].push(info);
@@ -135,7 +135,7 @@ Game.prototype.getGameState = function(user) {
     });
 
     state[1] = [];
-    _(this.users).forEach(function(el) {
+    _.forEach(this.users, function(el) {
         var info = el.getInfo();
         if (info !== undefined) {
             state[1].push(info);
@@ -146,7 +146,7 @@ Game.prototype.getGameState = function(user) {
 };
 
 Game.prototype.resetBodyUsedActions = function() {
-    _(this.bodies).forEach(function(el) {
+    _.forEach(this.bodies, function(el) {
         el.resetActionsUsed();
     });
 };
@@ -167,7 +167,7 @@ Game.prototype.getGameFirstState = function(user) {
     state.sendStateInterval = this.sendStateInterval;
 
     state.bodies = [];
-    _(this.bodies).forEach(function(el) {
+    _.forEach(this.bodies, function(el) {
         var info = el.getFirstInfo();
         if (info !== undefined) {
             state.bodies.push(info);
@@ -186,7 +186,7 @@ Game.prototype.getGameNewState = function(user) {
     var state = [];
 
     state[0] = [];
-    _(this.newBodies).forEach(function(el) {
+    _.forEach(this.newBodies, function(el) {
         var info = el.getFirstInfo();
         if (info !== undefined) {
             state[0].push(info);
@@ -254,7 +254,7 @@ Game.prototype.getDateForNewPlayer = function() {
 Game.prototype.close = function() {
     clearInterval(this.interval);
 
-    _(this.users).forEach(function(el) {
+    _.forEach(this.users, function(el) {
         el.send('gameClose');
         el.save();
     });

@@ -47,7 +47,7 @@ Client.prototype.createShip = function(data) {
         name: this.name
     });
 
-    _(this.ship.actions).forEach(function(el, i) {
+    _.forEach(this.ship.actions, function(el, i) {
         _this.actions[i] = el;
     });
 
@@ -77,7 +77,7 @@ Client.prototype.socketOn = function() {
         .removeAllListeners(5)
         .removeAllListeners(7)
         .on(5, function(data) {
-            _(data).forEach(function (el, i) {
+            _.forEach(data, function (el, i) {
                 _this.actionsDone[i] = el;
             });
         })
@@ -89,7 +89,7 @@ Client.prototype.socketOn = function() {
 Client.prototype.updateActions = function(now) {
     var _this = this;
 
-    _(this.actionsDone).forEach(function(el, i) {
+    _.forEach(this.actionsDone, function(el, i) {
         _this.action(now, i, el);
     });
 

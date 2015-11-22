@@ -26,7 +26,7 @@ Ship.prototype.applyActions = function() {
     var _this = this,
         actionsArray = [1, 2, 3, 4, 6, 7, 8];
 
-    _(actionsArray).forEach(function(el) {
+    _.forEach(actionsArray, function(el) {
         _this.actions[el] = action.create({body: _this, name: el});
     });
 
