@@ -1,13 +1,12 @@
-var Asteroid = require('./asteroid');
-var Rectangle = require('./rectangle');
-var Ship = require('./ships/ship');
-var Bullet = require('./bullets/bullet');
+import Asteroid from './Asteroid';
+import Rectangle from './Rectangle';
+import Ship from './ships/Ship';
+import Bullet from './bullets/Bullet';
 
-exports.create = function(options) {
-    var newBody, type;
+export function create(options = {}) {
+    let newBody;
 
-    options = options || [];
-    type = options[1] || 2;
+    const type = options[1] || 2;
 
     switch (type) {
         case 1:
@@ -34,4 +33,4 @@ exports.create = function(options) {
     newBody.updateSprite();
 
     return newBody;
-};
+}
