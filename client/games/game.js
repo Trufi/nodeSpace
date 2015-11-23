@@ -1,19 +1,19 @@
-var _ = require('lodash');
-var p2 = require('p2');
+import _ from 'lodash';
+import p2 from 'p2';
 
-var background = require('../modules/background');
-var request = require('../modules/request');
-var camera = require('../modules/camera');
-var render = require('../modules/render');
-var assets = require('../modules/assets');
-var player = require('../modules/player');
-var User = require('../modules/user');
-var ping = require('../modules/ping');
-var step = require('../modules/step');
-var key = require('../modules/key');
-var body = require('../body/index');
+import * as background from '../modules/background';
+import request from '../modules/request';
+import camera from '../modules/camera';
+import player from '../modules/player';
+import render from '../modules/render';
+import assets from '../modules/assets';
+import User from '../modules/user';
+import ping from '../modules/ping';
+import step from '../modules/step';
+import key from '../modules/key';
+import * as body from '../body';
 
-var game = {};
+let game = {};
 
 // p2.js world
 game.world;
@@ -309,4 +309,4 @@ game.disconnectEnable = function() {
     });
 };
 
-module.exports = game;
+export {game as default};

@@ -1,6 +1,6 @@
-var key = {};
+let key = {};
 
-/*var keyCodes = {
+/*let keyCodes = {
     1: 49, 2: 50, 3: 51, 4: 52, 5: 53, 6: 54, 7: 55, 8: 56, 9: 57, 0: 48,
     Q: 81, W: 87, E: 69, R: 82, T: 84, Y: 89, U: 85, I: 73, O: 79, P: 80,
     A: 65, S: 83, D: 68, F: 70, G: 71, H: 72, J: 74, K: 75, L: 76,
@@ -17,7 +17,7 @@ var key = {};
 };*/
 //TODO: доделать остальные кнопки
 
-var codesToKey = {
+let codesToKey = {
     49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9, 48: 0,
     81: 'Q', 87: 'W', 69: 'E', 82: 'R', 84: 'T', 89: 'Y', 85: 'U', 73: 'I', 79: 'O', 80: 'P',
     65: 'A', 83: 'S', 68: 'D', 70: 'F', 71: 'G', 72: 'H', 74: 'J', 75: 'K', 76: 'L',
@@ -43,19 +43,19 @@ var codesToKey = {
 };
 
 // кнопки которые блокируют действия браузера
-var defaultKeyBlock = [8, 9];
-var keyPressed = {};
-var keyDown = {};
+let defaultKeyBlock = [8, 9];
+let keyPressed = {};
+let keyDown = {};
 
 // включен ли набор текста
-var isWriteText = false;
-var writeTextCallback;
+let isWriteText = false;
+let writeTextCallback;
 // кнопки которые будут передаваться в writeTextCallback при событии keydown
-var keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
+let keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
 
 window.addEventListener('keydown', function(ev) {
-    var keyCode = ev.keyCode || ev.which,
-        keyStr;
+    let keyCode = ev.keyCode || ev.which;
+    let keyStr;
 
     if (defaultKeyBlock.indexOf(keyCode) !== -1) {
         ev.preventDefault();
@@ -71,8 +71,7 @@ window.addEventListener('keydown', function(ev) {
 });
 
 window.addEventListener('keypress', function(ev) {
-    var code,
-        ch;
+    let code, ch;
 
     if (isWriteText) {
         code = ev.keyCode || ev.charCode;
@@ -90,7 +89,7 @@ window.addEventListener('keypress', function(ev) {
 });
 
 window.addEventListener('keyup', function(ev) {
-    var keyCode = ev.keyCode || ev.which;
+    let keyCode = ev.keyCode || ev.which;
     keyDown[codesToKey[keyCode]] = false;
 });
 
@@ -138,7 +137,7 @@ window.addEventListener('contextmenu', function(ev) {
 key.pressed = keyPressed;
 
 key.reset = function() {
-    for (var i in keyPressed) {
+    for (let i in keyPressed) {
         keyPressed[i] = false;
     }
 };
@@ -156,4 +155,4 @@ key.disableWriteText = function() {
     writeTextCallback = undefined;
 };
 
-module.exports = key;
+export {key as default};

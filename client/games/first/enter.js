@@ -1,23 +1,22 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var request = require('../../modules/request');
-var key = require('../../modules/key');
-var ui = require('../../ui/index');
-var game = require('../../games/game');
-var nextStage = require('./mainstate');
+import request from '../../modules/request';
+import key from '../../modules/key';
+import ui from '../../ui';
+import game from '../../games/game';
+import nextStage from './mainstate';
 
-var state = {};
-state.firstMenu;
-state.loginMenu;
-state.regMenu;
-state.followBodyNumber;
+let state = {};
+// state.firstMenu;
+// state.loginMenu;
+// state.regMenu;
+// state.followBodyNumber;
 
 // вначале undefined, после логина, квик старта или регистрации получает id
-state.playerId;
+//state.playerId;
 
 // предлагать или нет сохранение после быстрого старта
 state.proposeSignUp = false;
-
 
 function createFirstMenu() {
     var buttonQuickStart;
@@ -89,4 +88,4 @@ state.newData = function() {};
 
 state.removeData = function() {};
 
-module.exports = state;
+export {state as default};

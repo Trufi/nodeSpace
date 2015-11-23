@@ -1,8 +1,8 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var step = {};
+let step = {};
 
-var weaponsList = {};
+let weaponsList = {};
 
 step.go = function(dt) {
     _.forEach(weaponsList, function(el) {
@@ -20,4 +20,4 @@ step.removeWeapon = function(weapon) {
     }
 };
 
-module.exports = step;
+export {step as default};

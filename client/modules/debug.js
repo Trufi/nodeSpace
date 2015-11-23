@@ -1,12 +1,12 @@
-var PIXI = require('pixi.js');
+import PIXI from 'pixi.js';
 
-var render = require('../modules/render');
-var ping = require('../modules/ping');
+import render from '../modules/render';
+import ping from '../modules/ping';
 
-var debug = {};
+let debug = {};
 
-var pingText,
-    dtText;
+let pingText;
+let dtText;
 
 debug.pingOn = function() {
     pingText = new PIXI.Text(ping.get() + 'ms', {
@@ -40,4 +40,4 @@ debug.update = function() {
     }
 };
 
-module.exports = debug;
+export {debug as default};

@@ -1,20 +1,21 @@
-var request = require('../modules/request');
+import request from '../modules/request';
 
-var ping = {};
+let ping = {};
 
-var pingTimeInterval = 1000;
+let pingTimeInterval = 1000;
 
-var value = 0;
-var sendTime = Date.now();
+let value = 0;
+let sendTime = Date.now();
 
 function approxPing(time) {
     value = Math.round((value + time) / 2);
 }
 
-var lastDiffs = 0;
-var numderOfLastDiffs = 0;
+let lastDiffs = 0;
+let numderOfLastDiffs = 0;
+
 function approxDiffWithServerTime(clientTime, serverTime, dt) {
-    var currentDiff = clientTime + dt / 2 - serverTime;
+    let currentDiff = clientTime + dt / 2 - serverTime;
     lastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
     numderOfLastDiffs += 1;
 }
@@ -22,7 +23,7 @@ function approxDiffWithServerTime(clientTime, serverTime, dt) {
 function checkPing() {
     sendTime = Date.now();
     request.ping(function(serverTime) {
-        var now = Date.now();
+        let now = Date.now();
 
         approxPing(now - sendTime);
         approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
@@ -43,4 +44,4 @@ ping.dt = function() {
     return lastDiffs;
 };
 
-module.exports = ping;
+export {ping as default};

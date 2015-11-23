@@ -1,9 +1,9 @@
-var PIXI = require('pixi.js');
-var _ = require('lodash');
+import PIXI from 'pixi.js';
+import _ from 'lodash';
 
-var config = require('../config');
+import config from '../config';
 
-var assets = {};
+let assets = {};
 
 assets.texture = {};
 
@@ -75,4 +75,4 @@ function generateGraphicsTextures() {
     assets.texture.side = generateSideTextures();
 }
 
-module.exports = assets;
+export {assets as default};

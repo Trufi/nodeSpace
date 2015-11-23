@@ -1,8 +1,8 @@
-var PIXI = require('pixi.js');
+import PIXI from 'pixi.js';;
 
-var config = require('../config');
+import config from '../config';
 
-var render = {};
+let render = {};
 
 // stage из pixi.js
 render.stage;
@@ -36,4 +36,4 @@ render.draw = function() {
     this.render.render(this.stage);
 };
 
-module.exports = render;
+export {render as default};

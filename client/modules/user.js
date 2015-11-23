@@ -1,19 +1,17 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-function User(options) {
-    this.id = options[0];
-    this.ship;
-    this.actions = {};
-};
+export default class User {
+    constructor(options) {
+        this.id = options[0];
+        this.ship;
+        this.actions = {};
+    }
 
-User.prototype.setShip = function(body) {
-    var _this = this;
+    setShip(body) {
+        this.ship = body;
 
-    this.ship = body;
-
-    _.forEach(this.ship.actions, function(el, i) {
-        _this.actions[i] = el;
-    });
-};
-
-module.exports = User;
+        _.forEach(this.ship.actions, (el, i) => {
+            this.actions[i] = el;
+        });
+    }
+}

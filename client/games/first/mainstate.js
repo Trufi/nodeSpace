@@ -1,17 +1,15 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var player = require('../../modules/player');
-var render = require('../../modules/render');
-var debug = require('../../modules/debug');
-var key = require('../../modules/key');
+import player from '../../modules/player';
+import render from '../../modules/render';
+import debug from '../../modules/debug';
+import key from '../../modules/key';
+import ui from '../../ui';
+import mainMenu from '../../ui/frames/mainmenu';
+import ScreenArrow from '../../ui/screenarrow';
+import game from '../game';
 
-var mainMenu = require('../../ui/frames/mainmenu');
-var ScreenArrow = require('../../ui/screenarrow');
-var ui = require('../../ui/index');
-
-var game = require('../game');
-
-var state = {};
+let state = {};
 
 state.start = function(options) {
     // присваиваем User игроку
@@ -96,4 +94,4 @@ state.removeData = function(data) {
 
 };
 
-module.exports = state;
+export {state as default};

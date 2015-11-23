@@ -1,16 +1,17 @@
-var io = require('socket.io-client');
-var config = require('../config');
-var disconnectFrame = require('../ui/frames/disconnect');
+import io from 'socket.io-client';
 
-var request = {};
+import config from '../config';
+import disconnectFrame from '../ui/frames/disconnect';
 
-var socket = io.connect(location.origin, {
+let request = {};
+
+let socket = io.connect(location.origin, {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 1000
 });
 
-var disconnectCallback = function() {};
-var reconnectCallback = function() {};
+let disconnectCallback = function() {};
+let reconnectCallback = function() {};
 
 socket
     .on('disconnect', function() {
@@ -92,4 +93,4 @@ request.ping = function(callback) {
     socket.emit(7);
 };
 
-module.exports = request;
+export {request as default};

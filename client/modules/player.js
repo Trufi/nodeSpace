@@ -1,8 +1,8 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var request = require('../modules/request');
+import request from '../modules/request';
 
-var player = {};
+let player = {};
 
 player.user;
 player.actions = {};
@@ -39,4 +39,4 @@ player.sendActionToServer = function() {
     }
 };
 
-module.exports = player;
+export {player as default};

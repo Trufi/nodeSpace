@@ -1,4 +1,4 @@
-var valid = {};
+let valid = {};
 
 valid.passwordLength = function(pass) {
     return pass.length > 3;
@@ -16,4 +16,4 @@ valid.name = function(str) {
     return (str.length > 3) && !/[^a-z0-9\s]/i.test(str);
 };
 
-module.exports = valid;
+export {valid as default};

@@ -1,15 +1,13 @@
-var PIXI = require('pixi.js');
+import PIXI from 'pixi.js';
 
-var assets = require('../modules/assets');
-var render = require('../modules/render');
-var camera = require('../modules/camera');
+import assets from '../modules/assets';
+import render from '../modules/render';
+import camera from '../modules/camera';
 
-var bg = {};
+let layers = [];
 
-var layers = [];
-
-bg.create = function(game) {
-    var scale = camera.scale();
+export function create() {
+    let scale = camera.scale();
     layers[0] = new PIXI.TilingSprite(assets.texture.bg_0, render.resolution[0] / scale, render.resolution[1] / scale);
     layers[0].position.x = 0;
     layers[0].position.y = 0;
@@ -39,13 +37,13 @@ bg.create = function(game) {
     layers[3].tilePosition.y = 0;
     layers[3].scale = new PIXI.Point(scale, scale);
     render.layers[0].addChild(layers[3]);
-};
+}
 
-bg.update = function() {
-    var cameraPos = camera.position(),
-        camSc = camera.scale(),
-        bgSc = 0.05,
-        scale = 1 + bgSc * (camSc - 1);
+export function update() {
+    let cameraPos = camera.position();
+    let camSc = camera.scale();
+    let bgSc = 0.05;
+    let scale = 1 + bgSc * (camSc - 1);
 
     layers[0].width = render.resolution[0] / scale;
     layers[0].height = render.resolution[1] / scale;
@@ -84,6 +82,4 @@ bg.update = function() {
     } else {
         layers[3].visible = false;
     }
-};
-
-module.exports = bg;
+}
