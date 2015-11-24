@@ -1,5 +1,4 @@
 import PIXI from 'pixi.js';
-import _ from 'lodash';
 
 import render from '../modules/render';
 import position from './position';

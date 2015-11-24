@@ -7,7 +7,7 @@ let assets = {};
 
 assets.texture = {};
 
-assets.load = function (loadObj, callback) {
+assets.load = function(loadObj, callback) {
     var loadArray = [],
         loader;
 

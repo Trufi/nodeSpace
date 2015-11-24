@@ -35,7 +35,7 @@ request.reconnect = function(callback) {
 };
 
 request.gameInit = function(callback) {
-    socket.once(2, function (data) {
+    socket.once(2, function(data) {
         callback(data);
     });
     socket.emit(1);

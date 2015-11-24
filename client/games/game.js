@@ -117,14 +117,14 @@ game.updateImportant = function(data) {
     // new data
     if (data[2]) {
         if (data[2][0] !== 0) {
-            _.forEach(data[2][0], function (el) {
+            _.forEach(data[2][0], function(el) {
                 if (_this.bodies[el[0]] === undefined) {
                     _this.addBody(body.create(el));
                 }
             });
         }
         if (data[2][1] !== 0) {
-            _.forEach(data[2][1], function (el) {
+            _.forEach(data[2][1], function(el) {
                 var user;
 
                 if (_this.users[el[0]] === undefined) {
@@ -145,7 +145,7 @@ game.updateImportant = function(data) {
     // remove data
     if (data[3]) {
         if (data[3][0] !== 0) {
-            _.forEach(data[3][0], function (el) {
+            _.forEach(data[3][0], function(el) {
                 if (_this.bodies[el] !== undefined) {
                     _this.bodies[el].destroy();
                 } else {
@@ -181,7 +181,7 @@ game.updateFromDataServer = function(now) {
     arrDataLen = arrData.length;
     if (arrDataLen > 0) {
         this.updateData = this.updateData.slice(arrDataLen);
-        _.forEach(arrData, function (data) {
+        _.forEach(arrData, function(data) {
             _this.updateImportant(data);
         });
 
@@ -195,7 +195,7 @@ game.updateFromDataServer = function(now) {
             step.go(dt);
         }
 
-        _.forEach(lastData[1][0], function (el) {
+        _.forEach(lastData[1][0], function(el) {
             if (_this.bodies[el[0]] !== undefined) {
                 _this.bodies[el[0]].update(lastData[0], el);
             }

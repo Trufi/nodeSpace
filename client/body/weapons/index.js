@@ -3,8 +3,6 @@ import PIXI from 'pixi.js';
 import assets from '../../modules/assets';
 import camera from '../../modules/camera';
 import render from '../../modules/render';
-import step from '../../modules/step';
-import * as weapons from '../weapons';
 
 let idCounter = 1;
 

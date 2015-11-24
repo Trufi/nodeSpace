@@ -4,7 +4,7 @@ const typeToMoveName = ['thrust', 'reverse', 'left', 'right', null, 'strafeLeft'
 
 export default class Move extends Action {
     constructor(options) {
-       super(options);
+        super(options);
 
         this.ship = options.body;
         this.moveName = typeToMoveName[options.name - 1];
