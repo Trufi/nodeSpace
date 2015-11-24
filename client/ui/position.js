@@ -1,6 +1,6 @@
-var render = require('../modules/render');
+import render from '../modules/render';
 
-var position = {};
+let position = {};
 position.CENTER = [0, 0];
 position.TOP = [0, 0];
 position.BOTTOM = [0, 0];
@@ -25,4 +25,4 @@ position.update = function() {
     this.BOTTOMRIGHT = [render.resolution[0], render.resolution[1]];
 };
 
-module.exports = position;
+export {position as default};

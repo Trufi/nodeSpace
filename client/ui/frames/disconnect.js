@@ -1,18 +1,18 @@
-var ui = require('../index');
+import ui from '../index';
 
-var disconnect = {};
+let disconnect = {};
 
-var frame, text, timeText, interval, timeLeft, timeStart;
+let frame, text, timeText, interval, timeLeft, timeStart;
 
-var _show = function(val) {
+const _show = function(val) {
     timeLeft = val;
     timeStart = Date.now();
 
     frame.show();
     timeText.setText(Math.ceil(timeLeft / 1000));
 
-    interval = setInterval(function() {
-        var val = Math.max(Math.ceil((timeLeft - (Date.now() - timeStart)) / 1000), 0);
+    interval = setInterval(() => {
+        const val = Math.max(Math.ceil((timeLeft - (Date.now() - timeStart)) / 1000), 0);
         timeText.setText(val);
     }, 1000);
 };
@@ -56,4 +56,4 @@ disconnect.setTime = function(val) {
     timeText.setText(val);
 };
 
-module.exports = disconnect;
+export {disconnect as default};

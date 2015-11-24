@@ -1,9 +1,13 @@
-var ui = {};
+import frame from './frame';
+import button from './button';
+import editbox from './editbox';
+import text from './text';
+import bodyInfo from './bodyinfo';
 
-ui.frame = require('./frame');
-ui.button = require('./button');
-ui.editbox = require('./editbox');
-ui.text = require('./text');
-ui.bodyInfo = require('./bodyinfo');
-
-module.exports = ui;
+export default {
+    frame,
+    button,
+    editbox,
+    text,
+    bodyInfo
+};

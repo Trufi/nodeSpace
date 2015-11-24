@@ -2,9 +2,9 @@ import PIXI from 'pixi.js';
 import _ from 'lodash';
 import p2 from 'p2';
 
-import camera from '../../modules/camera';
-import render from '../../modules/render';
-import * as actions from '../../actions';
+import camera from '../modules/camera';
+import render from '../modules/render';
+import * as actions from '../actions';
 
 export default class Body {
     constructor(options) {

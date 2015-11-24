@@ -1,8 +1,8 @@
 import PIXI from 'pixi.js';
 import p2 from 'p2';
 
-import assets from '../../modules/assets';
-import Body from '../Body';
+import assets from '../modules/assets';
+import Body from './Body';
 
 export default class Rectangle extends Body {
     constructor(options) {

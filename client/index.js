@@ -1,15 +1,15 @@
-var request = require('./modules/request');
-var game = require('./games/game');
-var render = require('./modules/render');
-var enterstate = require('./games/first/enter');
-var mainstate = require('./games/first/mainstate');
-var position = require('./ui/position');
+import request from './modules/request';
+import render from './modules/render';
+import enterstate from './games/first/enter';
+import mainstate from './games/first/mainstate';
+import game from './games/game';
+import position from './ui/position';
 
 window.JS_ENV = window.JS_ENV || 'production';
 console.log('Development mode enable');
 
-request.gameInit(function(data) {
-    game.load(data, function() {
+request.gameInit(data => {
+    game.load(data, () => {
         render.create();
         position.update();
 

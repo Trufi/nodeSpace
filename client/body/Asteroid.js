@@ -1,9 +1,9 @@
 import PIXI from 'pixi.js';
 import p2 from 'p2';
 
-import assets from '../../modules/assets';
-import Body from '../Body';
-import mask from '../mask';
+import assets from '../modules/assets';
+import Body from './Body';
+import mask from './mask';
 
 export default class Asteroid extends Body {
     constructor(options) {

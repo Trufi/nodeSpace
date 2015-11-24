@@ -1,8 +1,8 @@
-var ui = require('../index');
+import ui from '../index';
 
-var mainMenu = {};
+let mainMenu = {};
 
-var frame,
+let frame,
     buttonResume,
     buttonExit;
 
@@ -51,4 +51,4 @@ mainMenu.toggle = function() {
     frame.toggle();
 };
 
-module.exports = mainMenu;
+export {mainMenu as default};
