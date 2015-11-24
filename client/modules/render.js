@@ -9,11 +9,8 @@ render.stage;
 // уровни в stage
 render.layers = [];
 
-render.create = function(options) {
-    var gameWrap = document.getElementById(config.gameHtmlWrapId),
-        i;
-
-    options = options || {};
+render.create = function(options = {}) {
+    let gameWrap = document.getElementById(config.gameHtmlWrapId);
 
     // разрешение рендера
     this.resolution = options.resolution || [window.innerWidth, window.innerHeight];
@@ -25,9 +22,10 @@ render.create = function(options) {
     gameWrap.style.display = 'block';
     gameWrap.appendChild(this.render.view);
 
-    this.stage = new PIXI.Stage(0x000000);
-    for (i = 0; i < 5; i++) {
-        this.layers[i] = new PIXI.DisplayObjectContainer();
+    this.stage = new PIXI.Container();
+
+    for (let i = 0; i < 5; i++) {
+        this.layers[i] = new PIXI.Container();
         this.stage.addChild(this.layers[i]);
     }
 };

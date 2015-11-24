@@ -35,7 +35,7 @@ class Text {
 
     setText(str) {
         this.text = str;
-        this.displayObject.setText(str);
+        this.displayObject.text = str;
     }
 }
 

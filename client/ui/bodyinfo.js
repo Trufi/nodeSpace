@@ -19,7 +19,7 @@ class BodyInfo {
         this.fontSize = options.fontSize || 16;
         this.padding = 30;
 
-        this.displayObject = new PIXI.DisplayObjectContainer();
+        this.displayObject = new PIXI.Container();
         render.layers[4].addChild(this.displayObject);
         this.spriteName;
         this.spriteHp;
@@ -54,7 +54,7 @@ class BodyInfo {
         this.displayObject.position.x = this.body.sprite.position.x;
         this.displayObject.position.y = this.body.sprite.position.y;
 
-        this.spriteHp.setText(Math.floor(this.body.hp));
+        this.spriteHp.text = Math.floor(this.body.hp);
         this.spriteHp.position.x = 5;
         this.spriteHp.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
 

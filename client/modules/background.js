@@ -7,22 +7,23 @@ import camera from '../modules/camera';
 let layers = [];
 
 export function create() {
-    let scale = camera.scale();
-    layers[0] = new PIXI.TilingSprite(assets.texture.bg_0, render.resolution[0] / scale, render.resolution[1] / scale);
+    const scale = camera.scale();
+
+    layers[0] = new PIXI.extras.TilingSprite(assets.texture.bg_0, render.resolution[0] / scale, render.resolution[1] / scale);
     layers[0].position.x = 0;
     layers[0].position.y = 0;
     layers[0].tilePosition.x = 0;
     layers[0].tilePosition.y = 0;
     render.layers[0].addChild(layers[0]);
 
-    layers[1] = new PIXI.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
+    layers[1] = new PIXI.extras.TilingSprite(assets.texture.bg_1, render.resolution[0] / scale, render.resolution[1] / scale);
     layers[1].position.x = 0;
     layers[1].position.y = 0;
     layers[1].tilePosition.x = 0;
     layers[1].tilePosition.y = 0;
     render.layers[0].addChild(layers[1]);
 
-    layers[2] = new PIXI.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
+    layers[2] = new PIXI.extras.TilingSprite(assets.texture.bg_2, render.resolution[0] / scale, render.resolution[1] / scale);
     layers[2].position.x = 0;
     layers[2].position.y = 0;
     layers[2].tilePosition.x = 0;
@@ -30,7 +31,7 @@ export function create() {
     layers[2].scale = new PIXI.Point(scale, scale);
     render.layers[0].addChild(layers[2]);
 
-    layers[3] = new PIXI.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
+    layers[3] = new PIXI.extras.TilingSprite(assets.texture.bg_3, render.resolution[0] / scale, render.resolution[1] / scale);
     layers[3].position.x = 0;
     layers[3].position.y = 0;
     layers[3].tilePosition.x = 0;

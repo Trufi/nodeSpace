@@ -34,7 +34,7 @@ class Editbox {
             };
         }
 
-        this.displayObject = new PIXI.DisplayObjectContainer();
+        this.displayObject = new PIXI.Container();
         this.displayObject.buttonMode = true;
         this.displayObject.interactive = true;
         this.displayObject.width = this.width;
@@ -274,8 +274,8 @@ class Editbox {
                 } else {
                     str = _this.text;
                 }
-                _this.spriteText.setText(str);
-                _this.spriteTextHelp.setText(str.substr(0, _this.cursorPosition));
+                _this.spriteText.text = str;
+                _this.spriteTextHelp.text = str.substr(0, _this.cursorPosition);
                 setTimeout(function() {
                     _this.checkForAlign();
                     _this.updateCursor();
@@ -293,7 +293,7 @@ class Editbox {
     }
 
     _mousedown(ev) {
-        ev.originalEvent.stopPropagation();
+        ev.stopPropagation();
     }
 
     _click() {

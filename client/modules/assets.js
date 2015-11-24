@@ -8,8 +8,7 @@ let assets = {};
 assets.texture = {};
 
 assets.load = function(loadObj, callback) {
-    var loadArray = [],
-        loader;
+    const loader = PIXI.loader;
 
     loadObj.texture.screenArrow = 'screenarrow.png';
     loadObj.texture.debug = 'debug.png';
@@ -35,27 +34,23 @@ assets.load = function(loadObj, callback) {
     loadObj.texture.bulletGreen = 'bullet_green.gif';
 
     // загрузка текстур
-    _.forEach(loadObj.texture, function(el) {
-        loadArray.push(config.pathToAssets + el);
+    _.forEach(loadObj.texture, (texturePath, name) => {
+        loader.add(name, config.pathToAssets + texturePath);
     });
 
-    loader = new PIXI.AssetLoader(loadArray);
-
-    loader.onComplete = function() {
-        _.forEach(loadObj.texture, function(el, i) {
-            assets.texture[i] = PIXI.Texture.fromImage(config.pathToAssets + el);
+    loader.load((loader, resources) => {
+        _.forEach(resources, (resource, name) => {
+            assets.texture[name] = resource.texture;
         });
 
         generateGraphicsTextures();
 
         callback();
-    };
-
-    loader.load();
+    });
 };
 
 function generateThrustTextures() {
-    var graphics = new PIXI.Graphics();
+    let graphics = new PIXI.Graphics();
     graphics.beginFill(0xFFFFFF);
     graphics.drawRect(0, 0, 5, 30);
     graphics.endFill();
@@ -63,7 +58,7 @@ function generateThrustTextures() {
 }
 
 function generateSideTextures() {
-    var graphics = new PIXI.Graphics();
+    let graphics = new PIXI.Graphics();
     graphics.beginFill(0xFFFFFF);
     graphics.drawRect(0, 0, 10, 5);
     graphics.endFill();

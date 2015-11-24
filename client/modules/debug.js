@@ -33,10 +33,10 @@ debug.pingOff = function() {
 
 debug.update = function() {
     if (pingText !== undefined) {
-        pingText.setText(ping.get() + 'ms');
+        pingText.text = ping.get() + 'ms';
     }
     if (dtText !== undefined) {
-        dtText.setText('dt: ' + (Math.floor(ping.dt() * 1000) / 1000));
+        dtText.text = 'dt: ' + (Math.floor(ping.dt() * 1000) / 1000);
     }
 };
 

@@ -24,7 +24,7 @@ class Frame {
             };
         }
 
-        this.displayObject = new PIXI.DisplayObjectContainer();
+        this.displayObject = new PIXI.Container();
         this.displayObject.width = this.width;
         this.displayObject.height = this.height;
         this.displayObject.position.x = this.anchor[0] + this.position[0];
@@ -91,7 +91,7 @@ class Frame {
     }
 
     _mousedown(ev) {
-        ev.originalEvent.stopPropagation();
+        ev.stopPropagation();
     }
 
     show() {

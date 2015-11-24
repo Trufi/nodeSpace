@@ -68,7 +68,7 @@ state.update = function(now) {
         mainMenu.toggle();
     }
 
-    player.user.ship.weaponsGoto(render.stage.getMousePosition());
+    player.user.ship.weaponsGoto(render.render.plugins.interaction.mouse.global);
     this.scrArrow.update();
     ui.bodyInfo.update();
     debug.update();

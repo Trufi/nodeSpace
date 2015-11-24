@@ -62,7 +62,7 @@ game.loop = function() {
     this.lastGameStepTime = now;
 
 
-    requestAnimFrame(function() {
+    requestAnimationFrame(function() {
         _this.loop();
     });
 

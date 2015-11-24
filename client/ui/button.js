@@ -29,7 +29,7 @@ class Button {
         this.height = options.height || 50;
         this.position = options.position || [0, 0];
 
-        this.displayObject = new PIXI.DisplayObjectContainer();
+        this.displayObject = new PIXI.Container();
         this.displayObject.buttonMode = true;
         this.displayObject.interactive = true;
         this.displayObject.width = this.width;
@@ -103,7 +103,7 @@ class Button {
     }
 
     _mousedown(ev) {
-        ev.originalEvent.stopPropagation();
+        ev.stopPropagation();
     }
 
     _mouseover() {
