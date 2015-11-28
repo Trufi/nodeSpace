@@ -42,8 +42,8 @@ game.state;
 game.isEnable = true;
 
 game.loop = function() {
-    var _this = this;
-    var now = Date.now();
+    let _this = this;
+    let now = Date.now();
 
     if (now < this.lastGameStepTime) {
         return;
@@ -96,7 +96,7 @@ game.load = function(options, callback) {
 };
 
 game.updateFromServerEnable = function() {
-    var _this = this;
+    let _this = this;
 
     request.onUpdateGameState(function(data) {
         data[0] += ping.dt();
@@ -106,7 +106,7 @@ game.updateFromServerEnable = function() {
 
 // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
 game.updateImportant = function(data) {
-    var _this = this,
+    let _this = this,
         now = data[0] + this.ping;
     // actions data
     _.forEach(data[1][0], function(el) {
@@ -125,7 +125,7 @@ game.updateImportant = function(data) {
         }
         if (data[2][1] !== 0) {
             _.forEach(data[2][1], function(el) {
-                var user;
+                let user;
 
                 if (_this.users[el[0]] === undefined) {
                     user = new User(el);
@@ -159,7 +159,7 @@ game.updateImportant = function(data) {
 };
 
 game.updateFromDataServer = function(now) {
-    var _this = this,
+    let _this = this,
         arrData, arrDataLen, lastData, dt;
 
     if (this.dataFromServer.length > 0) {
@@ -206,7 +206,7 @@ game.updateFromDataServer = function(now) {
 };
 
 game.worldStep = function(now) {
-    var dt;
+    let dt;
     // world step до времени последней информации с сервера
     // синхронизируем с посленей информацией
     // делаем степ до конца
@@ -222,7 +222,7 @@ game.worldStep = function(now) {
 };
 
 game.start = function(options) {
-    var _this = this;
+    let _this = this;
 
     ping.on();
     this.serverSendStateInterval = options.game.sendStateInterval;
@@ -246,7 +246,7 @@ game.start = function(options) {
 
     // создаем и сохраняем юзеров
     _.forEach(options.game.users, function(el) {
-        var user = new User(el);
+        let user = new User(el);
         _this.addUser(user);
 
         // if user have ship
@@ -298,7 +298,7 @@ game.close = function() {
 };
 
 game.disconnectEnable = function() {
-    var _this = this;
+    let _this = this;
 
     request.disconnect(function() {
         _this.isEnable = false;

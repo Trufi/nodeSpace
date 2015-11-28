@@ -21,7 +21,7 @@ export default class Action {
         if (!this.checked) {
             if (now - this.lastTimeUsed > this.cooldown) {
                 this.checked = true;
-                //this.lastTimeUsed = now;
+                // this.lastTimeUsed = now;
             }
         }
     }

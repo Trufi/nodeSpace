@@ -8,7 +8,7 @@ player.user;
 player.actions = {};
 
 player.setUser = function(user) {
-    var _this = this;
+    let _this = this;
 
     this.user = user;
 
@@ -22,7 +22,7 @@ player.action = function(now, name) {
 };
 
 player.sendActionToServer = function() {
-    var actions = {},
+    let actions = {},
         notNull = false;
 
     _.forEach(player.actions, function(el, i) {

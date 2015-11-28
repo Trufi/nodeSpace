@@ -153,7 +153,7 @@ class Editbox {
     }
 
     updateCursor() {
-        var _this = this;
+        let _this = this;
 
         if (this.cursorPosition === 0) {
             this.cursor.position.x = this.paddingLeft;
@@ -222,7 +222,7 @@ class Editbox {
     }
 
     active() {
-        var _this = this;
+        let _this = this;
 
         // bad
         setTimeout(function() {
@@ -238,7 +238,7 @@ class Editbox {
             _this.updateCursor();
 
             key.enableWriteText(function(ch) {
-                var str;
+                let str;
 
                 switch (ch) {
                     case 'LEFT':

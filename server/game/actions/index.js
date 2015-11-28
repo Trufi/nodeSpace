@@ -2,7 +2,7 @@ import Move from './Move';
 import Fire from './Fire';
 
 export function create(options) {
-    var newAction;
+    let newAction;
 
     switch (options.name) {
         case 1:

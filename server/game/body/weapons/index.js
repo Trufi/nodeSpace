@@ -5,7 +5,7 @@ import log from '../../../modules/log';
 let idCounter = 1;
 
 function resetAngle(angle) {
-    var sign = angle > 0 ? 1 : -1;
+    let sign = angle > 0 ? 1 : -1;
     return sign * ((Math.abs(angle) + Math.PI) % (Math.PI * 2) - Math.PI);
 }
 

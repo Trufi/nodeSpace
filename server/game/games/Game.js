@@ -43,12 +43,12 @@ export default function Game() {
 }
 
 Game.prototype.start = function() {
-    var _this = this;
+    let _this = this;
 
     this.lastTimeStep = Date.now();
 
     this.interval = setInterval(function() {
-        var now = Date.now();
+        let now = Date.now();
 
         _.forEach(_this.users, function(el) {
             el.updateActions(now);
@@ -71,11 +71,11 @@ Game.prototype.stop = function() {
 };
 
 Game.prototype.sendState = function(now) {
-    var _this = this,
+    let _this = this,
         hasNew, hasRemove;
 
     function send(user) {
-        var gameState = [];
+        let gameState = [];
         gameState[0] = now;
         gameState[1] = _this.getGameState(user);
 
@@ -122,11 +122,11 @@ Game.prototype.sendState = function(now) {
 
 // данные, которые отправляются через каждый шаг
 Game.prototype.getGameState = function(user) {
-    var state = [];
+    let state = [];
 
     state[0] = [];
     _.forEach(this.bodies, function(el) {
-        var info = el.getInfo();
+        let info = el.getInfo();
         if (info !== undefined) {
             state[0].push(info);
         }
@@ -134,7 +134,7 @@ Game.prototype.getGameState = function(user) {
 
     state[1] = [];
     _.forEach(this.users, function(el) {
-        var info = el.getInfo();
+        let info = el.getInfo();
         if (info !== undefined) {
             state[1].push(info);
         }
@@ -151,7 +151,7 @@ Game.prototype.resetBodyUsedActions = function() {
 
 // данные отправляемые при подключении пользователя
 Game.prototype.getGameFirstState = function(user) {
-    var state = {};
+    let state = {};
 
     state.assets = this.assets;
     state.time = Date.now();
@@ -166,7 +166,7 @@ Game.prototype.getGameFirstState = function(user) {
 
     state.bodies = [];
     _.forEach(this.bodies, function(el) {
-        var info = el.getFirstInfo();
+        let info = el.getFirstInfo();
         if (info !== undefined) {
             state.bodies.push(info);
         }
@@ -181,11 +181,11 @@ Game.prototype.getGameFirstState = function(user) {
 
 // данные о новых телах и пользователях
 Game.prototype.getGameNewState = function(user) {
-    var state = [];
+    let state = [];
 
     state[0] = [];
     _.forEach(this.newBodies, function(el) {
-        var info = el.getFirstInfo();
+        let info = el.getFirstInfo();
         if (info !== undefined) {
             state[0].push(info);
         }
@@ -237,7 +237,7 @@ Game.prototype.removeBody = function(body) {
 };
 
 Game.prototype.getDateForNewPlayer = function() {
-    var date = {};
+    let date = {};
 
     date.gameType = 0;
     date.shipType = 10;

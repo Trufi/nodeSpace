@@ -65,7 +65,7 @@ class BodyInfo {
 }
 
 bodyInfo.create = function(options) {
-    var bi = new BodyInfo(options);
+    let bi = new BodyInfo(options);
     bodyInfo.list[bi.id] = bi;
     return bi;
 };

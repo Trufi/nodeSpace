@@ -5,7 +5,7 @@ import game from '../game';
 import * as body from '../game/body';
 import config from '../config';
 
-var usersCount = 0;
+let usersCount = 0;
 
 // В клиенте содержится сокет, игрок клиента, сессия и информация о ней
 export default class Client {
@@ -36,7 +36,7 @@ export default class Client {
     }
 
     createShip(data) {
-        var _this = this;
+        let _this = this;
 
         this.ship = body.create({
             type: data.shipType || 10,
@@ -72,7 +72,7 @@ export default class Client {
     }
 
     socketOn() {
-        var _this = this;
+        let _this = this;
         log.silly('Client socketOn, id: %s', this.id);
         this.socket
             .removeAllListeners(5)
@@ -88,7 +88,7 @@ export default class Client {
     };
 
     updateActions(now) {
-        var _this = this;
+        let _this = this;
 
         _.forEach(this.actionsDone, function(el, i) {
             _this.action(now, i, el);
@@ -104,7 +104,7 @@ export default class Client {
     }
 
     getFirstState() {
-        var state = {};
+        let state = {};
 
         state.game = this.game.getGameFirstState();
         state.user = this.getFirstInfo();
@@ -113,13 +113,13 @@ export default class Client {
     }
 
     getInfo() {
-        var info = [];
+        let info = [];
         info[0] = this.id;
         return info;
     }
 
     getFirstInfo() {
-        var info = [];
+        let info = [];
         info[0] = this.id;
 
         if (this.name !== undefined) {

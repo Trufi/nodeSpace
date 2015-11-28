@@ -19,7 +19,7 @@ let state = {};
 state.proposeSignUp = false;
 
 function createFirstMenu() {
-    var buttonQuickStart;
+    let buttonQuickStart;
 
     state.firstMenu = ui.frame.create({
         anchor: 'CENTER'
@@ -50,7 +50,7 @@ state.start = function() {
 };
 
 state.update = function() {
-    var now = Date.now();
+    let now = Date.now();
 
     function changeCamera() {
         state.lastTimeChangeCamera = now;
@@ -76,7 +76,7 @@ state.close = function() {
 };
 
 state.next = function() {
-    var options = {
+    let options = {
         changeStatusData: this.changeStatusData,
         proposeSignUp: this.proposeSignUp
     };
