@@ -60,8 +60,6 @@ export default class Ship extends Body {
     }
 
     createSprite() {
-        var _this = this;
-
         this.sprite = new PIXI.Sprite(assets.texture.ship);
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
@@ -72,7 +70,7 @@ export default class Ship extends Body {
         this.spriteThrust = new PIXI.Sprite(assets.texture.thrust);
         this.spriteThrust.anchor.x = 0;
         this.spriteThrust.anchor.y = 0.5;
-        this.spriteThrust.position.x = -45;
+        this.spriteThrust.position.x = -35;
         this.spriteThrust.position.y = 0;
         this.sprite.addChild(this.spriteThrust);
 
@@ -80,27 +78,27 @@ export default class Ship extends Body {
         this.spriteReverse = new PIXI.Sprite(assets.texture.thrust);
         this.spriteReverse.anchor.x = 0;
         this.spriteReverse.anchor.y = 0.5;
-        this.spriteReverse.position.x = 21;
+        this.spriteReverse.position.x = 30;
         this.spriteReverse.position.y = 0;
-        this.spriteReverse.height = 30;
-        this.spriteReverse.width = 20;
+        this.spriteReverse.height = 15;
+        this.spriteReverse.width = 5;
         this.sprite.addChild(this.spriteReverse);
 
         // боковые спрайты
         this.spriteSide = [];
 
-        function createSideSprite(x, y) {
-            var sprite = new PIXI.Sprite(assets.texture.side);
+        const createSideSprite = (x, y) => {
+            const sprite = new PIXI.Sprite(assets.texture.side);
             sprite.position.x = x;
             sprite.position.y = y;
-            _this.sprite.addChild(sprite);
+            this.sprite.addChild(sprite);
             return sprite;
-        }
+        };
 
-        this.spriteSide[0] = createSideSprite(-30, -35);
-        this.spriteSide[1] = createSideSprite(0, -35);
-        this.spriteSide[2] = createSideSprite(-30, 10);
-        this.spriteSide[3] = createSideSprite(0, 10);
+        this.spriteSide[0] = createSideSprite(-20, -25);
+        this.spriteSide[1] = createSideSprite(10, -25);
+        this.spriteSide[2] = createSideSprite(-20, 20);
+        this.spriteSide[3] = createSideSprite(10, 20);
 
         this.applyWeapons();
     }
@@ -138,9 +136,7 @@ export default class Ship extends Body {
     addToGame(game) {
         game.world.addBody(this.body);
 
-        _.forEach(this.weapons, function(el) {
-            step.addWeapon(el);
-        });
+        _.forEach(this.weapons, el => step.addWeapon(el));
 
         render.layers[2].addChild(this.sprite);
 
