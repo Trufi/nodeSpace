@@ -72,26 +72,23 @@ export default class Client {
     }
 
     socketOn() {
-        let _this = this;
         log.silly('Client socketOn, id: %s', this.id);
         this.socket
             .removeAllListeners(5)
             .removeAllListeners(7)
-            .on(5, function(data) {
-                _.forEach(data, function(el, i) {
-                    _this.actionsDone[i] = el;
+            .on(5, data => {
+                _.forEach(data, (el, i) => {
+                    this.actionsDone[i] = el;
                 });
             })
-            .on(7, function() {
-                _this.socket.emit(8, Date.now());
+            .on(7, () => {
+                this.socket.emit(8, Date.now());
             });
     };
 
     updateActions(now) {
-        let _this = this;
-
-        _.forEach(this.actionsDone, function(el, i) {
-            _this.action(now, i, el);
+        _.forEach(this.actionsDone, (el, i) => {
+            this.action(now, i, el);
         });
 
         this.actionsDone = {};

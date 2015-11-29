@@ -11,7 +11,7 @@ export default class Asteroid extends Body {
     }
 
     applyShape() {
-        this.shape = new p2.Circle(87.5);
+        this.shape = new p2.Circle({radius: 87.5});
         this.shape.collisionGroup = mask.BODY;
         this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
         this.body.addShape(this.shape);

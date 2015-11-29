@@ -35,7 +35,7 @@ export default class Body {
     }
 
     applyShape() {
-        this.body.addShape(new p2.Circle(87.5));
+        this.body.addShape(new p2.Circle({radius: 87.5}));
     }
 
     applyActions() {

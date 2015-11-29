@@ -8,6 +8,6 @@ export default class Rectangle extends Body {
     }
 
     applyShape() {
-        this.body.addShape(new p2.Rectangle(100, 100));
+        this.body.addShape(new p2.Box({width: 100, height: 100}));
     }
 }

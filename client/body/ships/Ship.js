@@ -53,7 +53,7 @@ export default class Ship extends Body {
     }
 
     applyShape() {
-        this.shape = new p2.Rectangle(60, 40);
+        this.shape = new p2.Box({width: 60, height: 40});
         this.shape.collisionGroup = mask.SHIP;
         this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
         this.body.addShape(this.shape);

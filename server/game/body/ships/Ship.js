@@ -1,7 +1,7 @@
 import p2 from 'p2';
 
-import * as actions from '../../actions';
-import * as weapons from '../weapons';
+import * as actions from '../../actions/index';
+import * as weapons from '../weapons/index';
 import Bullet from '../bullets/Bullet';
 import Body from '../Body';
 import mask from '../mask';
@@ -10,8 +10,8 @@ export default class Ship extends Body {
     constructor(options) {
         super(options);
 
-        this.forceThrust = options.forceThrust || 50000;
-        this.forceSide = options.forceSide || 15000;
+        this.forceThrust = options.forceThrust || 1500;
+        this.forceSide = options.forceSide || 400;
         this.client;
         this.hp = 100;
 
@@ -40,7 +40,7 @@ export default class Ship extends Body {
     }
 
     applyShape() {
-        this.shape = new p2.Rectangle(60, 40);
+        this.shape = new p2.Box({width: 60, height: 40});
         this.shape.collisionGroup = mask.SHIP;
         this.shape.collisionMask = mask.BODY | mask.SHIP | mask.BULLET;
         this.body.addShape(this.shape);
@@ -50,77 +50,43 @@ export default class Ship extends Body {
 
     // газ
     thrust() {
-        let worldPoint = [];
-        let force = [this.forceThrust * Math.cos(this.body.angle), this.forceThrust * Math.sin(this.body.angle)];
-
-        this.body.toWorldFrame(worldPoint, [-20, 0]);
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([this.forceThrust, 0], [-20, 0]);
     }
 
     reverse() {
-        let worldPoint = [];
-        let force = [-this.forceSide * Math.cos(this.body.angle), -this.forceSide * Math.sin(this.body.angle)];
-
-        this.body.toWorldFrame(worldPoint, [20, 0]);
-        this.body.applyForce(force, worldPoint);
-    };
+        this.body.applyImpulseLocal([-this.forceSide, 0], [20, 0]);
+    }
 
     left() {
-        let worldPoint = [];
-        let force;
-
         // первый двигатель
-        this.body.toWorldFrame(worldPoint, [-10, 10]);
-        force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, this.forceSide], [-10, 10]);
         // второй двигатель
-        this.body.toWorldFrame(worldPoint, [10, -10]);
-        force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, -this.forceSide], [10, -10]);
     }
 
     right() {
-        let worldPoint = [];
-        let force;
-
         // первый двигатель
-        this.body.toWorldFrame(worldPoint, [10, 10]);
-        force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, this.forceSide], [10, 10]);
         // второй двигатель
-        this.body.toWorldFrame(worldPoint, [-10, -10]);
-        force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, -this.forceSide], [-10, -10]);
     }
 
     strafeLeft() {
-        let worldPoint = [];
-        let force;
-
         // первый двигатель
-        this.body.toWorldFrame(worldPoint, [10, 10]);
-        force = [this.forceSide * Math.sin(this.body.angle), -this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, -this.forceSide], [10, 10]);
         // второй двигатель
-        this.body.toWorldFrame(worldPoint, [-10, 10]);
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, -this.forceSide], [-10, 10]);
     }
 
     strafeRight() {
-        let worldPoint = [];
-        let force;
-
         // первый двигатель
-        this.body.toWorldFrame(worldPoint, [10, -10]);
-        force = [-this.forceSide * Math.sin(this.body.angle), this.forceSide * Math.cos(this.body.angle)];
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, this.forceSide], [10, -10]);
         // второй двигатель
-        this.body.toWorldFrame(worldPoint, [-10, -10]);
-        this.body.applyForce(force, worldPoint);
+        this.body.applyImpulseLocal([0, this.forceSide], [-10, -10]);
     }
 
     angularBrake(now) {
-        let eps = 0.15;
+        const eps = 0.15;
 
         if (Math.abs(this.body.angularVelocity) < eps) {
             this.body.angularVelocity = 0;

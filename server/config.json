@@ -1,5 +1,6 @@
 {
     "port": 5000,
+    "minimalTimeBetweenGameLoop": 10,
     "sendStateInterval": 25,
     "actions": {
         "cooldown": 50

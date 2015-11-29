@@ -1,6 +1,6 @@
 import Action from './Action';
 
-let typeToMoveName = ['thrust', 'reverse', 'left', 'right', null, 'strafeLeft', 'strafeRight', 'angularBrake'];
+const typeToMoveName = ['thrust', 'reverse', 'left', 'right', null, 'strafeLeft', 'strafeRight', 'angularBrake'];
 
 export default class Move extends Action {
     constructor(options) {
