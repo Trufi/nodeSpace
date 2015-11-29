@@ -15,7 +15,9 @@ render.create = function(options = {}) {
     // разрешение рендера
     this.resolution = options.resolution || [window.innerWidth, window.innerHeight];
 
-    this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1]);
+    this.render = PIXI.autoDetectRenderer(this.resolution[0], this.resolution[1], {
+        antialias: true
+    });
     this.render.view.style.display = 'block';
 
     document.getElementById('gamepreloader').style.display = 'none';

@@ -45,14 +45,11 @@ class Game {
     }
 
     loop() {
+        requestAnimationFrame(this.loop);
+
         const now = Date.now();
 
-        if (now < this.lastGameStepTime) {
-            return;
-        }
-
         // шаг мира p2.js
-
         this.worldStep(now);
 
         // производим различные действия для нового шага
@@ -62,8 +59,6 @@ class Game {
         render.draw();
 
         this.lastGameStepTime = now;
-
-        requestAnimationFrame(this.loop);
 
         this.render();
     }
