@@ -4,16 +4,14 @@ import request from '../modules/request';
 
 let player = {};
 
-player.user;
+player.user = null;
 player.actions = {};
 
 player.setUser = function(user) {
-    let _this = this;
-
     this.user = user;
 
-    _.forEach(this.user.actions, function(el, i) {
-        _this.actions[i] = el;
+    _.forEach(this.user.actions, (el, i) => {
+        this.actions[i] = el;
     });
 };
 
@@ -22,8 +20,8 @@ player.action = function(now, name) {
 };
 
 player.sendActionToServer = function() {
-    let actions = {},
-        notNull = false;
+    const actions = {};
+    let notNull = false;
 
     _.forEach(player.actions, function(el, i) {
         if (el.checked) {
