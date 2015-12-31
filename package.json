@@ -8,10 +8,15 @@
   },
   "scripts": {
     "postinstall": "mkdir -p dist",
-    "start": "npm run build && npm run server",
+    "start": "npm run client && npm run server",
+    "dev": "parallelshell \"npm run server:dev\" \"npm run client:dev\"",
+
     "server": "node server",
-    "build": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
-    "dev": "watchify client/index.js -o dist/bundle.js -dv",
+    "server:dev": "nodemon --watch server server/index.js",
+
+    "client": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
+    "client:dev": "watchify client/index.js -o dist/bundle.js -dv",
+
     "lint": "eslint client server"
   },
   "engines": {
@@ -35,6 +40,8 @@
   "devDependencies": {
     "babel-eslint": "^4.1.5",
     "eslint": "^1.10.1",
+    "nodemon": "^1.8.1",
+    "parallelshell": "^2.0.0",
     "watchify": "^3.6.1"
   },
   "browserify": {
