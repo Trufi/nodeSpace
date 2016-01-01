@@ -3,14 +3,13 @@ import p2 from 'p2';
 
 import config from '../../config';
 import * as body from '../body/index';
+import time from '../../modules/time';
 
 let idCounter = 0;
 
 export default class Game {
     constructor() {
         this.id = ++idCounter;
-
-        this.timeStep = 1 / 60;
 
         this.sendStateInterval = config.sendStateInterval;
         this.sendStateLastTime = 0;
@@ -47,7 +46,7 @@ export default class Game {
     }
 
     start() {
-        this.lastTimeStep = Date.now();
+        this.lastTimeStep = time();
         this.started = true;
 
         setImmediate(this.loop);
@@ -58,7 +57,7 @@ export default class Game {
 
         setImmediate(this.loop);
 
-        const now = Date.now();
+        const now = time();
 
         if (now - this.lastTimeStep < config.minimalTimeBetweenGameLoop) { return; }
 
@@ -150,7 +149,7 @@ export default class Game {
         let state = {};
 
         state.assets = this.assets;
-        state.time = Date.now();
+        state.time = time();
         state.world = {};
         state.world.id = this.id;
         state.world.gravity = this.gravity;

@@ -11,6 +11,7 @@ import User from '../modules/user';
 import ping from '../modules/ping';
 import step from '../modules/step';
 import key from '../modules/key';
+import time from '../modules/time';
 import * as body from '../body/index';
 
 class Game {
@@ -47,7 +48,7 @@ class Game {
     loop() {
         requestAnimationFrame(this.loop);
 
-        const now = Date.now();
+        const now = time();
 
         // шаг мира p2.js
         this.worldStep(now);
@@ -84,17 +85,18 @@ class Game {
     }
 
     load(options, callback) {
-        this.lastGameStepTime = Date.now();
+        this.lastGameStepTime = time();
 
         assets.load(options.game.assets, callback);
     }
 
     updateFromServerEnable() {
-        let _this = this;
-
-        request.onUpdateGameState(function(data) {
+        request.onUpdateGameState(data => {
+            // Время сервера отличается от времени клиента
+            // Подправляем
             data[0] += ping.dt();
-            _this.dataFromServer.push(data);
+
+            this.dataFromServer.push(data);
         });
     }
 
@@ -159,7 +161,10 @@ class Game {
             this.dataFromServer = [];
         }
 
+        // Данные могли прийти не в том порядка, в котором отправил сервер
+        // Сортируем по времени
         this.updateData = _.sortBy(this.updateData, 0);
+
         // формируем массив данных для обновления
         const arrData = [];
         _.forEach(this.updateData, el => {
@@ -248,6 +253,11 @@ class Game {
         this.state.start({changeStatusData: options});
 
         this.updateFromServerEnable();
+
+        setTimeout(() => {
+            ping.reset();
+        }, 0);
+
         this.loop();
     }
 

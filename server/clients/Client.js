@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import log from '../modules/log';
+import time from '../modules/time';
 import game from '../game';
 import * as body from '../game/body';
 import config from '../config';
@@ -82,7 +83,7 @@ export default class Client {
                 });
             })
             .on(7, () => {
-                this.socket.emit(8, Date.now());
+                this.socket.emit(8, time());
             });
     };
 

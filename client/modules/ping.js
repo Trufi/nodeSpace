@@ -1,11 +1,12 @@
 import request from '../modules/request';
+import time from '../modules/time';
 
 let ping = {};
 
 let pingTimeInterval = 1000;
 
 let value = 0;
-let sendTime = Date.now();
+let sendTime = time();
 
 function approxPing(time) {
     value = Math.round((value + time) / 2);
@@ -21,9 +22,9 @@ function approxDiffWithServerTime(clientTime, serverTime, dt) {
 }
 
 function checkPing() {
-    sendTime = Date.now();
+    sendTime = time();
     request.ping(function(serverTime) {
-        let now = Date.now();
+        let now = time();
 
         approxPing(now - sendTime);
         approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
@@ -42,6 +43,12 @@ ping.get = function() {
 
 ping.dt = function() {
     return lastDiffs;
+};
+
+ping.reset = function() {
+    lastDiffs = 0;
+    numderOfLastDiffs = 0;
+    value = 0;
 };
 
 export {ping as default};

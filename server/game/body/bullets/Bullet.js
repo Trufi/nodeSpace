@@ -2,6 +2,7 @@ import p2 from 'p2';
 
 import Body from '../Body';
 import mask from '../mask';
+import time from '../../../modules/time';
 
 export default class Bullet extends Body {
     constructor(options) {
@@ -26,7 +27,7 @@ export default class Bullet extends Body {
             angle: 0
         });
 
-        this.timeCreate = Date.now();
+        this.timeCreate = time();
 
         this.body._gameBody = this;
     }
