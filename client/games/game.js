@@ -13,6 +13,7 @@ import step from '../modules/step';
 import key from '../modules/key';
 import time from '../modules/time';
 import * as body from '../body/index';
+import config from '../config.json';
 
 class Game {
     constructor() {
@@ -30,17 +31,14 @@ class Game {
 
         this.lastGameStepTime = null;
 
-        this.dataFromServer = [];
-        this.updateData = [];
-        this.ping = ping.get();
-
-        // минимальный интервал через который сервер посылает данные
-        this.serverSendStateInterval = 0;
+        this._serverData = [];
 
         // игровое состояние
         this.state = null;
 
         this.isEnable = true;
+
+        this._noTimeServerData = [];
 
         this.loop = this.loop.bind(this);
     }
@@ -92,22 +90,28 @@ class Game {
 
     updateFromServerEnable() {
         request.onUpdateGameState(data => {
+            if (!ping.readyToUse()) {
+                this._noTimeServerData.push(data);
+                return;
+            }
+
             // Время сервера отличается от времени клиента
             // Подправляем
             data[0] += ping.dt();
 
-            this.dataFromServer.push(data);
+            this._serverData.push(data);
         });
     }
 
     // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
     updateImportant(data) {
-        const now = data[0] + this.ping;
+        const now = data[0] - this._interpolationDelay;
 
-        // actions data
+        // actions and important data
         _.forEach(data[1][0], el => {
             if (this.bodies[el[0]] !== undefined) {
                 this.bodies[el[0]].updateActions(now, el);
+                this.bodies[el[0]].updateImportant(now, el);
             }
         });
 
@@ -155,61 +159,67 @@ class Game {
     }
 
     updateFromDataServer(now) {
-        if (this.dataFromServer.length > 0) {
-            // данные по времени пришедшие с сервера добавим в очередь
-            this.updateData = this.updateData.concat(this.dataFromServer);
-            this.dataFromServer = [];
+        if (this._noTimeServerData.length) {
+            _.forEach(this._noTimeServerData, data => this.updateImportant(data));
+            this._noTimeServerData = [];
         }
 
         // Данные могли прийти не в том порядка, в котором отправил сервер
         // Сортируем по времени
-        this.updateData = _.sortBy(this.updateData, 0);
+        this._serverData = _.sortBy(this._serverData, 0);
+        const length = this._serverData.length;
 
-        // формируем массив данных для обновления
-        const arrData = [];
-        _.forEach(this.updateData, el => {
-            if (el[0] < now - this.ping) {
-                arrData.push(el);
-            }
-        });
+        if (!length) { return; }
 
-        const arrDataLen = arrData.length;
+        // Обновляем важную информацию, например, вход/выход игроков
+        _.forEach(this._serverData, data => this.updateImportant(data));
 
-        if (arrDataLen > 0) {
-            this.updateData = this.updateData.slice(arrDataLen);
-            _.forEach(arrData, data => this.updateImportant(data));
+        if (!this._lastInterpolationData) {
+            this._lastInterpolationData = this._serverData[0];
+        }
 
-            const lastData = arrData[arrDataLen - 1];
+        const currentTime = now - this._interpolationDelay;
 
-            const dt = (lastData[0] + this.ping - this.lastGameStepTime) / 1000;
-            if (dt > 0) {
-                if (this.isEnable) {
-                    this.world.step(dt);
-                }
-                step.go(dt);
-            }
+        // Если последняя точка интерполяции уже прошла, ищем новую
+        if (this._lastInterpolationData[0] < currentTime) {
+            const lastData = this._serverData[length - 1];
+            const startData = this._lastInterpolationData;
 
-            _.forEach(lastData[1][0], el => {
-                if (this.bodies[el[0]] !== undefined) {
-                    this.bodies[el[0]].update(lastData[0], el);
+            this._lastInterpolationData = lastData;
+
+            const startTime = startData[0];
+            const endTime = lastData[0];
+
+            if (startTime > endTime) { return; }
+
+            _.forEach(lastData[1][0], (el, i) => {
+                const startBodyData = startData[1][0][i];
+                const lastBodyData = lastData[1][0][i];
+                const id = lastBodyData[0];
+
+                if (this.bodies[id] && startBodyData && lastBodyData) {
+                    this.bodies[id].setInterpolation({
+                        startTime,
+                        endTime,
+                        startData: startBodyData,
+                        endData: lastBodyData
+                    });
                 }
             });
-
-            this.lastGameStepTime = lastData[0] + this.ping;
         }
+
+        this._serverData = [];
     }
 
     worldStep(now) {
-        let dt;
-        // world step до времени последней информации с сервера
-        // синхронизируем с посленей информацией
-        // делаем степ до конца
         this.updateFromDataServer(now);
+        this._interpolate(now);
 
-        dt = (now - this.lastGameStepTime) / 1000;
+        const dt = (now - this.lastGameStepTime) / 1000;
         if (dt !== 0) {
             if (this.isEnable) {
                 this.world.step(dt);
+
             }
             step.go(dt);
         }
@@ -217,7 +227,6 @@ class Game {
 
     start(options) {
         ping.on();
-        this.serverSendStateInterval = options.game.sendStateInterval;
 
         this.world = new p2.World({
             gravity: options.game.world.gravity,
@@ -262,7 +271,8 @@ class Game {
     }
 
     update(now) {
-        this.ping = ping.get() / 2;
+        this._interpolationDelay = config.interpolationDelay + ping.get();
+
         this.camera.update();
 
         _.forEach(this.bodies, function(el) {
@@ -302,6 +312,12 @@ class Game {
         request.reconnect(() => {
             this.isEnable = true;
         });
+    }
+
+    _interpolate(now) {
+        const currentTime = now - this._interpolationDelay;
+
+        _.forEach(this.bodies, el => el.interpolate(currentTime));
     }
 }
 

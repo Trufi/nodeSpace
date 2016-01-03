@@ -134,7 +134,9 @@ export default class Ship extends Body {
     }
 
     addToGame(game) {
-        game.world.addBody(this.body);
+        if (!this._updatedFromServer) {
+            game.world.addBody(this.body);
+        }
 
         _.forEach(this.weapons, el => step.addWeapon(el));
 

@@ -2,6 +2,7 @@ import PIXI from 'pixi.js';
 import _ from 'lodash';
 import p2 from 'p2';
 
+import Interpolation from '../modules/Interpolation';
 import camera from '../modules/camera';
 import render from '../modules/render';
 import * as actions from '../actions';
@@ -21,6 +22,10 @@ export default class Body {
         this.actions = {};
         // список доступных действий этого корабля
         this.actionsArray = [];
+
+        this._updatedFromServer = true;
+
+        this._interpolation = null;
     }
 
     createBody(options) {
@@ -50,13 +55,17 @@ export default class Body {
     }
 
     addToGame(game) {
-        game.world.addBody(this.body);
+        if (!this._updatedFromServer) {
+            game.world.addBody(this.body);
+        }
         render.layers[2].addChild(this.sprite);
         this.game = game;
     }
 
     removeFromGame() {
-        this.game.world.removeBody(this.body);
+        if (!this._updatedFromServer) {
+            this.game.world.removeBody(this.body);
+        }
         render.layers[2].removeChild(this.sprite);
         this.game = undefined;
     }
@@ -69,13 +78,63 @@ export default class Body {
     }
 
     update(now, data) {
-        this.body.position[0] = data[2][0];
-        this.body.position[1] = data[2][1];
-        this.body.velocity[0] = data[3][0];
-        this.body.velocity[1] = data[3][1];
-        this.body.angularVelocity = data[4];
-        this.body.angle = data[5];
-        this.hp = data[7];
+        if (data[2] !== undefined) {
+            this.body.position[0] = data[2][0];
+            this.body.position[1] = data[2][1];
+        }
+
+        if (data[3] !== undefined) {
+            this.body.velocity[0] = data[3][0];
+            this.body.velocity[1] = data[3][1];
+        }
+
+        if (data[4] !== undefined) {
+            this.body.angularVelocity = data[4];
+        }
+
+        if (data[5] !== undefined) {
+            this.body.angle = data[5];
+        }
+
+        if (data[7] !== undefined) {
+            this.hp = data[7];
+        }
+    }
+
+    updateImportant(now, data) {
+        if (data[7] !== undefined) {
+            this.hp = data[7];
+        }
+    }
+
+    setInterpolation({startTime, endTime, startData, endData}) {
+        // Интерполируем только положение и угл поворота
+        const startArray = [startData[2][0], startData[2][1], startData[5]];
+        const endArray = [endData[2][0], endData[2][1], endData[5]];
+
+        this._interpolation = new Interpolation({
+            values: startArray,
+            time: startTime
+        }, {
+            values: endArray,
+            time: endTime
+        });
+
+        return this;
+    }
+
+    interpolate(time) {
+        if (!this._interpolation) { return this; }
+
+        const values = this._interpolation.step(time);
+
+        if (!values) { return this; }
+
+        this.body.position[0] = values[0];
+        this.body.position[1] = values[1];
+        this.body.angle = values[2];
+
+        return this;
     }
 
     updateActions(now, data) {

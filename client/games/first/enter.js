@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import request from '../../modules/request';
+import ping from '../../modules/ping';
 import key from '../../modules/key';
 import ui from '../../ui';
 import game from '../../games/game';
@@ -19,6 +20,8 @@ let state = {};
 state.proposeSignUp = false;
 
 function createFirstMenu() {
+    if (state.firstMenu) { return; }
+
     let buttonQuickStart;
 
     state.firstMenu = ui.frame.create({
@@ -40,8 +43,6 @@ state.start = function() {
     this.followBodyNumber = 1;
     game.camera.followTo(game.bodies[this.followBodyNumber]);
 
-    createFirstMenu();
-
     this.lastTimeChangeCamera = Date.now();
 
     request.changeStatusToPlayer(function(data) {
@@ -51,6 +52,10 @@ state.start = function() {
 
 state.update = function() {
     let now = Date.now();
+
+    if (ping.readyToUse()) {
+        createFirstMenu();
+    }
 
     function changeCamera() {
         state.lastTimeChangeCamera = now;

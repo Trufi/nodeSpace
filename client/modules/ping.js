@@ -1,5 +1,6 @@
 import request from '../modules/request';
 import time from '../modules/time';
+import config from '../config.json';
 
 let ping = {};
 
@@ -14,10 +15,17 @@ function approxPing(time) {
 
 let lastDiffs = 0;
 let numderOfLastDiffs = 0;
+let readyToUse = false;
 
 function approxDiffWithServerTime(clientTime, serverTime, dt) {
-    let currentDiff = clientTime + dt / 2 - serverTime;
-    lastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
+    const currentDiff = clientTime + dt / 2 - serverTime;
+    const newlastDiffs = (numderOfLastDiffs * lastDiffs + currentDiff) / (numderOfLastDiffs + 1);
+
+    if (!readyToUse && Math.abs(newlastDiffs - lastDiffs) < config.pingStableTime) {
+        readyToUse = true;
+    }
+
+    lastDiffs = newlastDiffs;
     numderOfLastDiffs += 1;
 }
 
@@ -49,6 +57,11 @@ ping.reset = function() {
     lastDiffs = 0;
     numderOfLastDiffs = 0;
     value = 0;
+    readyToUse = false;
+};
+
+ping.readyToUse = function() {
+    return readyToUse;
 };
 
 export {ping as default};

@@ -25,5 +25,8 @@
     },
     "socket": {
         "reconnectWait": 60000
-    }
+    },
+
+    "interpolationDelay": 100,
+    "pingStableTime": 100
 }

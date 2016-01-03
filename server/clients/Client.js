@@ -31,7 +31,6 @@ export default class Client {
     applyData(data) {
         this.gameType = data.gameType || 0;
         this.name = data.name || (config.users.anonName + ++usersCount);
-        this.dbId = data._id;
 
         this.createShip(data);
     }

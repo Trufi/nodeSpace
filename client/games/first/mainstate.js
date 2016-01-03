@@ -56,7 +56,7 @@ state.update = function(now) {
         player.action(now, 6);
     } else if (key.down.E) {
         player.action(now, 7);
-    } else if (!key.down.CTRL && player.user.ship.body.angularVelocity !== 0) {
+    } else if (!key.down.CTRL) {
         player.action(now, 8);
     }
 

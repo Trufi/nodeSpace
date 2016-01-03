@@ -9,6 +9,8 @@ import mask from '../mask';
 export default class Bullet extends Body {
     constructor(options) {
         super(options);
+
+        this._updatedFromServer = false;
     }
 
     createBody(options) {
