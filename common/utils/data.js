@@ -7,6 +7,10 @@ export function toClient(state) {
     ];
 }
 
+export function firstStateToClient(state) {
+    return state;
+}
+
 function changedToClient(state) {
     return [
         state.bodies,

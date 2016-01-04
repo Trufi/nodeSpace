@@ -5,6 +5,7 @@ import time from '../modules/time';
 import game from '../game';
 import * as body from '../game/body';
 import config from '../config';
+import * as data from '../../common/utils/data';
 
 let usersCount = 0;
 
@@ -68,7 +69,7 @@ export default class Client {
         }
 
         this.socketOn();
-        this.socket.emit(2, this.getFirstState());
+        this.socket.emit(2, data.firstStateToClient(this.getFirstState()));
     }
 
     socketOn() {
@@ -101,12 +102,10 @@ export default class Client {
     }
 
     getFirstState() {
-        let state = {};
-
-        state.game = this.game.getGameFirstState();
-        state.user = this.getFirstInfo();
-
-        return state;
+        return {
+            game: this.game.getGameFirstState(),
+            user: this.getFirstInfo()
+        };
     }
 
     getInfo() {
