@@ -82,5 +82,7 @@ export default class Bullet extends Body {
         return info;
     }
 
-    getInfo() {}
+    getInfo() {
+        return null;
+    }
 }

@@ -12,7 +12,7 @@
     "dev": "parallelshell \"npm run server:dev\" \"npm run client:dev\"",
 
     "server": "node server",
-    "server:dev": "nodemon --watch server server/index.js",
+    "server:dev": "nodemon --watch server --watch common server/index.js",
 
     "client": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
     "client:dev": "watchify client/index.js -o dist/bundle.js -dv",

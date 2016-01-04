@@ -4,6 +4,7 @@ import p2 from 'p2';
 import config from '../../config';
 import * as body from '../body/index';
 import time from '../../modules/time';
+import * as data from '../../../common/utils/data';
 
 let idCounter = 0;
 
@@ -92,50 +93,37 @@ export default class Game {
     }
 
     _sendStateData(now, user) {
-        const gameState = [];
-        gameState[0] = now;
-        gameState[1] = this.getGameState(user);
+        const state = {
+            time: now,
+            changed: this.getGameState(user)
+        };
 
         // новые данные
         if (this.newBodies.length || this.newUsers.length) {
-            gameState[2] = this.getGameNewState(user);
+            state.new = this.getGameNewState(user);
         } else {
-            gameState[2] = 0;
+            state.new = 0;
         }
 
         // данные которые нужно удалить
-        if (this.removeBodies.length) {
-            gameState[3] = [
-                this.removeBodies
-            ];
-        } else {
-            gameState[3] = 0;
-        }
+        state.removed = this.removeBodies.length ? [this.removeBodies] : 0;
 
-        user.send(3, gameState);
+        user.send(3, data.toClient(state));
     }
 
     // данные, которые отправляются через каждый шаг
-    getGameState(user) {
-        let state = [];
+    getGameState() {
+        function getInfo(obj) {
+            return _(obj)
+                .map(el => el.getInfo())
+                .filter(el => el !== null)
+                .value();
+        }
 
-        state[0] = [];
-        _.forEach(this.bodies, function(el) {
-            let info = el.getInfo();
-            if (info !== undefined) {
-                state[0].push(info);
-            }
-        });
-
-        state[1] = [];
-        _.forEach(this.users, function(el) {
-            let info = el.getInfo();
-            if (info !== undefined) {
-                state[1].push(info);
-            }
-        });
-
-        return state;
+        return {
+            bodies: getInfo(this.bodies),
+            users: getInfo(this.users)
+        };
     }
 
     resetBodyUsedActions() {
@@ -173,22 +161,18 @@ export default class Game {
     }
 
     // данные о новых телах и пользователях
-    getGameNewState(user) {
-        let state = [];
+    getGameNewState() {
+        function getFirstInfo(obj) {
+            return _(obj)
+                .map(el => el.getFirstInfo())
+                .filter(el => el !== null)
+                .value();
+        }
 
-        state[0] = [];
-        _.forEach(this.newBodies, function(el) {
-            let info = el.getFirstInfo();
-            if (info !== undefined) {
-                state[0].push(info);
-            }
-        });
-
-        state[1] = _.map(this.newUsers, function(el) {
-            return el.getFirstInfo();
-        });
-
-        return state;
+        return {
+            bodies: getFirstInfo(this.newBodies),
+            users: getFirstInfo(this.newUsers)
+        };
     }
 
     addPlayer(user) {
