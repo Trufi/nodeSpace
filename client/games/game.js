@@ -40,13 +40,18 @@ class Game {
 
         this._noTimeServerData = [];
 
+        this._sendStateInterval = config.sendStateInterval;
+        this._sendStateLastTime = 0;
+
         this.loop = this.loop.bind(this);
     }
 
     loop() {
         requestAnimationFrame(this.loop);
 
-        const now = time();
+        this._interpolationDelay = config.interpolationDelay + ping.get();
+
+        const now = time() - this._interpolationDelay;
 
         // шаг мира p2.js
         this.worldStep(now);
@@ -178,10 +183,8 @@ class Game {
             this._lastInterpolationData = this._serverData[0];
         }
 
-        const currentTime = now - this._interpolationDelay;
-
         // Если последняя точка интерполяции уже прошла, ищем новую
-        if (this._lastInterpolationData[0] < currentTime) {
+        if (this._lastInterpolationData[0] < now) {
             const lastData = this._serverData[length - 1];
             const startData = this._lastInterpolationData;
 
@@ -271,19 +274,17 @@ class Game {
     }
 
     update(now) {
-        this._interpolationDelay = config.interpolationDelay + ping.get();
-
         this.camera.update();
 
-        _.forEach(this.bodies, function(el) {
-            el.updateSprite(now);
-        });
+        _.forEach(this.bodies, el => el.updateSprite(now));
 
         background.update();
 
         this.state.update(now);
 
-        player.sendActionToServer();
+        if (now - this._sendStateLastTime > this._sendStateInterval) {
+            player.sendActionToServer();
+        }
 
         key.reset();
     }
@@ -315,9 +316,7 @@ class Game {
     }
 
     _interpolate(now) {
-        const currentTime = now - this._interpolationDelay;
-
-        _.forEach(this.bodies, el => el.interpolate(currentTime));
+        _.forEach(this.bodies, el => el.interpolate(now));
     }
 }
 
