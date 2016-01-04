@@ -5,6 +5,7 @@ import time from '../modules/time';
 import game from '../game';
 import * as body from '../game/body';
 import config from '../config';
+import * as data from '../modules/data';
 
 let usersCount = 0;
 
@@ -36,8 +37,6 @@ export default class Client {
     }
 
     createShip(data) {
-        let _this = this;
-
         this.ship = body.create({
             type: data.shipType || 10,
             position: data.position || [-100, -100],
@@ -48,8 +47,8 @@ export default class Client {
             name: this.name
         });
 
-        _.forEach(this.ship.actions, function(el, i) {
-            _this.actions[i] = el;
+        _.forEach(this.ship.actions, (el, i) => {
+            this.actions[i] = el;
         });
 
         this.ship.client = this;
@@ -68,7 +67,7 @@ export default class Client {
         }
 
         this.socketOn();
-        this.socket.emit(2, this.getFirstState());
+        this.socket.emit(2, data.firstStateToClient(this.getFirstState()));
     }
 
     socketOn() {
@@ -101,37 +100,40 @@ export default class Client {
     }
 
     getFirstState() {
-        let state = {};
-
-        state.game = this.game.getGameFirstState();
-        state.user = this.getFirstInfo();
-
-        return state;
+        return {
+            game: this.game.getGameFirstState(),
+            user: this.getFirstInfo()
+        };
     }
 
     getInfo() {
-        let info = [];
-        info[0] = this.id;
-        return info;
+        return {
+            id: this.id
+        };
     }
 
     getFirstInfo() {
-        let info = [];
-        info[0] = this.id;
-
         if (this.name !== undefined) {
-            info[1] = 1; // type
-            info[2] = this.name;
-            info[3] = this.ship.id;
+            return {
+                id: this.id,
+                type: 1,
+                name: this.name,
+                shipId: this.ship.id
+            };
         } else {
-            info[1] = 0; // type
+            return {
+                id: this.id,
+                type: 0
+            };
         }
-
-        return info;
     }
 
-    send(name, data) {
-        this.socket.emit(name, data);
+    sendFirstGameState(state) {
+        this.socket.emit(6, data.firstStateToClient(state));
+    }
+
+    sendGameState(state) {
+        this.socket.emit(3, data.toClient(state));
     }
 
     destroy() {

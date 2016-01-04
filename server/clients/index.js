@@ -64,7 +64,7 @@ function initNewPlayer(client, options = {}) {
     game.removeSpectator(client);
     game.addPlayer(client);
 
-    client.send(6, client.getFirstState());
+    client.sendFirstGameState(client.getFirstState());
 }
 
 function quickStart(client) {

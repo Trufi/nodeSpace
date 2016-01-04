@@ -74,13 +74,15 @@ export default class Bullet extends Body {
     }
 
     getFirstInfo() {
-        let info = [];
-        info[0] = this.id;
-        info[1] = this.type;
-        info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
-        info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
-        return info;
+        return {
+            id: this.id,
+            type: this.type,
+            position: [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100],
+            velocity: [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100]
+        };
     }
 
-    getInfo() {}
+    getInfo() {
+        return null;
+    }
 }

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import p2 from 'p2';
 
 import * as actions from '../actions';
@@ -45,38 +46,31 @@ export default class Body {
     }
 
     getFirstInfo() {
-        let info = [];
-        info[0] = this.id;
-        info[1] = this.type;
-        info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
-        info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
-        info[4] = Math.floor(this.body.angularVelocity * 100) / 100;
-        info[5] = Math.floor(this.body.angle * 100) / 100;
-        info[6] = this.actionsUsed;
-        info[7] = Math.floor(this.hp * 100) / 100;
-        info[8] = this.body.mass;
-
-        if (this.name !== undefined) {
-            info[9] = this.name;
-        }
-
-        return info;
+        return {
+            id: this.id,
+            type: this.type,
+            position: this.body.position,
+            velocity: this.body.velocity,
+            angularVelocity: this.body.angularVelocity,
+            angle: this.body.angle,
+            actionsUsed: this.actionsUsed,
+            hp: this.hp,
+            mass: this.body.mass,
+            name: this.name
+        };
     }
 
     getInfo() {
-        let info = [];
-        info[0] = this.id;
-
-        // в firstInfo это this.type
-        info[1] = 0;
-
-        info[2] = [Math.floor(this.body.position[0] * 100) / 100, Math.floor(this.body.position[1] * 100) / 100];
-        info[3] = [Math.floor(this.body.velocity[0] * 100) / 100, Math.floor(this.body.velocity[1] * 100) / 100];
-        info[4] = Math.floor(this.body.angularVelocity * 100) / 100;
-        info[5] = Math.floor(this.body.angle * 100) / 100;
-        info[6] = this.actionsUsed;
-        info[7] = Math.floor(this.hp * 100) / 100;
-        return info;
+        return {
+            id: this.id,
+            type: 0,
+            position: this.body.position,
+            velocity: this.body.velocity,
+            angularVelocity: this.body.angularVelocity,
+            angle: this.body.angle,
+            actionsUsed: this.actionsUsed,
+            hp: this.hp
+        };
     }
 
     resetActionsUsed() {
