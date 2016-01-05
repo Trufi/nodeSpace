@@ -1,3 +1,8 @@
+/**
+ * Модуль занимается запаковкой данных готовых к отправке на сервер.
+ * Все данные из объектов переделываются в массивы, чтобы занимать меньше места.
+ * На клиентской части есть аналогичный модуль для распаковки.
+ */
 import _ from 'lodash';
 
 // Округляем числовые значения: положения, скорости и т.д., до 3 знаков после запятой
@@ -5,6 +10,12 @@ const valuesRound = 3;
 
 const round = _.curryRight(_.round)(valuesRound);
 
+/**
+ * Запаковывает данные, которые шлются каждый игровой тик.
+ *
+ * @param {Object} state
+ * @returns {Array}
+ */
 export function statePack(state) {
     return [
         state.time,
@@ -53,6 +64,12 @@ function removePack(state) {
     ];
 }
 
+/**
+ * Запаковывает данные, которые шлются только один раз вначале
+ *
+ * @param {Object} state
+ * @returns {Object}
+ */
 export function firstStatePack(state) {
     state.game.bodies = _.map(state.game.bodies, newBodyPack);
     state.game.users = _.map(state.game.users, newUserPack);

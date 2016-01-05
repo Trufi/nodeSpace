@@ -1,5 +1,16 @@
+/**
+ * Модуль занимается распаковкой данных пришедших с сервера.
+ * Все данные из объектов переделываются в массивы, чтобы занимать меньше места.
+ * На серверной части есть аналогичный модуль для упаковки.
+ */
 import _ from 'lodash';
 
+/**
+ * Распаковывает данные, которые шлются каждый игровой тик.
+ *
+ * @param {Array} state
+ * @returns {Object}
+ */
 export function stateUnpack(state) {
     return {
         time: state[0],
@@ -48,6 +59,12 @@ function removeUnpack(state) {
     };
 }
 
+/**
+ * Распаковывает данные, которые шлются только один раз вначале
+ *
+ * @param {Object} state
+ * @returns {Object}
+ */
 export function firstStateUnpack(state) {
     state.game.bodies = _.map(state.game.bodies, newBodyUnpack);
     state.game.users = _.map(state.game.users, newUserUnpack);
