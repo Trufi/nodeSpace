@@ -50,7 +50,7 @@ function disableSocketAuth(client) {
 function initNewPlayer(client, options = {}) {
     const game = client.game;
 
-    let gameData = game.getDateForNewPlayer();
+    const gameData = game.getDateForNewPlayer();
 
     if (options.name !== undefined) {
         gameData.name = options.name;

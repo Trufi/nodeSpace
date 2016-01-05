@@ -12,18 +12,18 @@ export default class Game {
     constructor() {
         this.id = ++idCounter;
 
-        this.sendStateInterval = config.sendStateInterval;
-        this.sendStateLastTime = 0;
+        this._sendStateInterval = config.sendStateInterval;
+        this._sendStateLastTime = 0;
 
-        this.gravity = [0, 0];
-        this.applyDamping = false;
-        this.users = {};
-        this.spectators = {};
-        this.bodies = {};
+        this._gravity = [0, 0];
+        this._applyDamping = false;
+        this._users = {};
+        this._spectators = {};
+        this._bodies = {};
 
-        this.started = false;
+        this._started = false;
 
-        this.assets = {
+        this._assets = {
             texture: {
                 asteroid: 'asteroid.png',
                 rectangle: 'rect.png',
@@ -32,64 +32,64 @@ export default class Game {
             }
         };
 
-        this.newBodies = [];
-        this.removeBodies = [];
-        this.newUsers = [];
+        this._newBodies = [];
+        this._removeBodies = [];
+        this._newUsers = [];
 
-        this.world = new p2.World({
-            gravity: this.gravity,
-            applyDamping: this.applyDamping
+        this._world = new p2.World({
+            gravity: this._gravity,
+            applyDamping: this._applyDamping
         });
 
-        this.loop = this.loop.bind(this);
+        this._loop = this._loop.bind(this);
 
-        this.impactEvents();
+        this._impactEvents();
     }
 
     start() {
-        this.lastTimeStep = time();
-        this.started = true;
+        this._lastTimeStep = time();
+        this._started = true;
 
-        setImmediate(this.loop);
+        setImmediate(this._loop);
     }
 
-    loop() {
-        if (!this.started) { return; }
+    _loop() {
+        if (!this._started) { return; }
 
-        setImmediate(this.loop);
+        setImmediate(this._loop);
 
         const now = time();
 
-        if (now - this.lastTimeStep < config.minimalTimeBetweenGameLoop) { return; }
+        if (now - this._lastTimeStep < config.minimalTimeBetweenGameLoop) { return; }
 
-        _.forEach(this.users, el => el.updateActions(now));
+        _.forEach(this._users, el => el.updateActions(now));
 
-        _.forEach(this.bodies, el => el.update(now));
+        _.forEach(this._bodies, el => el.update(now));
 
-        this.world.step((now - this.lastTimeStep) / 1000);
+        this._world.step((now - this._lastTimeStep) / 1000);
 
         this.sendState(now);
 
-        this.lastTimeStep = now;
+        this._lastTimeStep = now;
     }
 
     stop() {
-        this.started = false;
+        this._started = false;
     }
 
     sendState(now) {
-        if (now - this.sendStateLastTime < this.sendStateInterval) { return; }
+        if (now - this._sendStateLastTime < this._sendStateInterval) { return; }
 
-        this.sendStateLastTime = now;
+        this._sendStateLastTime = now;
 
-        _.forEach(this.users, user => this._sendStateData(now, user));
-        _.forEach(this.spectators, user => this._sendStateData(now, user));
+        _.forEach(this._users, user => this._sendStateData(now, user));
+        _.forEach(this._spectators, user => this._sendStateData(now, user));
 
-        this.newBodies = [];
-        this.newUsers = [];
-        this.removeBodies = [];
+        this._newBodies = [];
+        this._newUsers = [];
+        this._removeBodies = [];
 
-        this.resetBodyUsedActions();
+        this._resetBodyUsedActions();
     }
 
     _sendStateData(now, user) {
@@ -103,7 +103,7 @@ export default class Game {
 
         // данные которые нужно удалить
         state.removed = {
-            bodies: this.removeBodies
+            bodies: this._removeBodies
         };
 
         user.sendGameState(state);
@@ -119,13 +119,13 @@ export default class Game {
         }
 
         return {
-            bodies: getInfo(this.bodies),
-            users: getInfo(this.users)
+            bodies: getInfo(this._bodies),
+            users: getInfo(this._users)
         };
     }
 
-    resetBodyUsedActions() {
-        _.forEach(this.bodies, function(el) {
+    _resetBodyUsedActions() {
+        _.forEach(this._bodies, function(el) {
             el.resetActionsUsed();
         });
     }
@@ -134,24 +134,24 @@ export default class Game {
     getGameFirstState(user) {
         let state = {};
 
-        state.assets = this.assets;
+        state.assets = this._assets;
         state.time = time();
         state.world = {};
         state.world.id = this.id;
-        state.world.gravity = this.gravity;
-        state.world.applyDamping = this.applyDamping;
+        state.world.gravity = this._gravity;
+        state.world.applyDamping = this._applyDamping;
 
-        state.sendStateInterval = this.sendStateInterval;
+        state.sendStateInterval = this._sendStateInterval;
 
         state.bodies = [];
-        _.forEach(this.bodies, function(el) {
+        _.forEach(this._bodies, function(el) {
             let info = el.getFirstInfo();
             if (info !== undefined) {
                 state.bodies.push(info);
             }
         });
 
-        state.users = _.map(this.users, function(el) {
+        state.users = _.map(this._users, function(el) {
             return el.getFirstInfo();
         });
 
@@ -168,66 +168,64 @@ export default class Game {
         }
 
         return {
-            bodies: getFirstInfo(this.newBodies),
-            users: getFirstInfo(this.newUsers)
+            bodies: getFirstInfo(this._newBodies),
+            users: getFirstInfo(this._newUsers)
         };
     }
 
     addPlayer(user) {
-        this.users[user.id] = user;
+        this._users[user.id] = user;
         this.addBody(user.ship);
 
-        this.newUsers.push(user);
+        this._newUsers.push(user);
     }
 
     removePlayer(user) {
-        if (this.users[user.id] !== undefined) {
-            delete this.users[user.id];
+        if (this._users[user.id] !== undefined) {
+            delete this._users[user.id];
         }
     }
 
     addSpectator(user) {
-        this.spectators[user.id] = user;
+        this._spectators[user.id] = user;
     }
 
     removeSpectator(user) {
-        if (this.spectators[user.id] !== undefined) {
-            delete this.spectators[user.id];
+        if (this._spectators[user.id] !== undefined) {
+            delete this._spectators[user.id];
         }
     }
 
     addBody(body) {
-        this.bodies[body.id] = body;
+        this._bodies[body.id] = body;
         body.game = this;
-        this.world.addBody(body.body);
+        this._world.addBody(body.body);
 
-        this.newBodies.push(body);
+        this._newBodies.push(body);
     }
 
     removeBody(body) {
-        delete this.bodies[body.id];
-        this.world.removeBody(body.body);
+        delete this._bodies[body.id];
+        this._world.removeBody(body.body);
         body.game = undefined;
-        this.removeBodies.push(body.id);
+        this._removeBodies.push(body.id);
     }
 
     getDateForNewPlayer() {
-        let date = {};
-
-        date.gameType = 0;
-        date.shipType = 10;
-        date.velocity = [0, 0];
-        date.position = [-100, -100];
-        date.angularVelocity = 0;
-        date.angle = 0;
-
-        return date;
+        return {
+            gameType: 0,
+            shipType: 10,
+            position: [-100, -100],
+            velocity: [0, 0],
+            angularVelocity: 0,
+            angle: 0
+        };
     }
 
     close() {
         this.stop();
 
-        _.forEach(this.users, function(el) {
+        _.forEach(this._users, function(el) {
             el.send('gameClose');
             el.save();
         });
@@ -235,12 +233,12 @@ export default class Game {
         // TODO: доделать
     }
 
-    impactEvents() {
-        this.world.on('impact', function(ev) {
+    _impactEvents() {
+        this._world.on('impact', function(ev) {
             body.collide(ev.bodyA._gameBody, ev.bodyB._gameBody);
         });
 
-        this.world.on('beginContact', function(ev) {
+        this._world.on('beginContact', function(ev) {
             body.beginContact(ev.bodyA._gameBody, ev.bodyB._gameBody);
         });
     }
