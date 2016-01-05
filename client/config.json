@@ -1,7 +1,7 @@
 {
     "gameHtmlWrapId": "gamewrap",
     "pathToAssets": "/img/",
-    "serverSendStateInterval": 50,
+    "serverSendStateInterval": 30,
     "sendStateInterval": 33,
     "actions": {
         "cooldown": 50
