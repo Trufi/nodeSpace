@@ -13,7 +13,7 @@ request.gameInit(data => {
         render.create();
         position.update();
 
-        if (data.user[1] === 0) {
+        if (data.user.type === 0) {
             game.changeState(enterstate);
         } else {
             game.changeState(mainstate);

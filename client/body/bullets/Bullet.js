@@ -16,8 +16,8 @@ export default class Bullet extends Body {
     createBody(options) {
         this.body = new p2.Body({
             mass: 1,
-            position: options[2] || [0, 0],
-            velocity: options[3] || [0, 0],
+            position: options.position || [0, 0],
+            velocity: options.velocity || [0, 0],
             damping: 0,
             angularVelocity: 0,
             angularDamping: 0,
@@ -43,10 +43,10 @@ export default class Bullet extends Body {
     }
 
     update(data) {
-        this.body.position[0] = data[2][0];
-        this.body.position[1] = data[2][1];
-        this.body.velocity[0] = data[3][0];
-        this.body.velocity[1] = data[3][1];
+        this.body.position[0] = data.position[0];
+        this.body.position[1] = data.position[1];
+        this.body.velocity[0] = data.velocity[0];
+        this.body.velocity[1] = data.velocity[1];
     }
 
     updateSprite() {

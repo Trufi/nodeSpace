@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class User {
     constructor(options) {
-        this.id = options[0];
+        this.id = options.id;
         this.ship;
         this.actions = {};
     }

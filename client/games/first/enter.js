@@ -67,7 +67,7 @@ state.update = function() {
         changeCamera();
     }
 
-    if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user[0]] !== undefined) {
+    if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user.id] !== undefined) {
         this.next();
     }
 };

@@ -102,7 +102,7 @@ class Game {
 
             // Время сервера отличается от времени клиента
             // Подправляем
-            data[0] += ping.dt();
+            data.time += ping.dt();
 
             this._serverData.push(data);
         });
@@ -110,56 +110,50 @@ class Game {
 
     // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
     updateImportant(data) {
-        const now = data[0] - this._interpolationDelay;
+        const now = data.time - this._interpolationDelay;
 
         // actions and important data
-        _.forEach(data[1][0], el => {
-            if (this.bodies[el[0]] !== undefined) {
-                this.bodies[el[0]].updateActions(now, el);
-                this.bodies[el[0]].updateImportant(now, el);
+        _.forEach(data.changed.bodies, el => {
+            if (this.bodies[el.id]) {
+                this.bodies[el.id].updateActions(now, el);
+                this.bodies[el.id].updateImportant(now, el);
             }
         });
 
         // new data
-        if (data[2]) {
-            if (data[2][0] !== 0) {
-                _.forEach(data[2][0], el => {
-                    if (this.bodies[el[0]] === undefined) {
-                        this.addBody(body.create(el));
+        if (data.new) {
+            _.forEach(data.new.bodies, el => {
+                if (!this.bodies[el.id]) {
+                    this.addBody(body.create(el));
+                }
+            });
+
+            _.forEach(data.new.users, el => {
+                if (!this.users[el.id]) {
+                    const user = new User(el);
+
+                    this.addUser(user);
+
+                    // if user have ship
+                    if (el.shipId) {
+                        user.setShip(this.bodies[el.shipId]);
                     }
-                });
-            }
+                }
+            });
 
-            if (data[2][1] !== 0) {
-                _.forEach(data[2][1], el => {
-                    if (this.users[el[0]] === undefined) {
-                        const user = new User(el);
-
-                        this.addUser(user);
-
-                        // if user have ship
-                        if (el[3]) {
-                            user.setShip(this.bodies[el[3]]);
-                        }
-                    }
-                });
-            }
-
-            this.state.newData(data[2]);
+            this.state.newData(data.new);
         }
         // remove data
-        if (data[3]) {
-            if (data[3][0] !== 0) {
-                _.forEach(data[3][0], el => {
-                    if (this.bodies[el] !== undefined) {
-                        this.bodies[el].destroy();
-                    } else {
-                        console.log('Error remove data ' + el);
-                    }
-                });
-            }
+        if (data.removed) {
+            _.forEach(data.removed.bodies, el => {
+                if (this.bodies[el]) {
+                    this.bodies[el].destroy();
+                } else {
+                    console.log('Error remove data ' + el);
+                }
+            });
 
-            this.state.removeData(data[2]);
+            this.state.removeData(data.removed);
         }
     }
 
@@ -184,21 +178,21 @@ class Game {
         }
 
         // Если последняя точка интерполяции уже прошла, ищем новую
-        if (this._lastInterpolationData[0] < now) {
+        if (this._lastInterpolationData.time < now) {
             const lastData = this._serverData[length - 1];
             const startData = this._lastInterpolationData;
 
             this._lastInterpolationData = lastData;
 
-            const startTime = startData[0];
-            const endTime = lastData[0];
+            const startTime = startData.time;
+            const endTime = lastData.time;
 
             if (startTime > endTime) { return; }
 
-            _.forEach(lastData[1][0], (el, i) => {
-                const startBodyData = startData[1][0][i];
-                const lastBodyData = lastData[1][0][i];
-                const id = lastBodyData[0];
+            _.forEach(lastData.changed.bodies, (el, i) => {
+                const startBodyData = startData.changed.bodies[i];
+                const lastBodyData = lastData.changed.bodies[i];
+                const id = lastBodyData.id;
 
                 if (this.bodies[id] && startBodyData && lastBodyData) {
                     this.bodies[id].setInterpolation({
@@ -250,12 +244,12 @@ class Game {
 
         // создаем и сохраняем юзеров
         _.forEach(options.game.users, (el) => {
-            let user = new User(el);
+            const user = new User(el);
             this.addUser(user);
 
             // if user have ship
-            if (el[3]) {
-                user.setShip(this.bodies[el[3]]);
+            if (el.shipId) {
+                user.setShip(this.bodies[el.shipId]);
             }
         });
 

@@ -5,23 +5,23 @@ const valuesRound = 3;
 
 const round = _.curryRight(_.round)(valuesRound);
 
-export function toClient(state) {
+export function statePack(state) {
     return [
         state.time,
-        changedToClient(state.changed),
-        newToClient(state.new),
-        removeToClient(state.removed)
+        changedPack(state.changed),
+        newPack(state.new),
+        removePack(state.removed)
     ];
 }
 
-function changedToClient(state) {
+function changedPack(state) {
     return [
-        _.map(state.bodies, bodyToClient),
-        _.map(state.users, userToClient)
+        _.map(state.bodies, bodyPack),
+        _.map(state.users, userPack)
     ];
 }
 
-function bodyToClient(state) {
+function bodyPack(state) {
     return [
         state.id,
         state.type,
@@ -34,34 +34,34 @@ function bodyToClient(state) {
     ];
 }
 
-function userToClient(state) {
+function userPack(state) {
     return [
         state.id
     ];
 }
 
-function newToClient(state) {
+function newPack(state) {
     return [
-        _.map(state.bodies, newBodyToClient),
-        _.map(state.users, newUserToClient)
+        _.map(state.bodies, newBodyPack),
+        _.map(state.users, newUserPack)
     ];
 }
 
-function removeToClient(state) {
+function removePack(state) {
     return [
         state.bodies
     ];
 }
 
-export function firstStateToClient(state) {
-    state.game.bodies = _.map(state.game.bodies, newBodyToClient);
-    state.game.users = _.map(state.game.users, newUserToClient);
-    state.user = newUserToClient(state.user);
+export function firstStatePack(state) {
+    state.game.bodies = _.map(state.game.bodies, newBodyPack);
+    state.game.users = _.map(state.game.users, newUserPack);
+    state.user = newUserPack(state.user);
 
     return state;
 }
 
-function newBodyToClient(state) {
+function newBodyPack(state) {
     return [
         state.id,
         state.type,
@@ -76,7 +76,7 @@ function newBodyToClient(state) {
     ];
 }
 
-function newUserToClient(state) {
+function newUserPack(state) {
     return [
         state.id,
         state.type,

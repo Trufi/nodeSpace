@@ -9,15 +9,15 @@ import * as actions from '../actions';
 
 export default class Body {
     constructor(options) {
-        this.id = options[0];
-        this.type = options[1];
+        this.id = options.id;
+        this.type = options.type;
         this.body;
         this.sprite;
         this.spriteSize = 100;
         this.shape;
         this.game;
-        this.name = options[9] || 'Unknown';
-        this.hp = options[7];
+        this.name = options.name || 'Unknown';
+        this.hp = options.hp;
 
         this.actions = {};
         // список доступных действий этого корабля
@@ -30,13 +30,13 @@ export default class Body {
 
     createBody(options) {
         this.body = new p2.Body({
-            mass: options[8],
-            position: options[2],
-            velocity: options[3],
+            mass: options.mass,
+            position: options.position,
+            velocity: options.velocity,
             damping: 0,
-            angularVelocity: options[4],
+            angularVelocity: options.angularVelocity,
             angularDamping: 0,
-            angle: options[5]
+            angle: options.angle
         });
 
         this.body._gameBody = this;
@@ -78,39 +78,39 @@ export default class Body {
     }
 
     update(now, data) {
-        if (data[2] !== undefined) {
-            this.body.position[0] = data[2][0];
-            this.body.position[1] = data[2][1];
+        if (data.position !== undefined) {
+            this.body.position[0] = data.position[0];
+            this.body.position[1] = data.position[1];
         }
 
-        if (data[3] !== undefined) {
-            this.body.velocity[0] = data[3][0];
-            this.body.velocity[1] = data[3][1];
+        if (data.velocity !== undefined) {
+            this.body.velocity[0] = data.velocity[0];
+            this.body.velocity[1] = data.velocity[1];
         }
 
-        if (data[4] !== undefined) {
-            this.body.angularVelocity = data[4];
+        if (data.angularVelocity !== undefined) {
+            this.body.angularVelocity = data.angularVelocity;
         }
 
-        if (data[5] !== undefined) {
-            this.body.angle = data[5];
+        if (data.angle !== undefined) {
+            this.body.angle = data.angle;
         }
 
-        if (data[7] !== undefined) {
-            this.hp = data[7];
+        if (data.hp !== undefined) {
+            this.hp = data.hp;
         }
     }
 
     updateImportant(now, data) {
-        if (data[7] !== undefined) {
-            this.hp = data[7];
+        if (data.hp !== undefined) {
+            this.hp = data.hp;
         }
     }
 
     setInterpolation({startTime, endTime, startData, endData}) {
         // Интерполируем только положение и угл поворота
-        const startArray = [startData[2][0], startData[2][1], startData[5]];
-        const endArray = [endData[2][0], endData[2][1], endData[5]];
+        const startArray = [startData.position[0], startData.position[1], startData.angle];
+        const endArray = [endData.position[0], endData.position[1], endData.angle];
 
         this._interpolation = new Interpolation({
             values: startArray,
@@ -138,7 +138,7 @@ export default class Body {
     }
 
     updateActions(now, data) {
-        _.forEach(data[6], el => {
+        _.forEach(data.actionsUsed, el => {
             this.action(now, el);
         });
     }

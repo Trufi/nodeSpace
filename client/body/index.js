@@ -6,7 +6,7 @@ import Bullet from './bullets/Bullet';
 export function create(options = {}) {
     let newBody;
 
-    const type = options[1] || 2;
+    const type = options.type || 2;
 
     switch (type) {
         case 1:

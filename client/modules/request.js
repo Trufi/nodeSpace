@@ -1,11 +1,12 @@
 import io from 'socket.io-client';
 
 import config from '../config';
+import * as data from '../modules/data';
 import disconnectFrame from '../ui/frames/disconnect';
 
-let request = {};
+const request = {};
 
-let socket = io.connect(location.origin, {
+const socket = io.connect(location.origin, {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 1000
 });
@@ -35,21 +36,21 @@ request.reconnect = function(callback) {
 };
 
 request.gameInit = function(callback) {
-    socket.once(2, function(data) {
-        callback(data);
+    socket.once(2, function(state) {
+        callback(data.firstStateUnpack(state));
     });
     socket.emit(1);
 };
 
 request.changeStatusToPlayer = function(callback) {
-    socket.once(6, function(data) {
-        callback(data);
+    socket.once(6, function(state) {
+        callback(data.firstStateUnpack(state));
     });
 };
 
 request.onUpdateGameState = function(callback) {
-    socket.on(3, function(data) {
-        callback(data);
+    socket.on(3, function(state) {
+        callback(data.stateUnpack(state));
     });
 };
 

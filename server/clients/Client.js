@@ -67,7 +67,7 @@ export default class Client {
         }
 
         this.socketOn();
-        this.socket.emit(2, data.firstStateToClient(this.getFirstState()));
+        this.socket.emit(2, data.firstStatePack(this.getFirstState()));
     }
 
     socketOn() {
@@ -129,11 +129,11 @@ export default class Client {
     }
 
     sendFirstGameState(state) {
-        this.socket.emit(6, data.firstStateToClient(state));
+        this.socket.emit(6, data.firstStatePack(state));
     }
 
     sendGameState(state) {
-        this.socket.emit(3, data.toClient(state));
+        this.socket.emit(3, data.statePack(state));
     }
 
     destroy() {
