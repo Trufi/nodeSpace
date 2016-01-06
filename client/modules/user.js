@@ -14,4 +14,8 @@ export default class User {
             this.actions[i] = el;
         });
     }
+
+    getShip() {
+        return this.ship;
+    }
 }

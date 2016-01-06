@@ -13,7 +13,7 @@ let state = {};
 
 state.start = function(options) {
     // присваиваем User игроку
-    player.setUser(game.users[options.changeStatusData.user.id || options.user.id]);
+    player.setUser(game.getUser(options.changeStatusData.user.id || options.user.id));
 
     game.camera.followTo(player.user.ship);
 
@@ -85,7 +85,7 @@ state.close = function() {
 state.newData = function(data) {
     _.forEach(data.users, function(el) {
         ui.bodyInfo.create({
-            body: game.users[el.id].ship
+            body: game.getUser(el.id).getShip()
         });
     });
 };

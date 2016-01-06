@@ -18,7 +18,7 @@ import config from '../config.json';
 class Game {
     constructor() {
         // p2.js world
-        this.world = null;
+        this._world = null;
         // все тела p2.js
         this.bodies = {};
         // все подключенные юзеры
@@ -26,10 +26,7 @@ class Game {
 
         this.camera = null;
 
-        // фон игры
-        this.background = null;
-
-        this.lastGameStepTime = null;
+        this._lastGameStepTime = null;
 
         this._serverData = [];
 
@@ -43,32 +40,36 @@ class Game {
         this._sendStateInterval = config.sendStateInterval;
         this._sendStateLastTime = 0;
 
-        this.loop = this.loop.bind(this);
+        this._loop = this._loop.bind(this);
     }
 
-    loop() {
-        requestAnimationFrame(this.loop);
+    _loop() {
+        requestAnimationFrame(this._loop);
 
         this._interpolationDelay = config.interpolationDelay + ping.get();
 
         const now = time() - this._interpolationDelay;
 
         // шаг мира p2.js
-        this.worldStep(now);
+        this._worldStep(now);
 
         // производим различные действия для нового шага
-        this.update(now);
+        this._update(now);
 
         // отрисовываем сцену
         render.draw();
 
-        this.lastGameStepTime = now;
+        this._lastGameStepTime = now;
 
-        this.render();
+        this._render();
     }
 
     addUser(user) {
         this.users[user.id] = user;
+    }
+
+    getUser(id) {
+        return this.users[id];
     }
 
     removeUser(user) {
@@ -82,18 +83,22 @@ class Game {
         body.addToGame(this);
     }
 
+    getBody(id) {
+        return this.bodies[id];
+    }
+
     removeBody(body) {
         delete this.bodies[body.id];
         body.removeFromGame();
     }
 
     load(options, callback) {
-        this.lastGameStepTime = time();
+        this._lastGameStepTime = time();
 
         assets.load(options.game.assets, callback);
     }
 
-    updateFromServerEnable() {
+    _updateFromServerEnable() {
         request.onUpdateGameState(data => {
             if (!ping.readyToUse()) {
                 this._noTimeServerData.push(data);
@@ -109,7 +114,7 @@ class Game {
     }
 
     // обновить только важную информацию об игре (вход, выход игроков и пр.) их данных с сервера
-    updateImportant(data) {
+    _updateImportant(data) {
         const now = data.time - this._interpolationDelay;
 
         // actions and important data
@@ -157,9 +162,9 @@ class Game {
         }
     }
 
-    updateFromDataServer(now) {
+    _updateFromDataServer(now) {
         if (this._noTimeServerData.length) {
-            _.forEach(this._noTimeServerData, data => this.updateImportant(data));
+            _.forEach(this._noTimeServerData, data => this._updateImportant(data));
             this._noTimeServerData = [];
         }
 
@@ -171,7 +176,7 @@ class Game {
         if (!length) { return; }
 
         // Обновляем важную информацию, например, вход/выход игроков
-        _.forEach(this._serverData, data => this.updateImportant(data));
+        _.forEach(this._serverData, data => this._updateImportant(data));
 
         if (!this._lastInterpolationData) {
             this._lastInterpolationData = this._serverData[0];
@@ -208,14 +213,14 @@ class Game {
         this._serverData = [];
     }
 
-    worldStep(now) {
-        this.updateFromDataServer(now);
+    _worldStep(now) {
+        this._updateFromDataServer(now);
         this._interpolate(now);
 
-        const dt = (now - this.lastGameStepTime) / 1000;
+        const dt = (now - this._lastGameStepTime) / 1000;
         if (dt !== 0) {
             if (this.isEnable) {
-                this.world.step(dt);
+                this._world.step(dt);
 
             }
             step.go(dt);
@@ -225,7 +230,7 @@ class Game {
     start(options) {
         ping.on();
 
-        this.world = new p2.World({
+        this._world = new p2.World({
             gravity: options.game.world.gravity,
             applyDamping: options.game.world.applyDamping
         });
@@ -254,20 +259,20 @@ class Game {
         });
 
         request.onGameClose(this.close.bind(this));
-        this.disconnectEnable();
+        this._disconnectEnable();
 
         this.state.start({changeStatusData: options});
 
-        this.updateFromServerEnable();
+        this._updateFromServerEnable();
 
         setTimeout(() => {
             ping.reset();
         }, 0);
 
-        this.loop();
+        this._loop();
     }
 
-    update(now) {
+    _update(now) {
         this.camera.update();
 
         _.forEach(this.bodies, el => el.updateSprite(now));
@@ -283,7 +288,7 @@ class Game {
         key.reset();
     }
 
-    render() {
+    _render() {
         this.state.render();
     }
 
@@ -299,7 +304,7 @@ class Game {
         this.isEnable = false;
     }
 
-    disconnectEnable() {
+    _disconnectEnable() {
         request.disconnect(() => {
             this.isEnable = false;
         });

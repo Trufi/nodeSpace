@@ -60,14 +60,14 @@ state.update = function() {
     function changeCamera() {
         state.lastTimeChangeCamera = now;
         state.followBodyNumber = state.followBodyNumber % _.size(game.bodies) + 1;
-        game.camera.followTo(game.bodies[state.followBodyNumber]);
+        game.camera.followTo(game.getBody(state.followBodyNumber));
     }
 
     if (key.pressed.SPACE || (now - this.lastTimeChangeCamera) > 7000) {
         changeCamera();
     }
 
-    if (this.changeStatusData !== undefined && game.users[this.changeStatusData.user.id] !== undefined) {
+    if (this.changeStatusData !== undefined && game.getUser(this.changeStatusData.user.id) !== undefined) {
         this.next();
     }
 };
