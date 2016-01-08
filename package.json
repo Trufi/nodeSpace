@@ -10,13 +10,10 @@
     "postinstall": "mkdir -p dist",
     "start": "npm run client && npm run server",
     "dev": "parallelshell \"npm run server:dev\" \"npm run client:dev\"",
-
     "server": "node server",
     "server:dev": "nodemon --watch server server/index.js",
-
     "client": "browserify client/index.js | uglifyjs -mc --screw-ie8 > dist/bundle.js",
     "client:dev": "watchify client/index.js -o dist/bundle.js -dv",
-
     "lint": "eslint client server"
   },
   "engines": {
@@ -34,6 +31,7 @@
     "pixi.js": "^3.0.8",
     "socket.io": "^1.3.7",
     "socket.io-client": "^1.3.7",
+    "stats.js": "git://github.com/Trufi/Stats.js.git#v1.0.1",
     "uglify-js": "^2.6.1",
     "winston": "^2.1.1"
   },

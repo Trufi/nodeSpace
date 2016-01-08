@@ -1,6 +1,8 @@
 import _ from 'lodash';
 
 import request from '../../modules/request';
+import render from '../../modules/render';
+import debug from '../../modules/debug';
 import ping from '../../modules/ping';
 import key from '../../modules/key';
 import ui from '../../ui';
@@ -48,6 +50,8 @@ state.start = function() {
     request.changeStatusToPlayer(function(data) {
         state.changeStatusData = data;
     });
+
+    debug.addTo(render.layers[4]);
 };
 
 state.update = function() {
@@ -70,6 +74,8 @@ state.update = function() {
     if (this.changeStatusData !== undefined && game.getUser(this.changeStatusData.user.id) !== undefined) {
         this.next();
     }
+
+    debug.update();
 };
 
 state.render = function() {

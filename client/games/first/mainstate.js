@@ -28,7 +28,6 @@ state.start = function(options) {
         });
     });
 
-    debug.pingOn();
     player.user.ship.weaponsAimActivate();
 
     // добавим гланое меню

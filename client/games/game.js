@@ -7,6 +7,7 @@ import camera from '../modules/camera';
 import player from '../modules/player';
 import render from '../modules/render';
 import assets from '../modules/assets';
+import debug from '../modules/debug';
 import User from '../modules/user';
 import ping from '../modules/ping';
 import step from '../modules/step';
@@ -48,6 +49,8 @@ class Game {
     }
 
     _loop() {
+        debug.frameStart();
+
         requestAnimationFrame(this._loop);
 
         this._interpolationDelay = config.interpolationDelay + ping.get();
@@ -66,6 +69,8 @@ class Game {
         this._lastGameStepTime = now;
 
         this._render();
+
+        debug.frameEnd();
     }
 
     addUser(user) {
@@ -288,6 +293,10 @@ class Game {
         setTimeout(() => {
             ping.reset();
         }, 0);
+
+        setTimeout(() => {
+            debug.resetStats();
+        }, 5000);
 
         this._loop();
     }

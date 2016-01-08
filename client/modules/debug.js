@@ -1,43 +1,52 @@
 import PIXI from 'pixi.js';
 
 import render from '../modules/render';
+import Stats from 'stats.js';
 import ping from '../modules/ping';
 
-let debug = {};
+const fontColor = '#777';
 
-let pingText;
-let dtText;
+class Debug {
+    constructor() {
+        this._stats = new Stats();
 
-debug.pingOn = function() {
-    pingText = new PIXI.Text(ping.get() + 'ms', {
-        font: 'normal 18px Arial',
-        fill: '#fff'
-    });
-    pingText.position.x = 10;
-    pingText.position.y = 10;
-    render.layers[4].addChild(pingText);
+        this._text = new PIXI.Text('', {
+            font: 'normal 14px Arial',
+            fill: fontColor
+        });
+        this._text.position.x = 10;
+        this._text.position.y = 10;
 
-    dtText = new PIXI.Text(ping.get() + 'ms', {
-        font: 'normal 18px Arial',
-        fill: '#fff'
-    });
-    dtText.position.x = 10;
-    dtText.position.y = 40;
-    render.layers[4].addChild(dtText);
-};
-
-debug.pingOff = function() {
-    render.layers[4].removeChild(pingText);
-    pingText = undefined;
-};
-
-debug.update = function() {
-    if (pingText !== undefined) {
-        pingText.text = ping.get() + 'ms';
+        this._container = null;
     }
-    if (dtText !== undefined) {
-        dtText.text = 'dt: ' + (Math.floor(ping.dt() * 1000) / 1000);
-    }
-};
 
-export {debug as default};
+    addTo(container) {
+        container.addChild(this._text);
+        this._container = container;
+    }
+
+    remove() {
+        this._container.removeChild(this._text);
+        this._container = null;
+    }
+
+    update() {
+        this._text.text = 'Ping: ' + ping.get() + 'ms' +
+            '\ndt: ' + Math.round(ping.dt() * 1000) / 1000 +
+            '\n' + this._stats.getText();
+    }
+
+    frameStart() {
+        this._stats.start();
+    }
+
+    frameEnd() {
+        this._stats.end();
+    }
+
+    resetStats() {
+        this._stats.reset();
+    }
+}
+
+export default new Debug();
