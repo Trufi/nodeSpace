@@ -59,8 +59,8 @@ state.update = function() {
 
     function changeCamera() {
         state.lastTimeChangeCamera = now;
-        state.followBodyNumber = state.followBodyNumber % _.size(game.bodies) + 1;
-        game.camera.followTo(game.getBody(state.followBodyNumber));
+        state.followBodyNumber = (state.followBodyNumber + 1) % _.size(game.bodies);
+        game.camera.followTo(game.getBody(Object.keys(game.bodies)[state.followBodyNumber]));
     }
 
     if (key.pressed.SPACE || (now - this.lastTimeChangeCamera) > 7000) {

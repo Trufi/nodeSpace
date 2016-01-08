@@ -18,7 +18,7 @@ import config from '../config.json';
 class Game {
     constructor() {
         // p2.js world
-        this._world = null;
+        this.world = null;
         // все тела p2.js
         this.bodies = {};
         // все подключенные юзеры
@@ -28,7 +28,11 @@ class Game {
 
         this._lastGameStepTime = null;
 
+        // Все данные с сервера
         this._serverData = [];
+
+        // Данные интерполяции
+        this._interpolationData = [];
 
         // игровое состояние
         this.state = null;
@@ -168,23 +172,38 @@ class Game {
             this._noTimeServerData = [];
         }
 
-        // Данные могли прийти не в том порядка, в котором отправил сервер
-        // Сортируем по времени
-        this._serverData = _.sortBy(this._serverData, 0);
-        const length = this._serverData.length;
+        if (this._serverData.length) {
+            // Данные могли прийти не в том порядке, в котором отправил сервер
+            // Сортируем по времени
+            this._serverData = _.sortBy(this._serverData, 'time');
+
+            // Обновляем важную информацию, например, вход/выход игроков
+            _.forEach(this._serverData, data => this._updateImportant(data));
+
+            // Возможно, что после склеивания массивов их нужно будет снова отсортировать
+            const needSort = this._interpolationData[0] &&
+                this._interpolationData[this._interpolationData.length - 1].time > this._serverData[0].time;
+
+            this._interpolationData = this._interpolationData.concat(this._serverData);
+
+            if (needSort) {
+                this._interpolationData = _.sortBy(this._interpolationData, 'time');
+            }
+
+            this._serverData = [];
+        }
+
+        const length = this._interpolationData.length;
 
         if (!length) { return; }
 
-        // Обновляем важную информацию, например, вход/выход игроков
-        _.forEach(this._serverData, data => this._updateImportant(data));
-
         if (!this._lastInterpolationData) {
-            this._lastInterpolationData = this._serverData[0];
+            this._lastInterpolationData = this._interpolationData[0];
         }
 
         // Если последняя точка интерполяции уже прошла, ищем новую
         if (this._lastInterpolationData.time < now) {
-            const lastData = this._serverData[length - 1];
+            const lastData = this._interpolationData[length - 1];
             const startData = this._lastInterpolationData;
 
             this._lastInterpolationData = lastData;
@@ -208,19 +227,20 @@ class Game {
                     });
                 }
             });
-        }
 
-        this._serverData = [];
+            this._interpolationData = [];
+        }
     }
 
     _worldStep(now) {
+        //console.log(this._serverData.length);
         this._updateFromDataServer(now);
         this._interpolate(now);
 
         const dt = (now - this._lastGameStepTime) / 1000;
         if (dt !== 0) {
             if (this.isEnable) {
-                this._world.step(dt);
+                this.world.step(dt);
 
             }
             step.go(dt);
@@ -230,7 +250,7 @@ class Game {
     start(options) {
         ping.on();
 
-        this._world = new p2.World({
+        this.world = new p2.World({
             gravity: options.game.world.gravity,
             applyDamping: options.game.world.applyDamping
         });
@@ -283,6 +303,7 @@ class Game {
 
         if (now - this._sendStateLastTime > this._sendStateInterval) {
             player.sendActionToServer();
+            this._sendStateLastTime = now;
         }
 
         key.reset();
