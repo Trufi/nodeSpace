@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import config from '../config';
 
-let assets = {};
+const assets = {};
 
 assets.texture = {};
 
@@ -29,7 +29,7 @@ assets.load = function(loadObj, callback) {
     loadObj.texture.bg_3 = 'bg_3.png';
 
     loadObj.texture.aimRed = 'aim_red.png';
-    //loadObj.texture.aimBlue = 'aim_blue.png';
+    // loadObj.texture.aimBlue = 'aim_blue.png';
 
     loadObj.texture.bulletGreen = 'bullet_green.gif';
 
@@ -50,7 +50,7 @@ assets.load = function(loadObj, callback) {
 };
 
 function generateThrustTextures() {
-    let graphics = new PIXI.Graphics();
+    const graphics = new PIXI.Graphics();
     graphics.beginFill(0xFFFFFF);
     graphics.drawRect(0, 0, 5, 30);
     graphics.endFill();
@@ -58,7 +58,7 @@ function generateThrustTextures() {
 }
 
 function generateSideTextures() {
-    let graphics = new PIXI.Graphics();
+    const graphics = new PIXI.Graphics();
     graphics.beginFill(0xFFFFFF);
     graphics.drawRect(0, 0, 10, 5);
     graphics.endFill();

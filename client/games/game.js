@@ -238,7 +238,6 @@ class Game {
     }
 
     _worldStep(now) {
-        //console.log(this._serverData.length);
         this._updateFromDataServer(now);
         this._interpolate(now);
 

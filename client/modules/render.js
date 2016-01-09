@@ -2,15 +2,15 @@ import PIXI from 'pixi.js';
 
 import config from '../config';
 
-let render = {};
+const render = {};
 
 // stage из pixi.js
-render.stage;
+render.stage = null;
 // уровни в stage
 render.layers = [];
 
 render.create = function(options = {}) {
-    let gameWrap = document.getElementById(config.gameHtmlWrapId);
+    const gameWrap = document.getElementById(config.gameHtmlWrapId);
 
     // разрешение рендера
     this.resolution = options.resolution || [window.innerWidth, window.innerHeight];

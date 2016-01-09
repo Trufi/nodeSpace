@@ -3,7 +3,7 @@ import PIXI from 'pixi.js';
 import render from '../modules/render';
 import position from './position';
 
-let frame = {};
+const frame = {};
 
 class Frame {
     constructor(options = {}) {
@@ -55,7 +55,7 @@ class Frame {
     _initColor(color) {
         this.color = color;
 
-        if (this.color === undefined) return;
+        if (this.color === undefined) { return; }
 
         switch (this.color) {
             case 'blue':
@@ -73,7 +73,6 @@ class Frame {
             default:
                 this.strokeColor = '1a59e8';
         }
-
 
         this.spriteBackground = new PIXI.Graphics();
         this.spriteBackground.lineStyle(1, parseInt('0x' + this.strokeColor, 16), this.opacity);

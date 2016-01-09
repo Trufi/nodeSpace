@@ -4,7 +4,7 @@ import _ from 'lodash';
 import render from '../modules/render';
 import config from '../config';
 
-let bodyInfo = {};
+const bodyInfo = {};
 bodyInfo.list = {};
 
 let idCounter = 0;
@@ -21,8 +21,8 @@ class BodyInfo {
 
         this.displayObject = new PIXI.Container();
         render.layers[4].addChild(this.displayObject);
-        this.spriteName;
-        this.spriteHp;
+        this.spriteName = null;
+        this.spriteHp = null;
 
         this.createName();
         this.createHp();
@@ -58,14 +58,13 @@ class BodyInfo {
         this.spriteHp.position.x = 5;
         this.spriteHp.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
 
-
         this.spriteName.position.x = -5;
         this.spriteName.position.y = -this.padding - this.body.spriteSize / 2 * this.body.sprite.scale.y;
     }
 }
 
 bodyInfo.create = function(options) {
-    let bi = new BodyInfo(options);
+    const bi = new BodyInfo(options);
     bodyInfo.list[bi.id] = bi;
     return bi;
 };

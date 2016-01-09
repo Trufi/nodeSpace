@@ -2,9 +2,9 @@ import request from '../modules/request';
 import time from '../modules/time';
 import config from '../config.json';
 
-let ping = {};
+const ping = {};
 
-let pingTimeInterval = 1000;
+const pingTimeInterval = 1000;
 
 let value = 0;
 let sendTime = time();
@@ -32,14 +32,13 @@ function approxDiffWithServerTime(clientTime, serverTime, dt) {
 function checkPing() {
     sendTime = time();
     request.ping(function(serverTime) {
-        let now = time();
+        const now = time();
 
         approxPing(now - sendTime);
         approxDiffWithServerTime(sendTime, serverTime, now - sendTime);
         setTimeout(checkPing, pingTimeInterval);
     });
 }
-
 
 ping.on = function() {
     checkPing();

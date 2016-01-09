@@ -9,7 +9,7 @@ import mainMenu from '../../ui/frames/mainmenu';
 import ScreenArrow from '../../ui/screenarrow';
 import game from '../game';
 
-let state = {};
+const state = {};
 
 state.start = function(options) {
     // присваиваем User игроку

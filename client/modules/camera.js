@@ -1,7 +1,7 @@
 import PIXI from 'pixi.js';
 import _ from 'lodash';
 
-let camera = {};
+const camera = {};
 
 let idCounter = 0;
 
@@ -13,7 +13,7 @@ class Camera {
         this.scale = scale || 1;
 
         this.position = [0, 0];
-        //this.angle = 0; пока без поворотов
+        // this.angle = 0; пока без поворотов
 
         // значение на которое меняется scale при зуме
         this.zoomChangeValue = 0.1;
@@ -80,7 +80,7 @@ class Camera {
     }
 
     containsSprite(sprite) {
-        let bounds = sprite.getBounds();
+        const bounds = sprite.getBounds();
 
         if (this.rectangle.contains(bounds.x, bounds.y)) {
             return true;
@@ -132,11 +132,11 @@ camera.position = function() {
 };
 
 camera.width = function() {
-    return enableCamera.width
+    return enableCamera.width;
 };
 
 camera.height = function() {
-    return enableCamera.height
+    return enableCamera.height;
 };
 
 camera.getVelocity = function() {

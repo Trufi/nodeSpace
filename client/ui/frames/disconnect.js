@@ -1,6 +1,6 @@
 import ui from '../index';
 
-let disconnect = {};
+const disconnect = {};
 
 let frame, text, timeText, interval, timeLeft, timeStart;
 

@@ -1,6 +1,6 @@
 import ui from '../index';
 
-let mainMenu = {};
+const mainMenu = {};
 
 let frame,
     buttonResume,

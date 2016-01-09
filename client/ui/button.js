@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import config from '../config';
 
-let button = {};
+const button = {};
 
 class Button {
     constructor(options = {}) {
@@ -24,7 +24,7 @@ class Button {
                 break;
         }
 
-        this.id;
+        this.id = null;
         this.width = options.width || 300;
         this.height = options.height || 50;
         this.position = options.position || [0, 0];
@@ -42,10 +42,10 @@ class Button {
             this.displayObject.visible = options.visible;
         }
 
-        this.sprite;
-        this.spriteHover;
+        this.sprite = null;
+        this.spriteHover = null;
         this.text = options.text || '';
-        this.spriteText;
+        this.spriteText = null;
         this.fontSize = options.fontSize || 22;
 
         this._createBackground();

@@ -1,6 +1,5 @@
 import PIXI from 'pixi.js';
 
-import render from '../modules/render';
 import Stats from 'stats.js';
 import ping from '../modules/ping';
 

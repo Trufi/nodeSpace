@@ -1,4 +1,4 @@
-let valid = {};
+const valid = {};
 
 valid.passwordLength = function(pass) {
     return pass.length > 3;

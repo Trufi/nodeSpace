@@ -3,20 +3,21 @@ import _ from 'lodash';
 import request from '../../modules/request';
 import render from '../../modules/render';
 import debug from '../../modules/debug';
+import time from '../../modules/time';
 import ping from '../../modules/ping';
 import key from '../../modules/key';
 import ui from '../../ui';
 import game from '../../games/game';
 import nextStage from './mainstate';
 
-let state = {};
+const state = {};
 // state.firstMenu;
 // state.loginMenu;
 // state.regMenu;
 // state.followBodyNumber;
 
 // вначале undefined, после логина, квик старта или регистрации получает id
-//state.playerId;
+// state.playerId;
 
 // предлагать или нет сохранение после быстрого старта
 state.proposeSignUp = false;
@@ -55,7 +56,7 @@ state.start = function() {
 };
 
 state.update = function() {
-    let now = Date.now();
+    const now = time();
 
     if (ping.readyToUse()) {
         createFirstMenu();
@@ -87,7 +88,7 @@ state.close = function() {
 };
 
 state.next = function() {
-    let options = {
+    const options = {
         changeStatusData: this.changeStatusData,
         proposeSignUp: this.proposeSignUp
     };

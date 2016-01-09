@@ -1,6 +1,6 @@
-let key = {};
+const key = {};
 
-/*let keyCodes = {
+/* let keyCodes = {
     1: 49, 2: 50, 3: 51, 4: 52, 5: 53, 6: 54, 7: 55, 8: 56, 9: 57, 0: 48,
     Q: 81, W: 87, E: 69, R: 82, T: 84, Y: 89, U: 85, I: 73, O: 79, P: 80,
     A: 65, S: 83, D: 68, F: 70, G: 71, H: 72, J: 74, K: 75, L: 76,
@@ -14,10 +14,10 @@ let key = {};
     RIGHT: 39,
     DOWN: 40,
     SPACE: 32
-};*/
-//TODO: доделать остальные кнопки
+}; */
+// TODO: доделать остальные кнопки
 
-let codesToKey = {
+const codesToKey = {
     49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9, 48: 0,
     81: 'Q', 87: 'W', 69: 'E', 82: 'R', 84: 'T', 89: 'Y', 85: 'U', 73: 'I', 79: 'O', 80: 'P',
     65: 'A', 83: 'S', 68: 'D', 70: 'F', 71: 'G', 72: 'H', 74: 'J', 75: 'K', 76: 'L',
@@ -43,18 +43,18 @@ let codesToKey = {
 };
 
 // кнопки которые блокируют действия браузера
-let defaultKeyBlock = [8, 9];
-let keyPressed = {};
-let keyDown = {};
+const defaultKeyBlock = [8, 9];
+const keyPressed = {};
+const keyDown = {};
 
 // включен ли набор текста
 let isWriteText = false;
 let writeTextCallback;
 // кнопки которые будут передаваться в writeTextCallback при событии keydown
-let keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
+const keyForTextEdit = [13, 37, 39, 8, 46, 35, 36, 9];
 
 window.addEventListener('keydown', function(ev) {
-    let keyCode = ev.keyCode || ev.which;
+    const keyCode = ev.keyCode || ev.which;
     let keyStr;
 
     if (defaultKeyBlock.indexOf(keyCode) !== -1) {
@@ -89,7 +89,7 @@ window.addEventListener('keypress', function(ev) {
 });
 
 window.addEventListener('keyup', function(ev) {
-    let keyCode = ev.keyCode || ev.which;
+    const keyCode = ev.keyCode || ev.which;
     keyDown[codesToKey[keyCode]] = false;
 });
 
@@ -137,7 +137,7 @@ window.addEventListener('contextmenu', function(ev) {
 key.pressed = keyPressed;
 
 key.reset = function() {
-    for (let i in keyPressed) {
+    for (const i in keyPressed) {
         keyPressed[i] = false;
     }
 };

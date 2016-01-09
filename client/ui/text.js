@@ -2,11 +2,11 @@ import PIXI from 'pixi.js';
 
 import config from '../config';
 
-let text = {};
+const text = {};
 
 class Text {
     constructor(options = {}) {
-        this.id;
+        this.id = null;
         this.text = options.text || '';
         this.width = options.width || 300;
         this.position = options.position || [0, 0];
@@ -31,7 +31,6 @@ class Text {
             this.displayObject.visible = options.visible;
         }
     }
-
 
     setText(str) {
         this.text = str;

@@ -1,6 +1,6 @@
 import render from '../modules/render';
 
-let position = {};
+const position = {};
 position.CENTER = [0, 0];
 position.TOP = [0, 0];
 position.BOTTOM = [0, 0];

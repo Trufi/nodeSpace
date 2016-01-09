@@ -4,7 +4,7 @@ import _ from 'lodash';
 import key from '../modules/key';
 import config from '../config';
 
-let editbox = {};
+const editbox = {};
 
 class Editbox {
     constructor(options = {}) {
@@ -22,7 +22,7 @@ class Editbox {
                 break;
         }
 
-        this.id;
+        this.id = null;
         this.width = options.width || 300;
         this.height = options.height || 50;
         this.position = options.position || [0, 0];
@@ -50,22 +50,21 @@ class Editbox {
 
         this.isActive = false;
 
-        this.sprite;
+        this.sprite = null;
         this.text = options.text || '';
-        this.spriteText;
+        this.spriteText = null;
         this.fontSize = options.fontSize || 22;
         this.paddingLeft = options.paddingLeft || 15;
         this.type = options.type;
-        this.spriteTextHelp;
-        this.mask;
+        this.spriteTextHelp = null;
+        this.mask = null;
         this.isTextOverWidth = false;
-
 
         this._createBackground();
         this._createText();
 
-        this.cursor;
-        this.cursorInterval;
+        this.cursor = null;
+        this.cursorInterval = null;
         this.cursorIntervalDelay = 500;
         this._createCursor();
         this.cursorPosition = this.text.length;
@@ -97,7 +96,7 @@ class Editbox {
     }
 
     _createText() {
-        let textOptions = {
+        const textOptions = {
             font: config.buttonFontWeight + ' ' + this.fontSize + 'px ' + config.buttonFontFamily,
             align: 'left',
             fill: '#fff',
@@ -153,22 +152,20 @@ class Editbox {
     }
 
     updateCursor() {
-        let _this = this;
-
         if (this.cursorPosition === 0) {
             this.cursor.position.x = this.paddingLeft;
-        } else if (_this.isTextOverWidth) {
-            _this.cursor.position.x = _this.width - _this.paddingLeft;
+        } else if (this.isTextOverWidth) {
+            this.cursor.position.x = this.width - this.paddingLeft;
         } else {
-            _this.cursor.position.x = _this.paddingLeft + _this.spriteTextHelp.width;
+            this.cursor.position.x = this.paddingLeft + this.spriteTextHelp.width;
         }
 
         // запускаем интервал мигания курсора
         if (this.isActive) {
             clearInterval(this.cursorInterval);
             this.cursor.visible = true;
-            this.cursorInterval = setInterval(function() {
-                _this.cursor.visible = !_this.cursor.visible;
+            this.cursorInterval = setInterval(() => {
+                this.cursor.visible = !this.cursor.visible;
             }, this.cursorIntervalDelay);
         }
     }
@@ -222,63 +219,60 @@ class Editbox {
     }
 
     active() {
-        let _this = this;
-
         // bad
-        setTimeout(function() {
-            _this.isActive = true;
-            _this.cursorPosition = _this.text.length;
+        setTimeout(() => {
+            this.isActive = true;
+            this.cursorPosition = this.text.length;
 
             if (editbox._active !== undefined) {
                 editbox._active.deactive();
             }
-            editbox._active = _this;
+            editbox._active = this;
 
+            this.updateCursor();
 
-            _this.updateCursor();
-
-            key.enableWriteText(function(ch) {
+            key.enableWriteText(ch => {
                 let str;
 
                 switch (ch) {
                     case 'LEFT':
-                        _this._cursorLeft();
+                        this._cursorLeft();
                         break;
                     case 'RIGHT':
-                        _this._cursorRight();
+                        this._cursorRight();
                         break;
                     case 'BACKSPACE':
-                        _this._backspace();
+                        this._backspace();
                         break;
                     case 'DELETE':
-                        _this._delete();
+                        this._delete();
                         break;
                     case 'HOME':
-                        _this._cursorHome();
+                        this._cursorHome();
                         break;
                     case 'END':
-                        _this._cursorEnd();
+                        this._cursorEnd();
                         break;
                     case 'ENTER':
-                        _this._enter();
+                        this._enter();
                         break;
                     case 'TAB':
-                        _this._tab();
+                        this._tab();
                         break;
                     default:
-                        _this._addCharToText(ch);
+                        this._addCharToText(ch);
                 }
 
-                if (_this.type === 'pass') {
-                    str = (new Array(_this.text.length + 1)).join('*');
+                if (this.type === 'pass') {
+                    str = (new Array(this.text.length + 1)).join('*');
                 } else {
-                    str = _this.text;
+                    str = this.text;
                 }
-                _this.spriteText.text = str;
-                _this.spriteTextHelp.text = str.substr(0, _this.cursorPosition);
-                setTimeout(function() {
-                    _this.checkForAlign();
-                    _this.updateCursor();
+                this.spriteText.text = str;
+                this.spriteTextHelp.text = str.substr(0, this.cursorPosition);
+                setTimeout(() => {
+                    this.checkForAlign();
+                    this.updateCursor();
                 }, 30);
             });
         }, 0);

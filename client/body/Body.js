@@ -11,11 +11,11 @@ export default class Body {
     constructor(options) {
         this.id = options.id;
         this.type = options.type;
-        this.body;
-        this.sprite;
+        this.body = null;
+        this.sprite = null;
         this.spriteSize = 100;
-        this.shape;
-        this.game;
+        this.shape = null;
+        this.game = null;
         this.name = options.name || 'Unknown';
         this.hp = options.hp;
 
@@ -67,7 +67,7 @@ export default class Body {
             this.game.world.removeBody(this.body);
         }
         render.layers[2].removeChild(this.sprite);
-        this.game = undefined;
+        this.game = null;
     }
 
     updateSprite() {
@@ -150,9 +150,9 @@ export default class Body {
     }
 
     destroy() {
-        if (this.game !== undefined) {
+        if (this.game !== null) {
             this.game.removeBody(this);
         }
-        this.body._gameBody = undefined;
+        this.body._gameBody = null;
     }
 }

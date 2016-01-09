@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import request from '../modules/request';
 
-let player = {};
+const player = {};
 
 player.user = null;
 player.actions = {};
