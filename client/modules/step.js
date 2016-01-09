@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
-let step = {};
+const step = {};
 
-let weaponsList = {};
+const weaponsList = {};
 
 step.go = function(dt) {
-    _.forEach(weaponsList, function(el) {
-        el.step(dt);
-    });
+    for (const i in weaponsList) {
+        weaponsList[i].step(dt);
+    }
 };
 
 step.addWeapon = function(weapon) {

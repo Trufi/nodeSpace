@@ -345,7 +345,9 @@ class Game {
     }
 
     _interpolate(now) {
-        _.forEach(this.bodies, el => el.interpolate(now));
+        for (const id in this.bodies) {
+            this.bodies[id].interpolate(now);
+        }
     }
 }
 
