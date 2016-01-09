@@ -12,7 +12,7 @@ export default class Ship extends Body {
 
         this.forceThrust = options.forceThrust || 1500;
         this.forceSide = options.forceSide || 400;
-        this.client;
+        this.client = null;
         this.hp = 100;
 
         this.weapons = [];
@@ -113,7 +113,6 @@ export default class Ship extends Body {
 
             bodyB.checkForDestroyAfterCollide();
         }
-
 
         this.hp = this.hp - damageValue;
     }

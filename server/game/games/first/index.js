@@ -2,11 +2,11 @@ import * as body from '../../body';
 import Game from '../Game';
 
 // инициализация единственной пока что игры
-let game = new Game();
+const game = new Game();
 game.start();
 
 // добавим астероид в игру
-let asteroid = body.create({
+const asteroid = body.create({
     type: 1,
     position: [0, 0],
     velocity: [0, 0],

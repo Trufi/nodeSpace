@@ -11,10 +11,8 @@ export default class Bullet extends Body {
         this.parent = options.parent;
         this.timeLive = 5000;
         this.damageValue = 5;
-        this.reflectAngle = 0.8;
-        this.timeCreate;
+        this.timeCreate = null;
     }
-
 
     createBody(options) {
         this.body = new p2.Body({
@@ -46,30 +44,11 @@ export default class Bullet extends Body {
         }
     }
 
-    addDamage() {/*
-     let v2 = [this.body.velocity[0], this.body.velocity[1]],
-     v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
-     a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
-     damage = 0;
-
-     if (a > this.reflectAngle) {
-     this.destroy();
-     damage = this.damageValue;
-     }*/
-
+    addDamage() {
         return this.damageValue;
     }
 
-    checkForDestroyAfterCollide() {/*
-     let v2 = [this.body.velocity[0], this.body.velocity[1]],
-     v1 = [v2[0] - this.body.vlambda[0], v2[1] - this.body.vlambda[1]],
-     a = Math.acos((v1[0] * v2[0] + v1[1] * v2[1]) / (Math.sqrt((v1[0] * v1[0] + v1[1] * v1[1]) * (v2[0] * v2[0] + v2[1] * v2[1])))),
-     damage = 0;
-
-     if (a > this.reflectAngle) {
-     this.destroy();
-     damage = this.damageValue;
-     }*/
+    checkForDestroyAfterCollide() {
         this.destroy();
     }
 

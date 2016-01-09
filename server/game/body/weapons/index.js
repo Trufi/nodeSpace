@@ -5,7 +5,7 @@ import log from '../../../modules/log';
 let idCounter = 1;
 
 function resetAngle(angle) {
-    let sign = angle > 0 ? 1 : -1;
+    const sign = angle > 0 ? 1 : -1;
     return sign * ((Math.abs(angle) + Math.PI) % (Math.PI * 2) - Math.PI);
 }
 
@@ -20,19 +20,21 @@ class Weapon {
     }
 
     checkAngle(now, angle) {
-        let mbAngle = (this.angularVelocity + 1) * (now - this.lastTimeFire) / 1000;
-        let dAngle = Math.abs(resetAngle(angle - this.lastAngle));
+        const mbAngle = (this.angularVelocity + 1) * (now - this.lastTimeFire) / 1000;
+        const dAngle = Math.abs(resetAngle(angle - this.lastAngle));
 
         if (dAngle <= mbAngle) {
             return true;
         } else {
-            log.warn(`dAngle > mbAngle, ${dAngle} > ${mbAnble}, bodyName: ${this.parent.name}, bodyId: ${this.parent.id}`);
+            log.warn(
+                `dAngle > mbAngle, ${dAngle} > ${mbAngle}, bodyName: ${this.parent.name}, bodyId: ${this.parent.id}`
+            );
             return false;
         }
     }
 
     fire(now, angle) {
-        let worldPoint = [];
+        const worldPoint = [];
 
         if (this.checkAngle(now, angle)) {
             this.parent.body.toWorldFrame(worldPoint, this.position);

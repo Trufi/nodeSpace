@@ -1,7 +1,7 @@
 import log from '../modules/log';
 import first from './games/first';
 
-let game = {};
+const game = {};
 
 game.list = {
     0: first

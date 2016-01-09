@@ -4,7 +4,6 @@ import p2 from 'p2';
 import config from '../../config';
 import * as body from '../body/index';
 import time from '../../modules/time';
-import * as data from '../../modules/data';
 
 let idCounter = 0;
 
@@ -132,7 +131,7 @@ export default class Game {
 
     // данные отправляемые при подключении пользователя
     getGameFirstState(user) {
-        let state = {};
+        const state = {};
 
         state.assets = this._assets;
         state.time = time();
@@ -145,7 +144,7 @@ export default class Game {
 
         state.bodies = [];
         _.forEach(this._bodies, function(el) {
-            let info = el.getFirstInfo();
+            const info = el.getFirstInfo();
             if (info !== undefined) {
                 state.bodies.push(info);
             }

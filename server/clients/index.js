@@ -4,7 +4,7 @@ import Client from './Client';
 
 let idCounter = 0;
 
-export let list = {};
+export const list = {};
 
 export function initialize(socket) {
     const client = new Client({

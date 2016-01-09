@@ -14,15 +14,13 @@ export default class Client {
     constructor(options) {
         this.id = options.id;
 
-        this.session;
-        this.sid;
-        this.name;
+        this.name = null;
 
         this.socket = options.socket;
 
         this.gameEnable = false;
-        this.gameType;
-        this.ship;
+        this.gameType = null;
+        this.ship = null;
         this.actions = {};
 
         // здесь хранятся действия до следующего шага игры
@@ -56,7 +54,7 @@ export default class Client {
 
     activateGame() {
         if (!this.gameEnable) {
-            if (this.name !== undefined) {
+            if (this.name !== null) {
                 this.game = game.getGameForPlayer(this);
                 this.game.addPlayer(this);
             } else {
@@ -83,7 +81,7 @@ export default class Client {
             .on(7, () => {
                 this.socket.emit(8, time());
             });
-    };
+    }
 
     updateActions(now) {
         _.forEach(this.actionsDone, (el, i) => {
@@ -113,7 +111,7 @@ export default class Client {
     }
 
     getFirstInfo() {
-        if (this.name !== undefined) {
+        if (this.name !== null) {
             return {
                 id: this.id,
                 type: 1,

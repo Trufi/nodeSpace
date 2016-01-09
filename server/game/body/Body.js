@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import p2 from 'p2';
 
 import * as actions from '../actions';
@@ -8,9 +7,9 @@ export default class Body {
     constructor(options) {
         this.id = options.id;
         this.type = options.type;
-        this.body;
-        this.texture;
-        this.game;
+        this.body = null;
+        this.texture = null;
+        this.game = null;
         this.name = options.name;
         this.hp = 0;
 
@@ -81,10 +80,10 @@ export default class Body {
     }
 
     destroy() {
-        if (this.game !== undefined) {
+        if (this.game !== null) {
             this.game.removeBody(this);
         }
-        this.body._gameBody = undefined;
+        this.body._gameBody = null;
         this.body.removeShape();
     }
 

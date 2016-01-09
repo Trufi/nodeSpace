@@ -3,7 +3,7 @@ import p2 from 'p2';
 import Body from './Body';
 import mask from './mask';
 
-export default class Asteroid extends  Body {
+export default class Asteroid extends Body {
     constructor(options) {
         super(options);
 
