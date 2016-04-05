@@ -1,7 +1,13 @@
 {
   "parser": "babel-eslint",
-  "root": true,
   "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true
+    }
+  },
   "rules": {
     "no-console": 0,
     "no-constant-condition": 2,
@@ -80,28 +86,21 @@
     "quotes": [2, "single", "avoid-escape"],
     "semi-spacing": 2,
     "semi": 2,
-    "space-after-keywords": 2,
-    "space-before-blocks": 2,
+    "keyword-spacing": 2,
     "space-before-function-paren": [2, "never"],
     "space-in-parens": 2,
     "space-infix-ops": 2,
-    "space-return-throw-case": 2,
     "space-unary-ops": 2,
     "spaced-comment": 2,
 
     "arrow-spacing": 2,
     "constructor-super": 2,
-    "no-arrow-condition": 2,
     "no-class-assign": 2,
     "no-const-assign": 2,
     "no-dupe-class-members": 2,
     "no-this-before-super": 2,
     "no-var": 2,
     "prefer-const": 2
-  },
-  "globals": {
-    "mallData": true,
-    "floors": true
   },
   "env": {
     "es6": true,
